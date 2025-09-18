@@ -1,30 +1,39 @@
-%%%%%%%%%%%%% Subsystem 1 %%%%%%%%%%%%%%%
-\subsection{Subsystem 1: [Subsystem Name]}
+\subsection{Subsystem 1: Processing}
 
-% Subsystem Diagram
 \subsubsection{Subsystem Diagrams}
-[\textbf{DD1+}]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{images/white.png} % Change the picture
+    \includegraphics[width=16cm]{images/Processing_Subsystem_Block_Diagram.png} % Change the picture
     \caption{Subsystem Block Diagram}
 \end{figure} % If your subsystem is more coding, change it to activity diagram
 
 % Specifications
 \subsubsection{Specifications}
 \begin{enumerate}
-    \item {[Type here \textbf{DD1+}]}
+    \item Support SPI clock $\geq$ 20 MHz
+    \item Display update latency $\leq$ 16 ms
+    \item Support configurable API refresh interval between 60 and 300 s
+    \item API end-to-end fetch latency $\leq$ 2 s
 \end{enumerate}
 
 % Subsystem Interactions
 \subsubsection{Subsystem Interactions}
-[Type here \textbf{DD1+}]
+The core computer interfaces with
+all other subsystems. The battery/power
+management unit supplies it with power.
+Running processes direct and receive
+information from the network module.
+It communicates with the digital dot matrix
+display via SPI according to display
+drivers on the controller.
+
 
 % Core ECE
 \subsubsection{Core ECE Design Tasks}
-[\textbf{DD1+} Write tasks and course that helps accomplish that task]
 \begin{itemize}
-    \item \textbf{ECE xxxxx}: [Type the relationship here. ]
+    \item \textbf{ENGR 16100}: Teamwork \& project documentation.
+    \item \textbf{CS 15900}: Fundamentals of programming.
+    \item \textbf{ECE 36200}: PCB design and embedded software development.
 \end{itemize}
 
 % Schematics
@@ -39,12 +48,40 @@
 % Parts List
 \subsubsection{Parts}
 \begin{itemize}
-    \item {[Type here \textbf{DD1+}]}
+    \item ESP32-S3
+    \item DS3231
+    \item PCB
 \end{itemize}
 
 % Algorithm
 \subsubsection{Algorithm}
-[Type here \textbf{DD1+}]
+\begin{lstlisting}
+    initialize clock, network, display, location
+
+    always 
+        wifi keep alive
+        error handling
+    
+    every minute
+        update display time
+
+        make API call for flight data
+        parse data
+
+        if battery powered
+            check battery voltage
+            add battery to data
+
+        add time, weather, flight info to data
+        convert data to pixel buffer
+        push pixel buffer to display
+    
+    every hour
+        sync RTC with network time
+
+        make API call for weather
+
+\end{lstlisting}
 
 % Theory of Operation
 \subsubsection{Theory of Operation}
@@ -62,5 +99,7 @@
 \subsubsection{Standards}
 [\textbf{DD1+}]
 \begin{itemize}
-    \item \textbf{[Standard Name]}: [Describe the standards and explain the connection]
+    \item \textbf{IPC-2221}: Governs PCB trace width, spacing, creepage/clearance, via rules, grounding, etc.
+    \item \textbf{IPC-A-610}: Covers soldering quality and workmanship.
+    \item \textbf{RFC 5905}: Protocol for syncing ESP time to internet.
 \end{itemize}
