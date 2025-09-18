@@ -3,7 +3,7 @@
 \subsubsection{Subsystem Diagrams}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{images/Processing_Subsystem_Block_Diagram.png} % Change the picture
+    \includegraphics[width=12cm]{images/Processing_Subsystem_Block_Diagram.png} % Change the picture
     \caption{Subsystem Block Diagram}
 \end{figure} % If your subsystem is more coding, change it to activity diagram
 
@@ -11,9 +11,12 @@
 \subsubsection{Specifications}
 \begin{enumerate}
     \item Support SPI clock $\geq$ 20 MHz
+    \item SPI support up to 40 MHz, full-duplex, DMA capable
     \item Display update latency $\leq$ 16 ms
     \item Support configurable API refresh interval between 60 and 300 s
     \item API end-to-end fetch latency $\leq$ 2 s
+    \item Clock drift $\leq \pm 1\frac{\text{sec}}{\text{day}}$
+    \item Operating voltage: $3.3 \pm 0.1$ V
 \end{enumerate}
 
 % Subsystem Interactions
@@ -97,7 +100,6 @@ drivers on the controller.
 
 % Standards
 \subsubsection{Standards}
-[\textbf{DD1+}]
 \begin{itemize}
     \item \textbf{IPC-2221}: Governs PCB trace width, spacing, creepage/clearance, via rules, grounding, etc.
     \item \textbf{IPC-A-610}: Covers soldering quality and workmanship.
