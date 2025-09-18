@@ -1,5 +1,5 @@
 \documentclass[letterpaper, 11pt]{article}
-\usepackage{cite,enumitem,graphicx,listings, comment}
+\usepackage{cite,enumitem,listings, comment}
 \usepackage[export]{adjustbox}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
@@ -16,57 +16,6 @@
 \counterwithin{figure}{subsection}
 
 \begin{document}
-
-%%%%%%%%%%%%%%% Tips page %%%%%%%%%%%%%%%%%%%%%%
-\section*{Tips for \textit{\LaTeX}}
-\begin{itemize}
-    \item If you find some tips do not make sense when reading the PDF alone, you may refer the corresponding codes in the source file.
-    \item DELETE or COMMENT OUT \hl{Tips for \textit{\LaTeX}} and \hl{Useful Commands} Page before submission. Pages before the title should NOT appear in the final submission of your project report.
-    \item Items in square brackets ([...]) should be replaced with correct information. They serve as location markers in the code for your convenience.
-    \item Check for comments to see which Design Document it is for. It will be contained in the [Type here] box.
-    \item Please read the comments in the document first if you have questions. % comments
-    \item Figure numbers and titles are required. You should refer to these in the text. Mostly, \textit{\LaTeX} will have them automatically numbered. The figure and caption template will be provided below.
-    \item References are required. If you include a circuit, cite the source. If you designed the circuit for a different course, you must cite that as well. Failing to do so will be considered cheating. Please make sure every source do not appear in the body of your document. They should be properly cited in the reference area and numbered at the end of your document. You are in ECE senior design, so IEEE standards shall be used. No direct citations of any sort should appear in the body of the report. Here is an example. \cite{b1} It should look similar to this. There will be examples for references in the appendix. IEEE format can be found on \href{https://owl.purdue.edu/owl/research_and_citation/ieee_style/ieee_overview.html}{\hl{Purdue OWL}}.
-    \item Submit the generated PDF by the source file .tex. DO NOT SUBMIT THIS LATEX CODE DIRECTLY. IT WILL NOT BE GRADED.
-    \item There are large code blocks commented out in the document for its design later. When the course progress reaches there, you may uncomment it.
-    \item For a .tex file to read outer resources, you may put them under the same directory. For details, you may refer to \href{https://www.overleaf.com/learn/latex/Inserting_Images}{\hl{this tutorial}}.
-    \item For the .tex file to read large amount of coding, refer to the appendices section.
-    \item In Overleaf, you can double click the section in the PDF to go to the according location in the \textit{\LaTeX} code.
-\end{itemize}
-
-%%%%%%%%%%%%%% Commands page %%%%%%%%%%%%%%%%%
-\clearpage
-\section*{Useful Commands}
-Format will be provided in the comment section as an example. You can copy and paste to where you desire in the document. This is not a guide to all \LaTeX\ codes. If you have questions regarding LATEX coding, you may refer to \href{https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes}{\hl{this tutorial}}.
-\begin{itemize}
-    \item \verb|%|: comment out. It will not appear in the output PDF. This is the same comment method as Python and Matlab and C. If you want to type the percentage mark, add a backslash before it. For large areas, such as trying to comment out the pages, you can use the following function. For the comment function, the opening and closing commands should appear on a line of their own. No starting spaces, nothing after it. Otherwise, it will be buggy.
-          \begin{comment}
-          All stuff here will be commented.
-          \end{comment}
-    \item \verb|\clearpage|: start a new page. newpage also works. Please use it accordingly.
-    \item \verb|\newline|. \\
-          This symbol will generate a new line, as you can see in the PDF. \\
-          DO NOT USE ENTER FOR NEW LINES LIKE YOU DO IN MICROSOFT WORD.
-    \item \verb|\begin{figure}\end{figure}|. See the following picture as an example. You can copy the code below. Items in the [ ] serves as settings. In the options, \verb|h| represents having the picture here,\verb|t| will put it in the top, and \verb|b| will put it in the bottom. \verb|width| and \verb|scale| configure the size of your picture in the document. The command \verb|\caption| are required.
-          \begin{verbatim}
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=6cm,scale=1]{RossAdeStadium.jpg} 
-        \caption{Ross-Ade}
-    \end{figure}
-    \end{verbatim}
-
-          \begin{figure}[!ht]
-              \centering
-              \includegraphics[width=6cm,scale=1]{RossAdeStadium.jpg} % Change the picture to your sketch
-              \caption{Ross-Ade}
-          \end{figure}
-
-    \item \verb|\begin{itemize}|: Consider it as a bullet point template. Every \verb|\item| will be a bullet point. You will see another environment called \verb|enumerate| later. It is essentially the same, but in numbers.
-
-    \item \verb|\lstinputlisting[language= [...]]{}|: This is a useful command to upload your code to the appendices. If you are using Overleaf, upload the code documents to Overleaf. If you are using other editors locally, put your code in the same folder as your .tex.
-\end{itemize}
-Again, if you have questions regarding LATEX coding, you may refer to \href{https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes}{\hl{this tutorial}}.
 
 %%%%%%%%%%%%%%%% Document Starts %%%%%%%%%%%%%%%%%%%%%
 
@@ -86,7 +35,7 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 % Sketch goes here
 \begin{figure}[h]
     \centering
-    \includegraphics[width=12cm,scale=1]{RossAdeStadium.jpg}
+    \includegraphics[width=12cm,scale=1]{white.png}
     \caption{[Caption]}
 \end{figure}
 
@@ -193,7 +142,7 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 [\textbf{DD1+}]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{RossAdeStadium.jpg} % Change the picture
+    \includegraphics[width=16cm]{white.png} % Change the picture
     \caption{System Block Diagram}
 \end{figure}
 
@@ -203,7 +152,7 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 [\textbf{DD1+}]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{RossAdeStadium.jpg} % Change the picture
+    \includegraphics[width=16cm]{white.png} % Change the picture
     \caption{System Activity Diagram}
 \end{figure}
 
@@ -213,7 +162,7 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 [\textbf{DD3+}]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{RossAdeStadium.jpg} % Change the picture
+    \includegraphics[width=16cm]{white.png} % Change the picture
     \caption{System Mechanical Design}
 \end{figure}
 
@@ -231,7 +180,7 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 [Photograph of assembled system, intended to highlight user interaction / controls. If system is split into multiple parts, show a composite of more than one photograph with all key user interactions / controls. ]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{RossAdeStadium.jpg} % Change the picture
+    \includegraphics[width=16cm]{white.png} % Change the picture
     \caption{[Photo Name]}
 \end{figure}
 
@@ -247,7 +196,7 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 [\textbf{DD1+}]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{RossAdeStadium.jpg} % Change the picture
+    \includegraphics[width=16cm]{white.png} % Change the picture
     \caption{Subsystem Block Diagram}
 \end{figure} % If your subsystem is more coding, change it to activity diagram
 
@@ -273,7 +222,7 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 [Type here \textbf{DD2+}]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{RossAdeStadium.jpg} % Change the picture
+    \includegraphics[width=16cm]{white.png} % Change the picture
     \caption{[Schematic Name]}
 \end{figure} % If your subsystem is more coding, change it to psudo code
 
@@ -315,7 +264,7 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 [\textbf{DD1+}]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{RossAdeStadium.jpg} % Change the picture
+    \includegraphics[width=16cm]{white.png} % Change the picture
     \caption{Subsystem Block Diagram}
 \end{figure} % If your subsystem is more coding, change it to activity diagram
 
@@ -341,7 +290,7 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 [Type here \textbf{DD2+}]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{RossAdeStadium.jpg} % Change the picture
+    \includegraphics[width=16cm]{white.png} % Change the picture
     \caption{[Schematic Name]}
 \end{figure} % If your subsystem is more coding, change it to psudo code
 
@@ -382,7 +331,7 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 [\textbf{DD1+}]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{RossAdeStadium.jpg} % Change the picture
+    \includegraphics[width=16cm]{white.png} % Change the picture
     \caption{Subsystem Block Diagram}
 \end{figure} % If your subsystem is more coding, change it to activity diagram
 
@@ -408,7 +357,7 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 [Type here \textbf{DD2+}]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{RossAdeStadium.jpg} % Change the picture
+    \includegraphics[width=16cm]{white.png} % Change the picture
     \caption{[Schematic Name]}
 \end{figure} % If your subsystem is more coding, change it to psudo code
 
@@ -450,7 +399,7 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 [\textbf{DD1+}]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{RossAdeStadium.jpg} % Change the picture
+    \includegraphics[width=16cm]{white.png} % Change the picture
     \caption{Subsystem Block Diagram}
 \end{figure} % If your subsystem is more coding, change it to activity diagram
 
@@ -476,7 +425,7 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 [Type here \textbf{DD2+}]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{RossAdeStadium.jpg} % Change the picture
+    \includegraphics[width=16cm]{white.png} % Change the picture
     \caption{[Schematic Name]}
 \end{figure} % If your subsystem is more coding, change it to psudo code
 
@@ -564,7 +513,7 @@ Team Role: [Technical and Professional Roles in the team] \\
 Bio: [Short Introduction here]
 
 \subsection{Team Member 3}
-\includegraphics[height=4cm]{RossAdeStadium.jpg} \\
+\includegraphics[height=4cm]{white.png} \\
 \textbf{[Name Here]}\\
 Major: [FILL IN]\\
 Contact: [user]@purdue.edu\\
@@ -572,7 +521,7 @@ Team Role: [Technical and Professional Roles in the team] \\
 Bio: [Short Introduction here]
 
 \subsection{Team Member 4}
-\includegraphics[height=4cm]{RossAdeStadium.jpg} \\
+\includegraphics[height=4cm]{white.png} \\
 \textbf{[Name Here]}\\
 Major: [FILL IN]\\
 Contact: [user]@purdue.edu\\
@@ -588,7 +537,7 @@ Bio: [Short Introduction here]
 \begin{thebibliography}{}
 
     \bibitem{b1}
-    “Data Platform – Open Power System data,” Apr. 15, 2020. https://data.open-power-system-data.org/household\_data/
+    “Data Platform - Open Power System data,” Apr. 15, 2020. https://data.open-power-system-data.org/household\_data/
 
     \bibitem{b2}
     Author,"Title," \emph{Journal},volume,number, page range, month year, DOI.
@@ -603,7 +552,4 @@ Bio: [Short Introduction here]
 \section{Appendices}
  [This section is mainly designed for code. You can directly generate a somewhat decent display of your code file or psuedo code by using the template provided below. You can have as many appendix as you want. In the document, you can refer to the code posted here instead of pasting the whole code in the body. ]
 
-\subsection{Appendix A: [Appendix Name]}
-\lstinputlisting[language=python]{HelloWorld.py}
-
-\end{document} % Anything beyond will not be in the document. This should be the last line. 
+\end{document}
