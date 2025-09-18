@@ -20,18 +20,18 @@
 %%%%%%%%%%%%%%% Tips page %%%%%%%%%%%%%%%%%%%%%%
 \section*{Tips for \textit{\LaTeX}}
 \begin{itemize}
-    \item If you find some tips do not make sense when reading the PDF alone, you may refer the corresponding codes in the source file. 
-    \item DELETE or COMMENT OUT \hl{Tips for \textit{\LaTeX}} and \hl{Useful Commands} Page before submission. Pages before the title should NOT appear in the final submission of your project report. 
+    \item If you find some tips do not make sense when reading the PDF alone, you may refer the corresponding codes in the source file.
+    \item DELETE or COMMENT OUT \hl{Tips for \textit{\LaTeX}} and \hl{Useful Commands} Page before submission. Pages before the title should NOT appear in the final submission of your project report.
     \item Items in square brackets ([...]) should be replaced with correct information. They serve as location markers in the code for your convenience.
-    \item Check for comments to see which Design Document it is for. It will be contained in the [Type here] box. 
+    \item Check for comments to see which Design Document it is for. It will be contained in the [Type here] box.
     \item Please read the comments in the document first if you have questions. % comments
-    \item Figure numbers and titles are required. You should refer to these in the text. Mostly, \textit{\LaTeX} will have them automatically numbered. The figure and caption template will be provided below. 
-    \item References are required. If you include a circuit, cite the source. If you designed the circuit for a different course, you must cite that as well. Failing to do so will be considered cheating. Please make sure every source do not appear in the body of your document. They should be properly cited in the reference area and numbered at the end of your document. You are in ECE senior design, so IEEE standards shall be used. No direct citations of any sort should appear in the body of the report. Here is an example. \cite{b1} It should look similar to this. There will be examples for references in the appendix. IEEE format can be found on \href{https://owl.purdue.edu/owl/research_and_citation/ieee_style/ieee_overview.html}{\hl{Purdue OWL}}. 
-    \item Submit the generated PDF by the source file .tex. DO NOT SUBMIT THIS LATEX CODE DIRECTLY. IT WILL NOT BE GRADED. 
-    \item There are large code blocks commented out in the document for its design later. When the course progress reaches there, you may uncomment it. 
+    \item Figure numbers and titles are required. You should refer to these in the text. Mostly, \textit{\LaTeX} will have them automatically numbered. The figure and caption template will be provided below.
+    \item References are required. If you include a circuit, cite the source. If you designed the circuit for a different course, you must cite that as well. Failing to do so will be considered cheating. Please make sure every source do not appear in the body of your document. They should be properly cited in the reference area and numbered at the end of your document. You are in ECE senior design, so IEEE standards shall be used. No direct citations of any sort should appear in the body of the report. Here is an example. \cite{b1} It should look similar to this. There will be examples for references in the appendix. IEEE format can be found on \href{https://owl.purdue.edu/owl/research_and_citation/ieee_style/ieee_overview.html}{\hl{Purdue OWL}}.
+    \item Submit the generated PDF by the source file .tex. DO NOT SUBMIT THIS LATEX CODE DIRECTLY. IT WILL NOT BE GRADED.
+    \item There are large code blocks commented out in the document for its design later. When the course progress reaches there, you may uncomment it.
     \item For a .tex file to read outer resources, you may put them under the same directory. For details, you may refer to \href{https://www.overleaf.com/learn/latex/Inserting_Images}{\hl{this tutorial}}.
     \item For the .tex file to read large amount of coding, refer to the appendices section.
-    \item In Overleaf, you can double click the section in the PDF to go to the according location in the \textit{\LaTeX} code. 
+    \item In Overleaf, you can double click the section in the PDF to go to the according location in the \textit{\LaTeX} code.
 \end{itemize}
 
 %%%%%%%%%%%%%% Commands page %%%%%%%%%%%%%%%%%
@@ -39,32 +39,32 @@
 \section*{Useful Commands}
 Format will be provided in the comment section as an example. You can copy and paste to where you desire in the document. This is not a guide to all \LaTeX\ codes. If you have questions regarding LATEX coding, you may refer to \href{https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes}{\hl{this tutorial}}.
 \begin{itemize}
-    \item \verb|%|: comment out. It will not appear in the output PDF. This is the same comment method as Python and Matlab and C. If you want to type the percentage mark, add a backslash before it. For large areas, such as trying to comment out the pages, you can use the following function. For the comment function, the opening and closing commands should appear on a line of their own. No starting spaces, nothing after it. Otherwise, it will be buggy. 
-\begin{comment}
-    All stuff here will be commented. 
-\end{comment}
-    \item \verb|\clearpage|: start a new page. newpage also works. Please use it accordingly. 
-    \item \verb|\newline|. \\ 
-    This symbol will generate a new line, as you can see in the PDF. \\
-    DO NOT USE ENTER FOR NEW LINES LIKE YOU DO IN MICROSOFT WORD.
+    \item \verb|%|: comment out. It will not appear in the output PDF. This is the same comment method as Python and Matlab and C. If you want to type the percentage mark, add a backslash before it. For large areas, such as trying to comment out the pages, you can use the following function. For the comment function, the opening and closing commands should appear on a line of their own. No starting spaces, nothing after it. Otherwise, it will be buggy.
+          \begin{comment}
+          All stuff here will be commented.
+          \end{comment}
+    \item \verb|\clearpage|: start a new page. newpage also works. Please use it accordingly.
+    \item \verb|\newline|. \\
+          This symbol will generate a new line, as you can see in the PDF. \\
+          DO NOT USE ENTER FOR NEW LINES LIKE YOU DO IN MICROSOFT WORD.
     \item \verb|\begin{figure}\end{figure}|. See the following picture as an example. You can copy the code below. Items in the [ ] serves as settings. In the options, \verb|h| represents having the picture here,\verb|t| will put it in the top, and \verb|b| will put it in the bottom. \verb|width| and \verb|scale| configure the size of your picture in the document. The command \verb|\caption| are required.
-    \begin{verbatim}
+          \begin{verbatim}
     \begin{figure}[h]
         \centering
         \includegraphics[width=6cm,scale=1]{RossAdeStadium.jpg} 
         \caption{Ross-Ade}
     \end{figure}
     \end{verbatim}
-    
-    \begin{figure}[!ht]
-        \centering
-        \includegraphics[width=6cm,scale=1]{RossAdeStadium.jpg} % Change the picture to your sketch
-        \caption{Ross-Ade}
-    \end{figure}
-    
-    \item \verb|\begin{itemize}|: Consider it as a bullet point template. Every \verb|\item| will be a bullet point. You will see another environment called \verb|enumerate| later. It is essentially the same, but in numbers. 
 
-    \item \verb|\lstinputlisting[language= [...]]{}|: This is a useful command to upload your code to the appendices. If you are using Overleaf, upload the code documents to Overleaf. If you are using other editors locally, put your code in the same folder as your .tex. 
+          \begin{figure}[!ht]
+              \centering
+              \includegraphics[width=6cm,scale=1]{RossAdeStadium.jpg} % Change the picture to your sketch
+              \caption{Ross-Ade}
+          \end{figure}
+
+    \item \verb|\begin{itemize}|: Consider it as a bullet point template. Every \verb|\item| will be a bullet point. You will see another environment called \verb|enumerate| later. It is essentially the same, but in numbers.
+
+    \item \verb|\lstinputlisting[language= [...]]{}|: This is a useful command to upload your code to the appendices. If you are using Overleaf, upload the code documents to Overleaf. If you are using other editors locally, put your code in the same folder as your .tex.
 \end{itemize}
 Again, if you have questions regarding LATEX coding, you may refer to \href{https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes}{\hl{this tutorial}}.
 
@@ -76,11 +76,11 @@ Again, if you have questions regarding LATEX coding, you may refer to \href{http
 \date{[Date]}
 \maketitle
 \begin{center}
-GTA: [GTA Name] \\
-Professor: [Professor Name]
+    GTA: [GTA Name] \\
+    Professor: [Professor Name]
 \end{center}
 \begin{center}
-    \textbf{Design Document} 
+    \textbf{Design Document}
 \end{center}
 
 % Sketch goes here
@@ -109,13 +109,13 @@ Professor: [Professor Name]
 % For every update, copy a whole LATEX code line and adjust accordingly. In theory, update every time you make major changes in the document. The \& symbol serves to separate items in the table. If you are new to this , aligh the \& so that it looks more like a table in the code. 
 \begin{table}[h]
     \begin{tabularx}{\textwidth}{|l|c|X|} % 
-    \hline
-    Date     & Revision &  Changes \\ \hline
-    5/3/2024 & v0.1     &  Initial Release    \\ \hline
-    [Copy]   & [and]    &  [Replace]    \\ \hline
+        \hline
+        Date     & Revision & Changes         \\ \hline
+        5/3/2024 & v0.1     & Initial Release \\ \hline
+        [Copy]   & [and]    & [Replace]       \\ \hline
     \end{tabularx}
     \caption{Revision Log}
-\end{table} 
+\end{table}
 
 % Glossary Page
 \clearpage
@@ -123,7 +123,7 @@ Professor: [Professor Name]
 \begin{itemize} % Remember to bold format the key word. Here are some examples. 
     \item \textbf{3D audio technology} Simulation that creates the illusion of sound sources placed anywhere in 3 dimensional space, including behind, above or below the listener.
     \item \textbf{API} Application Programming Interface.
-    \item 
+    \item
 \end{itemize}
 
 % Introduction Page
@@ -159,7 +159,7 @@ Professor: [Professor Name]
     \item {[Type here \textbf{DD1+}]}
     \item {[Type here \textbf{DD1+}]}
 \end{enumerate}
-    
+
 \subsubsection{Cultural Factors}
 \begin{enumerate}
     \item {[Type here \textbf{DD1+}]}
@@ -296,7 +296,7 @@ Professor: [Professor Name]
 [\textbf{DD3+} Every specification here should match the specification above. ]
 \begin{enumerate}
     \item {[Copy specification here. ]} \\
-    {[Explain the specification here. Add photoes if necessary. ]}
+          {[Explain the specification here. Add photoes if necessary. ]}
 \end{enumerate}
 
 % Standards
@@ -363,7 +363,7 @@ Professor: [Professor Name]
 [\textbf{DD3+} Every specification here should match the specification above. ]
 \begin{enumerate}
     \item {[Copy specification here. ]} \\
-    {[Explain the specification here. Add photoes if necessary. ]}
+          {[Explain the specification here. Add photoes if necessary. ]}
 \end{enumerate}
 
 % Standards
@@ -431,7 +431,7 @@ Professor: [Professor Name]
 [\textbf{DD3+} Every specification here should match the specification above. ]
 \begin{enumerate}
     \item {[Copy specification here. ]} \\
-    {[Explain the specification here. Add photoes if necessary. ]}
+          {[Explain the specification here. Add photoes if necessary. ]}
 \end{enumerate}
 
 % Standards
@@ -499,7 +499,7 @@ Professor: [Professor Name]
 [\textbf{DD3+} Every specification here should match the specification above. ]
 \begin{enumerate}
     \item {[Copy specification here. ]} \\
-    {[Explain the specification here. Add photoes if necessary. ]}
+          {[Explain the specification here. Add photoes if necessary. ]}
 \end{enumerate}
 
 % Standards
@@ -516,7 +516,7 @@ Professor: [Professor Name]
 [\textbf{DD3+}]
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=10cm]{SeriesExample.PNG} % Change the picture
+    \includegraphics[width=10cm]{white.png} % Change the picture
     \caption{PCB Schematic}
 \end{figure}
 
@@ -525,30 +525,30 @@ Professor: [Professor Name]
 [\textbf{DD3+}]
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{STM32_Board.PNG} % Change the picture
+    \includegraphics[width=16cm]{white.png} % Change the picture
     \caption{PCB Layout}
 \end{figure}
 
 %%%%%%%%%%%%%%% Final Status Page %%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Final Status of Requirements}
-[\textbf{DD3+}]
-[If met, give a detailed explanation of the requirement. If partially met, mention what has been met and a reason for why the complete requirement couldn’t be achieved. If not met, give an explanation for why the requirement couldn’t be met in the product. Add as many requirements as you had in your earlier design documents here. ]
+ [\textbf{DD3+}]
+ [If met, give a detailed explanation of the requirement. If partially met, mention what has been met and a reason for why the complete requirement couldn’t be achieved. If not met, give an explanation for why the requirement couldn’t be met in the product. Add as many requirements as you had in your earlier design documents here. ]
 \begin{enumerate}
     \item Requirement 1: [Copy your requirement above here] \\
-    \textbf{Met}: [Explanation] 
+          \textbf{Met}: [Explanation]
     \item Requirement 2: [Copy your requirement above here] \\
-    \textbf{Partially Met}: [Explanation] 
+          \textbf{Partially Met}: [Explanation]
     \item Requirement 3: [Copy your requirement above here] \\
-    \textbf{Not Met}: [Explanation] 
+          \textbf{Not Met}: [Explanation]
 \end{enumerate}
 
 %%%%%%%%%%%%%%% Team Intro Page %%%%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Team Structure}
-[\textbf{DD1+}]
+ [\textbf{DD1+}]
 \subsection{Team Member 1}
-\includegraphics[height=4cm]{RossAdeStadium.jpg} \\
+\includegraphics[height=4cm]{white.png} \\
 \textbf{[Name Here]}\\
 Major: [FILL IN]\\
 Contact: [user]@purdue.edu\\
@@ -556,7 +556,7 @@ Team Role: [Technical and Professional Roles in the team] \\
 Bio: [Short Introduction here]
 
 \subsection{Team Member 2}
-\includegraphics[height=4cm]{RossAdeStadium.jpg} \\
+\includegraphics[height=4cm]{white.png} \\
 \textbf{[Name Here]}\\
 Major: [FILL IN]\\
 Contact: [user]@purdue.edu\\
@@ -581,27 +581,27 @@ Bio: [Short Introduction here]
 
 %%%%%%%%%%%%%%%%% Biblography %%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
-\section{Bibliography} 
+\section{Bibliography}
 
-[Here are some examples. IEEE format can be found on \href{https://owl.purdue.edu/owl/research_and_citation/ieee_style/ieee_overview.html}{\hl{Purdue OWL}}. ]
+ [Here are some examples. IEEE format can be found on \href{https://owl.purdue.edu/owl/research_and_citation/ieee_style/ieee_overview.html}{\hl{Purdue OWL}}. ]
 
 \begin{thebibliography}{}
 
-\bibitem{b1}
- “Data Platform – Open Power System data,” Apr. 15, 2020. https://data.open-power-system-data.org/household\_data/  
+    \bibitem{b1}
+    “Data Platform – Open Power System data,” Apr. 15, 2020. https://data.open-power-system-data.org/household\_data/
 
-\bibitem{b2}
-Author,"Title," \emph{Journal},volume,number, page range, month year, DOI.
+    \bibitem{b2}
+    Author,"Title," \emph{Journal},volume,number, page range, month year, DOI.
 
-\bibitem{b3}
-Author. "Page."Website. URL(accessed month day,year)
+    \bibitem{b3}
+    Author. "Page."Website. URL(accessed month day,year)
 
 \end{thebibliography}
 
 %%%%%%%%%%%%%%%%% Appendix %%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
-\section{Appendices} 
-[This section is mainly designed for code. You can directly generate a somewhat decent display of your code file or psuedo code by using the template provided below. You can have as many appendix as you want. In the document, you can refer to the code posted here instead of pasting the whole code in the body. ]
+\section{Appendices}
+ [This section is mainly designed for code. You can directly generate a somewhat decent display of your code file or psuedo code by using the template provided below. You can have as many appendix as you want. In the document, you can refer to the code posted here instead of pasting the whole code in the body. ]
 
 \subsection{Appendix A: [Appendix Name]}
 \lstinputlisting[language=python]{HelloWorld.py}
