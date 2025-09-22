@@ -1,6 +1,5 @@
-%%%%%%%%%%%%% Subsystem 2 %%%%%%%%%%%%%%%
 \clearpage
-\subsection{Subsystem 2: [Subsystem Name]}
+\subsection{Subsystem 2: Power Management}
 
 % Subsystem Diagram
 \subsubsection{Subsystem Diagrams}
@@ -40,7 +39,12 @@
 % Parts List
 \subsubsection{Parts}
 \begin{itemize}
-    \item {[Type here \textbf{DD1+}]}
+    \item USB-C 5 V input module
+    \item Li-ion battery pack (3.7 V, 8000 mAh)
+    \item Buck-boost regulator IC (for 3.3 V and 5 V rails)
+    \item Battery charging IC (USB-C PD or simple Li-ion charger).
+    \item Basic protection devices (fuse, MOSFET switch, TVS diode).
+    \item (Optional) Solar panel (5–20 W) + MPPT controller IC.
 \end{itemize}
 
 % Algorithm
@@ -62,5 +66,8 @@
 \subsubsection{Standards}
 [\textbf{DD1+}]
 \begin{itemize}
-    \item \textbf{[Standard Name]}: [Describe the standards and explain the connection]
+    \item \textbf{USB-C Power Delivery Specification}: ensures safe and standard input power.
+    \item \textbf{IEEE 1625}: covers battery system reliability for portable electronics.
+    \item \textbf{UL 2054}: safety standard for rechargeable batteries in consumer devices.
+    \item \textbf{IEC 61215}: (Optional solar) performance and reliability for PV modules.
 \end{itemize}

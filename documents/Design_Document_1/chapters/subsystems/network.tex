@@ -1,6 +1,6 @@
 %%%%%%%%%%%%% Subsystem 4 %%%%%%%%%%%%%%%
 \clearpage
-\subsection{Subsystem 4: [Subsystem Name]}
+\subsection{Subsystem 4: Network and Communications}
 
 % Subsystem Diagram
 \subsubsection{Subsystem Diagrams}
@@ -40,7 +40,12 @@
 % Parts List
 \subsubsection{Parts}
 \begin{itemize}
-    \item {[Type here \textbf{DD1+}]}
+    \item Weather API
+    \item Flight API
+    \item Time Sync API
+    \item GPS/Geolocation API
+    \item Network Interface
+    \item Data/Signal Interface
 \end{itemize}
 
 % Algorithm
@@ -56,12 +61,15 @@
 [\textbf{DD3+} Every specification here should match the specification above. ]
 \begin{enumerate}
     \item {[Copy specification here. ]} \\
-          {[Explain the specification here. Add photoes if necessary. ]}
+          {[Explain the specification here. Add photos if necessary. ]}
 \end{enumerate}
 
 % Standards
 \subsubsection{Standards}
 [\textbf{DD1+}]
 \begin{itemize}
-    \item \textbf{[Standard Name]}: [Describe the standards and explain the connection]
+    \item \textbf{NMEA 0183}: Used by GPS receivers to format location/time data, ensuring compatibility with processing algorithms.
+    \item \textbf{REST/HTTPS}: Secure, standardized communication with weather servers and external data sources.
+    \item \textbf{IEEE 802.11 (Wi-Fi) / IEEE 802.3 (Ethernet)}: Provides reliable networking for internet-based data exchange (when we add website interference).
+    \item \textbf{TCP/IP, Checksum validation}: Ensures robustness in communication so that even non-technical users get accurate, reliable results.
 \end{itemize}
