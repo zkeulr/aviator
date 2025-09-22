@@ -39,9 +39,8 @@ The display subsystem links the main PCB and the LED Matrix. This subsystem will
 % Parts List
 \subsubsection{Parts}
 \begin{itemize}
-    \item {[Type here \textbf{DD1+}]}
     \item 32 x 64 px LED Matrix (ADAFruit from DigiKey)
-    \item 
+    \item Custom PCB (possibly a hat or extension) for driving display
 \end{itemize}
 
 % Algorithm
@@ -49,7 +48,7 @@ The display subsystem links the main PCB and the LED Matrix. This subsystem will
 
 \begin{lstlisting}
     Initialize:
-    Configure GPIOs for DATA, CLK, LAT, OE, row select lines (A,B,C,D)
+    Configure GPIOs (DATA, CLK, LAT, OE, row select lines (A,B,C,D))
     Initialize interface for incoming data
     Initialize timer for refresh interrupts
     Set PWM resolution (e.g., 8-bit)
@@ -102,7 +101,9 @@ The display subsystem links the main PCB and the LED Matrix. This subsystem will
 
 % Standards
 \subsubsection{Standards}
-[\textbf{DD1+}]
 \begin{itemize}
-    \item \textbf{[Standard Name]}: [Describe the standards and explain the connection]
+    \item \textbf{IEC 61010}: Safety for low-voltage electronic equipment; ensures protection against shorts, overcurrent, and handling risks.
+    \item \textbf{SPI/I²C}: If MCU/controller communicates with peripheral ICs over standard buses.
+    \item \textbf{HUB75}: Standard for 32×64 RGB LED matrices; timing, row multiplexing, and data latching must be followed.
+    \item \textbf{JESD51}: Important for high-current LED arrays; ensures heat dissipation and junction temperatures are within safe limits.
 \end{itemize}
