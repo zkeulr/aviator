@@ -39,15 +39,6 @@ drivers on the controller.
     \item \textbf{ECE 36200}: PCB design and embedded software development.
 \end{itemize}
 
-% Schematics
-\subsubsection{Schematics}
-[Type here \textbf{DD2+}]
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=16cm]{images/white.png} % Change the picture
-    \caption{[Schematic Name]}
-\end{figure} % If your subsystem is more coding, change it to psudo code
-
 % Parts List
 \subsubsection{Parts}
 \begin{itemize}
@@ -60,35 +51,72 @@ drivers on the controller.
 \subsubsection{Algorithm}
 \begin{lstlisting}
     initialize clock, network, display, location
+    DATA = {}
 
     always 
         wifi keep alive
         error handling
+        if power button pressed
+            save and shut down
     
     every minute
         update display time
 
-        make API call for flight data
-        parse data
+        read ADS-B sensor
+        if ADS-B valid
+            add to DATA
+            if internet connected
+                upload ADS-B data
+            else
+                cache ADS-B data
+        else 
+            if internet connected
+                make API call for flight data
+                add to DATA
+            else
+                add warning ADS-B out of date to DATA
+            
 
         if battery powered
-            check battery voltage
-            add battery to data
+            update battery level in DATA
 
-        add time, weather, flight info to data
-        convert data to pixel buffer
-        push pixel buffer to display
-    
+        update time, weather in DATA
+        convert DATA to pixel buffer
+        push pixel buffer to displar
     every hour
-        sync RTC with network time
-
+        sync with network time
         make API call for weather
 
 \end{lstlisting}
 
-% Theory of Operation
 \subsubsection{Theory of Operation}
-[Type here \textbf{DD2+}]
+The processing subsystem is responsible for
+coordinating all other subsystems and serving
+as the “brain” of the Aviator device. At startup,
+the ESP32-S3 initializes its real-time clock,
+connects to the Wi-Fi network, and
+configures the SPI interface for display communication.
+During normal operation, the processor maintains a
+persistent network connection to ensure timely access
+to APIs.
+
+Every minute, the processor updates the displayed time,
+retrieves the latest flight information from the network
+subsystem, and parses the response into a standardized
+data structure. If the device is battery-powered, it
+also queries the power management subsystem for voltage
+information and appends this to the displayed data.
+The processor then converts the compiled information
+(time, weather, and flight updates) into a pixel buffer
+and transmits it to the display subsystem.
+
+On an hourly basis, the processor synchronizes the
+real-time clock with network time servers and fetches
+weather data for local context. Error handling
+routines ensure that loss of network, corrupted data,
+or power fluctuations do not crash the system; instead,
+the subsystem retries API calls or falls back to cached
+data, with a warning that the data is out of date.
 
 % Specification Measurement
 \subsubsection{Specifications Measurement}
