@@ -1,8 +1,21 @@
-from machine import Pin
-from time import sleep
+# on boot
+# initialize network from saved settings, set else
+# initialize display
+# initialize location from saved settings, set else
+import time
+import adsb
 
-led = Pin(2, Pin.OUT)
+data = {}
+    
 
-while True:
-  led.value(not led.value())
-  sleep(0.5)
+def main():
+    
+    while(True):
+      time.sleep(60)
+    
+      # Fetch ADS-B data
+
+      # Fetch API data
+
+if __name__ == "main":
+    main()
