@@ -1,10 +1,9 @@
 \subsection{Subsystem 3: Text Display \& Chassis}
-
 % Subsystem Diagram
 \subsubsection{Subsystem Diagrams}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=12cm]{images/blockDiagram-display.png} % Change the picture
+    \includegraphics[width=12cm]{images/DisplayDriver/blockDiagram-display.png} % Change the picture
     \caption{Subsystem Block Diagram}
 \end{figure} % If your subsystem is more coding, change it to activity diagram
 
@@ -29,12 +28,32 @@ The display subsystem links the main PCB and the LED Matrix. This subsystem will
 
 % Schematics
 \subsubsection{Schematics}
-[Type here \textbf{DD2+}]
-\begin{figure}[h]
+
+\begin{figure}[H]
     \centering
-    \includegraphics[width=16cm]{images/white.png} % Change the picture
-    \caption{[Schematic Name]}
-\end{figure} % If your subsystem is more coding, change it to psudo code
+    \includegraphics[width=12cm]{images/DisplayDriver/DisplayDriver Schematic.jpg}
+    \caption{Display Driver Schematic}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{images/DisplayDriver/USBPwrGeneric.jpg}
+    \caption{Generic USB 5V Input until Power Subsystem is Complete}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{images/DisplayDriver/DriverBoardFeatures.jpg}
+    \caption{Features of Display Driver Board}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{images/DisplayDriver/WroverUsage.jpg}
+    \caption{Pinout of the ESP32-S2 WROVER-B}
+\end{figure}
+
+\FloatBarrier
 
 % Parts List
 \subsubsection{Parts}
@@ -89,7 +108,15 @@ The display subsystem links the main PCB and the LED Matrix. This subsystem will
 
 % Theory of Operation
 \subsubsection{Theory of Operation}
-[Type here \textbf{DD2+}]
+The Display Driver subsystem serves as the primary interface between the ESP32-WROVER-B microcontroller and a 32×64 HUB75 RGB LED matrix, enabling real-time visualization of aviation and weather data. 
+The ESP32 handles pixel generation, frame buffering, and timing control for row and column scanning of the display. 
+Core signals — including LAT (latch), OE (output enable), CLK (clock), and address lines A–E — are driven directly from the ESP32’s GPIO pins and level-shifted from 3.3 V logic to the 5 V domain required by the HUB75 interface. 
+The RGB data lines (R1, G1, B1, R2, G2, B2) are similarly translated to ensure proper color channel switching for both the upper and lower halves of the LED matrix. 
+During operation, the ESP32 continuously cycles through the address lines, updating one row at a time while controlling brightness through pulse-width modulation synchronized with the OE signal. 
+Power is supplied through regulated 5 V and 3.3 V rails, supporting both the LED panel and logic circuitry. 
+Optional pushbuttons provide manual reset and boot functionality, while status LEDs indicate system power and data activity. 
+In system deployment, the Display Driver operates under firmware that retrieves aircraft position and weather telemetry from networked sources, translating this incoming data into color-coded graphical output. 
+This modular design allows the subsystem to function independently or as an integrated component of the larger Aviator platform, emphasizing robustness, timing precision, and electrical isolation between logic and display domains.
 
 % Specification Measurement
 \subsubsection{Specifications Measurement}

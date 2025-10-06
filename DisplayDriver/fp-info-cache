@@ -1,4 +1,4 @@
-23837902446271712
+23841421839448740
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -56321,6 +56321,20 @@ LCD 16x2 Alphanumeric 16pin
 0
 20
 16
+DisplayDriver
+SW_TL3330AF260QG
+
+
+0
+4
+4
+DisplayDriver
+XCVR_ESP32-WROVER-B__16MB_
+
+
+0
+39
+39
 Display_7Segment
 7SEGMENT-LED__HDSM531_HDSM533_SMD
 7-Segment Display, HDSM53x, https://docs.broadcom.com/docs/AV02-0713EN
