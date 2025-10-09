@@ -1,4 +1,4 @@
-23843181611374095
+23851981075117809
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -56321,6 +56321,41 @@ LCD 16x2 Alphanumeric 16pin
 0
 20
 16
+DisplayDriver
+ESP32-S3-WROOM-1_EXP
+
+ESP32-S3-WROOM-1-N4R8 
+0
+49
+49
+DisplayDriver
+QFN28_6x6MC_MCH
+
+MCP23017-E/ML 
+0
+29
+29
+DisplayDriver
+QFN28_6x6MC_MCH-L
+
+MCP23017-E/ML 
+0
+29
+29
+DisplayDriver
+QFN28_6x6MC_MCH-M
+
+MCP23017-E/ML 
+0
+29
+29
+DisplayDriver
+QFN50P400X400X90-25N
+
+
+0
+25
+25
 DisplayDriver
 SAMTEC_HTSS-108-01-G-D
 
