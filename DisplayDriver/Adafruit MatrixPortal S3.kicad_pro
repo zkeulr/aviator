@@ -371,7 +371,7 @@
       "version": 1
     },
     "net_format_name": "",
-    "page_layout_descr_file": "",
+    "page_layout_descr_file": "empty.kicad_wks",
     "plot_directory": "",
     "spice_current_sheet_as_root": false,
     "spice_external_command": "spice \"%I\"",
@@ -382,6 +382,11 @@
     "subpart_first_id": 65,
     "subpart_id_separator": 0
   },
-  "sheets": [],
+  "sheets": [
+    [
+      "e86a85a6-76df-436d-b1b0-4bd3e19267ed",
+      "Adafruit MatrixPortal S3_0"
+    ]
+  ],
   "text_variables": {}
 }
