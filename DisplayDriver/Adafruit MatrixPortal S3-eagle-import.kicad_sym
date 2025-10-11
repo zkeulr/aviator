@@ -24405,6 +24405,44 @@
 				)
 			)
 		)
+		(symbol "SWITCH_SPST_MNT_TACT_RA_1_1"
+			(pin unspecified line
+				(at 0 -8.89 180)
+				(length 5.08) hide
+				(name "S1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "S1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin unspecified line
+				(at 0 -11.43 180)
+				(length 5.08) hide
+				(name "S2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "S2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
 		(symbol "SWITCH_SPST_MNT_TACT_RA_2_0"
 			(pin bidirectional line
 				(at 0 0 0)
@@ -27327,7 +27365,7 @@
 			)
 		)
 		(property "Footprint" "Adafruit MatrixPortal S3:BTN_RKB2_4.6X2.8"
-			(at 0 0 0)
+			(at -0.254 -4.572 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -27345,7 +27383,7 @@
 			)
 		)
 		(property "Description" "SMT Tact Switches\n\n• RKB2 https://www.digikey.com/short/m027prz5"
-			(at 0 0 0)
+			(at -3.302 -8.382 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -27526,7 +27564,7 @@
 						)
 					)
 				)
-				(number "A"
+				(number "1"
 					(effects
 						(font
 							(size 0 0)
@@ -27544,7 +27582,7 @@
 						)
 					)
 				)
-				(number "A'"
+				(number "1"
 					(effects
 						(font
 							(size 0 0)
@@ -27562,7 +27600,7 @@
 						)
 					)
 				)
-				(number "B"
+				(number "2"
 					(effects
 						(font
 							(size 0 0)
@@ -27580,7 +27618,7 @@
 						)
 					)
 				)
-				(number "B'"
+				(number "2"
 					(effects
 						(font
 							(size 0 0)
