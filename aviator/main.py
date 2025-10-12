@@ -1,8 +1,6 @@
 from machine import Pin
 import time
 
-# Safe GPIO pin list for ESP32-S3 (avoid flash/USB/boot pins)
-# You can adjust this list based on your specific board
 SAFE_PINS = [
     0, 1, 2, 3, 4, 5, 6, 7,
     8, 9, 10, 11, 12, 13, 14, 15,
