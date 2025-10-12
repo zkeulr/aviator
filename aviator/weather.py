@@ -1,19 +1,12 @@
-"""
-weather.py
-Weather data layer for MicroPython (ESP32): fetches current weather for a given lat/lon using Open-Meteo API.
+# THE WEATHER MODULE
 
-API: https://api.open-meteo.com/v1/forecast?latitude=LAT&longitude=LON&current_weather=true
-No API key required.
+# STILL MANY FIXES TO COMPLETE
 
-Public API:
-    fetch_weather(lat, lon)
-"""
-
-# Conditional import for MicroPython (urequests) or CPython (requests)
+# Conditional import 
 try:
     import urequests as requests  # MicroPython
 except ImportError:
-    import requests  # CPython fallback for desktop testing
+    import requests  # CPython 
 
 SURFACE_URL = "https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true"
 ALTITUDE_URL = "https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=temperature_850hPa,temperature_700hPa,temperature_500hPa,temperature_300hPa,temperature_250hPa,windspeed_850hPa,windspeed_700hPa,windspeed_500hPa,windspeed_300hPa,windspeed_250hPa,winddirection_850hPa,winddirection_700hPa,winddirection_500hPa,winddirection_300hPa,winddirection_250hPa"
@@ -21,7 +14,7 @@ ALTITUDE_URL = "https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude=
 def fetch_weather(lat, lon, altitude_ft=None):
     print("[weather] fetch_weather called with lat=", lat, "lon=", lon, "alt_ft=", altitude_ft)
     
-    # Get surface weather
+    # Surface Weather
     surface_url = SURFACE_URL.format(lat=lat, lon=lon)
     print("[weather] Fetching surface:", surface_url)
     
@@ -36,11 +29,11 @@ def fetch_weather(lat, lon, altitude_ft=None):
         surface = surface_data.get("current_weather", {})
         print("[weather] surface weather:", surface)
         
-        # If no altitude requested, return surface only
+        # If no altitude requested then it should return surface only
         if altitude_ft is None:
             return surface
             
-        # Get altitude weather
+        # Altitude Weather
         altitude_url = ALTITUDE_URL.format(lat=lat, lon=lon)
         print("[weather] Fetching altitude:", altitude_url)
         
@@ -53,7 +46,7 @@ def fetch_weather(lat, lon, altitude_ft=None):
         altitude_data = resp_alt.json()
         hourly = altitude_data.get("hourly", {})
         
-        # Map altitude to pressure level
+        # Mappin Altitude - Pressure level
         if altitude_ft < 7500:
             level = "850hPa"
             temp_key = "temperature_850hPa"
@@ -80,7 +73,7 @@ def fetch_weather(lat, lon, altitude_ft=None):
             wind_speed_key = "windspeed_250hPa"
             wind_dir_key = "winddirection_250hPa"
         
-        # Extract current hour data (first entry)
+        # Extract current hour data
         altitude_weather = {
             "temperature": hourly.get(temp_key, [None])[0],
             "windspeed": hourly.get(wind_speed_key, [None])[0], 
@@ -107,7 +100,7 @@ if __name__ == "__main__":
     result = fetch_weather(40.7128, -74.0060)
     print("Surface result:", result)
     
-    # Test high altitude weather (30,000 ft)
+    # Test high altitude weather 
     print("\n=== HIGH ALTITUDE WEATHER (30,000 ft) ===")
     result_alt = fetch_weather(40.7128, -74.0060, 30000)
     print("Altitude result:", result_alt)
