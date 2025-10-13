@@ -1,6 +1,6 @@
-"""flightinfo.py
-Look up flight details (origin, destination, times) from OpenSky Network using callsign.
-"""
+# Flight Info
+
+# Barely began this module (this is the last thing we will do)
 
 import requests
 import time
@@ -36,7 +36,7 @@ def lookup_flight_opensky(callsign):
         print(f"[flightinfo] Exception: {e}")
     return None
 
-# Example usage:
+# Example:
 if __name__ == "__main__":
     info = lookup_flight_opensky("KLM1023")
     print("Flight info:", info)

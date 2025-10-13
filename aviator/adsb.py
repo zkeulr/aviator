@@ -1,37 +1,13 @@
-"""adsb.py
-ADS-B data layer: supports two modes.
+# ADS-B DECODER MODULE
 
-Modes:
-  - "sim": synthetic flights (for early development)
-  - "raw": ingest & partially decode Mode-S / ADS-B 1090ES DF17 frames
-
-Real-world ADS-B operates at 1090 MHz (NOT 101.9 MHz). The extended
-beacon (DF17) is 112 bits (28 hex chars). Full position decoding uses
-Compact Position Reporting (CPR) requiring pairing of even/odd frames,
-which is beyond this simplified stub. We decode only:
-  - Downlink Format (DF)
-  - ICAO address
-  - Type Code (TC)
-  - Barometric altitude (if TC indicates airborne position & Q-bit set)
-
-Later you can add:
-  - CPR lat/lon extraction
-  - Velocity (ground speed, heading) decoding (TC 19)
-  - Flight ID (TC 1–4)
-
-Public API kept minimal:
-  set_mode(mode)
-  ingest_frame(hex_frame)
-  fetch_flights(lat, lon)  # returns list (sim OR raw snapshot)
-  get_flights()            # raw snapshot
-"""
+# Some Changes still needed
 
 import time
 import math
 from typing import List, Dict, Optional, Tuple
 
 
-MODE = "sim"  # change to "raw" when feeding real frames
+MODE = "sim"  # Should be "raw" when real ADS-B Arrives PLZZZZZ
 
 # Error tracking
 _error_count = 0
@@ -39,9 +15,9 @@ _last_error = None
 
 _flights_by_icao: Dict[str, Dict] = {}
 # For CPR decoding: store last even/odd frame per ICAO
-_cpr_cache: Dict[str, Dict[str, Dict]] = {}  # {icao: {"even": {...}, "odd": {...}}}
+_cpr_cache: Dict[str, Dict[str, Dict]] = {}  
 
-# Synthetic list for sim mode
+# Synthetic list for simultation to work
 _sim_flights: List[Dict] = []
 
 
@@ -52,7 +28,7 @@ def set_mode(mode: str) -> None:
 	MODE = mode
 
 
-# --------------------------- SIMULATION MODE --------------------------- 
+# Simulation Mode
 def _seed_sim(lat: float, lon: float) -> None:
 	global _sim_flights
 	_sim_flights = [
@@ -88,7 +64,7 @@ def _advance_sim():
 		f["updated"] = now
 
 
-# --------------------------- RAW MODE DECODING ------------------------- 
+# Raw Mode Decoding
 def _hex_to_bits(hex_frame: str) -> str:
 	return "".join(f"{int(c,16):04b}" for c in hex_frame.upper())
 
@@ -108,16 +84,15 @@ def _decode_type_code(bits: str) -> int:
 
 
 def _decode_altitude(bits: str, type_code: int) -> Optional[int]:
-	# For airborne position messages (TC 9-18) barometric altitude is
-	# encoded in bits 41-52 (indices 40..52). Q-bit at bit 48 (index 47).
+	# For airborne position messages (TC 9-18) barometric altitude is encoded in bits 41-52 Q-bit at bit 48. Indices are like this values -1 sicne begins at 0
 	if 9 <= type_code <= 18:
 		alt_field = bits[40:52]
 		q_bit = alt_field[7]  # index 7 within the 12-bit slice
 		if q_bit == "1":
-			# Remove the Q-bit and reconstruct 11-bit altitude data
+			# Removing the Q-bit and Reconstructing the 11-bit altitude data
 			eleven_bits = alt_field[0:7] + alt_field[8:12]
 			alt_code = int(eleven_bits, 2)
-			# Altitude in feet = alt_code * 25 - 1000 (per spec when Q=1)
+			# Changing to ft
 			return alt_code * 25 - 1000
 	return None
 def _decode_cpr(bits: str, type_code: int) -> Optional[Dict]:
@@ -134,7 +109,7 @@ def _decode_cpr(bits: str, type_code: int) -> Optional[Dict]:
 	parity = int(bits[53], 2)
 	return {"lat_cpr": lat_cpr, "lon_cpr": lon_cpr, "parity": parity}
 
-
+# THIS SHOULD STILL BE MODIFIED TO A FUNCTION MORE EFFICIENT
 def _cprNL(lat: float) -> int:
 	# Table from ICAO Doc 9871, Appendix B
 	if lat < 0:
@@ -265,21 +240,20 @@ def _decode_cpr_position(icao: str) -> Optional[Tuple[float, float]]:
 	cache = _cpr_cache.get(icao)
 	if not cache or "even" not in cache or "odd" not in cache:
 		return None
-	# Extract CPR fields
+	# Extracting CPR fields
 	lat_even = cache["even"]["lat_cpr"]
 	lon_even = cache["even"]["lon_cpr"]
 	lat_odd = cache["odd"]["lat_cpr"]
 	lon_odd = cache["odd"]["lon_cpr"]
 	t_even = cache["even"]["ts"]
 	t_odd = cache["odd"]["ts"]
-	# Use most recent frame
+	# In here we use the most recent frame fellas
 	if t_even > t_odd:
 		ts = t_even
 	else:
 		ts = t_odd
 	# CPR algorithm
-	# See ICAO Doc 9871, Appendix B
-	# Airborne: NZ = 15, Dlat_even = 360/60, Dlat_odd = 360/59
+	# More info from this on --> ICAO Doc 9871, Appendix B
 	Dlat_even = 360.0 / 60.0
 	Dlat_odd = 360.0 / 59.0
 	j = math.floor((59 * lat_even - 60 * lat_odd) / (2 ** 17))
@@ -315,33 +289,29 @@ def _haversine(lat1, lon1, lat2, lon2):
 	a = math.sin(dphi/2)**2 + math.cos(phi1)*math.cos(phi2)*math.sin(dlambda/2)**2
 	c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
 	return R * c
+
+# Don't know about this function
+def _decode_callsign(bits: str, type_code: int) -> Optional[str]:
 	# For airborne position messages (TC 9-18) barometric altitude is
 	# encoded in bits 41-52 (indices 40..52). Q-bit at bit 48 (index 47).
 	if 9 <= type_code <= 18:
 		alt_field = bits[40:52]
 		q_bit = alt_field[7]  # index 7 within the 12-bit slice
 		if q_bit == "1":
-			# Remove the Q-bit and reconstruct 11-bit altitude data
+			# Removing the Q-bit and Reconstructing the 11-bit altitude data
 			eleven_bits = alt_field[0:7] + alt_field[8:12]
 			alt_code = int(eleven_bits, 2)
-			# Altitude in feet = alt_code * 25 - 1000 (per spec when Q=1)
+			# Changing to ft
 			return alt_code * 25 - 1000
 	return None
 
 
 def _decode_callsign(bits: str, type_code: int) -> Optional[str]:
-	"""Decode callsign for Type Codes 1-4 (Aircraft Identification).
-
-	Layout (ME bits numbering):
-	  1-5   Type Code (1-4)
-	  6-8   Emitter category (ignored here)
-	  9-56  Eight 6-bit character codes (48 bits)
-	We map subset of IA-5 per ICAO Doc 9871.
-	"""
+	"""Decode callsign for Type Codes 1-4 (Aircraft Identification)"""
 	if not (1 <= type_code <= 4):
 		return None
-	# ME starts at global bit index 32. Char field begins at ME bit 9 => global index 32 + 8 = 40
-	char_bits = bits[40:88]  # 48 bits
+	# ME starts at global bit index 32. Char field begins at ME bit 9 --> global index 32 + 8 = 40
+	char_bits = bits[40:88] # 48 bits for 8 chars
 	chars: List[str] = []
 	for i in range(0, 48, 6):
 		val = int(char_bits[i:i+6], 2)
@@ -357,19 +327,14 @@ def _map_callsign_char(v: int) -> str:
 		return chr(ord('A') + v - 1)
 	if 48 <= v <= 57:
 		return chr(ord('0') + v - 48)
-	# Common extra codes (some tables map 32 to space, 27='/') – keep simple.
+	# Common extra codes (some tables map 32 to space, 27='/') –-> keep simple.
 	if v == 32:
 		return " "
 	return " "
 
 
 def _decode_velocity(bits: str, type_code: int) -> Tuple[Optional[int], Optional[int]]:
-	"""Decode ground speed & track from Type Code 19 subtype 1/2 (simplified).
-
-	This is an approximate implementation: handles ground speed subtypes with
-	East-West & North-South velocity components (10-bit magnitudes + sign).
-	Returns (track_deg, speed_kt) or (None, None) if not decodable.
-	"""
+	"""Decode ground speed & track from Type Code 19 subtype 1/2 (simplified)."""
 	if type_code != 19:
 		return None, None
 	# ME bits start at global bit 33 => index 32. Subtype is ME bits 6-8 => bits[37:40]
@@ -400,7 +365,7 @@ def _decode_velocity(bits: str, type_code: int) -> Tuple[Optional[int], Optional
 	vy = ns_mag * ( -1 if ns_dir == 1 else 1 )  # South negative
 	speed = int(round(math.sqrt(vx * vx + vy * vy)))
 	# Track angle: 0 deg = North, increase clockwise -> convert from atan2
-	# atan2(x, y) if we want 0=N. We'll use atan2(vx, vy)
+	# atan2(x, y) if we want 0=N. We'll use atan2(vx, vy) fellas
 	angle = math.degrees(math.atan2(vx, vy))
 	if angle < 0:
 		angle += 360
@@ -446,10 +411,10 @@ def _update_raw_flight(icao: str, frame: str, type_code: int, altitude: Optional
 		pos = _decode_cpr_position(icao)
 		if pos:
 			rec["lat"], rec["lon"] = pos
-			# Compute distance if receiver location given
+			# Computing the distance if receiver location given
 			if receiver_lat is not None and receiver_lon is not None:
 				rec["dist_km"] = round(_haversine(receiver_lat, receiver_lon, rec["lat"], rec["lon"]), 2)
-	# Store last raw frame for debugging
+	# Storing last raw frame for debugging
 	rec["raw_frame"] = frame
 
 
@@ -482,7 +447,7 @@ def ingest_frame(hex_frame: str, receiver_lat: Optional[float]=None, receiver_lo
 		return False
 	try:
 		df = _decode_df(bits)
-		if df != 17:  # Only handle extended squitter
+		if df != 17: 
 			_error_count += 1
 			_last_error = f"DF error: got DF={df}"
 			print(f"[adsb] ERROR: { _last_error }")
@@ -500,16 +465,14 @@ def ingest_frame(hex_frame: str, receiver_lat: Optional[float]=None, receiver_lo
 		_last_error = f"General decode error: {e}"
 		print(f"[adsb] ERROR: { _last_error }")
 		return False
-# --------------------------- PUBLIC ACCESSORS --------------------------
+
+# Public Accessors for Errors
 def get_error_count() -> int:
 	return _error_count
 
 def get_last_error() -> Optional[str]:
 	return _last_error
 
-
-
-# --------------------------- PUBLIC ACCESSORS --------------------------
 def fetch_flights(lat: float, lon: float) -> List[Dict]:
 	"""Return list of flight dicts for current mode.
 
