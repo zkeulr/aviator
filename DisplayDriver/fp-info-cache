@@ -1,4 +1,4 @@
-23855501315801891
+23857261554072543
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -56335,6 +56335,13 @@ ESP32-S3-WROOM-1-N4R8
 0
 49
 49
+DisplayDriver
+GCT_USB4110GFA
+
+
+0
+16
+16
 DisplayDriver
 QFN28_6x6MC_MCH
 

@@ -37,9 +37,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.0,
-          "height": 1.4,
-          "width": 1.2
+          "drill": 0.4,
+          "height": 0.65,
+          "width": 0.65
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -216,16 +216,7 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [
-      "lib_symbol_issues|1841500|292100|fd91886d-5289-4e3c-ac73-72ee514864ab|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|1917700|292100|f1b24746-2d88-4bf7-80cb-5d65144a6779|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|2222500|317500|769d72ba-9043-42ad-b7f1-ffab0c20282e|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|2298700|317500|9d3c2f98-be66-492f-a426-2d250b74e08a|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|2514600|317500|3a3edecf-7e0b-4491-a554-1dcebd3ba20d|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|2590800|317500|95c9ca17-dabf-4d5a-ba4d-b92841ee168c|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|2654300|825500|b86dda23-4602-44e5-93b3-0d0e2676e387|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|342900|1828800|0a381c4d-6087-4cb1-9f99-0e6224bd2c5d|00000000-0000-0000-0000-000000000000|||"
-    ],
+    "erc_exclusions": [],
     "meta": {
       "version": 0
     },
