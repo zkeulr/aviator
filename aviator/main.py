@@ -22,7 +22,23 @@ for pin_num in SAFE_PINS:
 ####
 import display
 from display import HUB75Display
-PINMAP = {
+DEV_PINMAP = {
+    "R1": 12,
+    "G1": 42,
+    "B1": 13,
+    "R2": 14,
+    "G2": 41,
+    "B2": 15,
+    "A": 16,
+    "B": 39,
+    "C": 0,
+    #"D": 38,
+    "CLK": 21,
+    "LAT": 6,
+    "OE": 5
+}
+
+WROOM_PINMAP = {
     "R1": 11,
     "G1": 10,
     "B1": 9,
@@ -39,7 +55,7 @@ PINMAP = {
     "OE": 17
 }
 
-disp = HUB75Display(PINMAP)
+disp = HUB75Display(DEV_PINMAP)
 
 def hello_test():
     text = "HELLO WORLD!"
@@ -62,13 +78,7 @@ def all_off():
 
 def main():
     print("Starting GPIO toggle loop...")
-    while True:
-        all_on()
-        print("All pins ON")
-        time.sleep(1)
-        all_off()
-        print("All pins OFF")
-        time.sleep(1)
+    hello_test()
 
 if __name__ == "__main__":
     main()
