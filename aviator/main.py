@@ -58,6 +58,7 @@ WROOM_PINMAP = {
 disp = HUB75Display(DEV_PINMAP)
 
 def hello_test():
+    print("hello_test")
     text = "HELLO WORLD!"
     disp.clear()
     disp.draw_text(2,4,text,[1,0,0])
@@ -76,9 +77,16 @@ def all_off():
     for p in pins:
         p.value(0)
 
+def turn_all_pixels_on():
+    """Turn all pixels on the display to white."""
+    for y in range(disp.NUM_ROWS):
+        for x in range(disp.NUM_COLS):
+            disp.set_pixel(x, y, [1, 1, 1])
+    disp.refresh()
+
 def main():
-    print("Starting GPIO toggle loop...")
-    hello_test()
+    print("main")
+    turn_all_pixels_on()
 
 if __name__ == "__main__":
     main()

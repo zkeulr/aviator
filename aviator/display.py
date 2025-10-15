@@ -35,8 +35,8 @@ class HUB75Display:
             machine.Pin(pinmap["A"], machine.Pin.OUT),
             machine.Pin(pinmap["B"], machine.Pin.OUT),
             machine.Pin(pinmap["C"], machine.Pin.OUT),
-            machine.Pin(pinmap["D"], machine.Pin.OUT),
-            machine.Pin(pinmap["E"], machine.Pin.OUT)
+            # machine.Pin(pinmap["D"], machine.Pin.OUT),
+            # machine.Pin(pinmap["E"], machine.Pin.OUT)
         ]
         self.NUM_ROWS= 32
         self.NUM_COLS= 64
@@ -47,7 +47,7 @@ class HUB75Display:
         self.CLK.off()
         
     def select_row(self, row):
-        for i in range(5):
+        for i in range(3):
             bit = (row >> i) & 1
             self.ADDR[i].value(bit)
 
