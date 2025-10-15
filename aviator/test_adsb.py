@@ -1,9 +1,4 @@
-"""test_adsb.py
-Simple manual test harness for adsb.py raw + sim modes.
-
-Usage (desktop):
-  python test_adsb.py
-"""
+# TESTING THE ADS-B MODULE
 
 import time
 import adsb
@@ -24,17 +19,17 @@ def test_raw():
     adsb.set_mode("raw")
     print("-- RAW MODE --")
     sample_frames = [
-        # Common example DF17 frames (length 28 hex chars). These may or may not contain altitude TC.
+        # Common example DF17 frames (length 28 hex chars)
         "8D4840D6202CC371C32CE0576098",  # ICAO 4840D6
         "8D40621D58C382D690C8AC2863A7",  # ICAO 40621D
-        "8D4B96969915560068AC3B284D77",  # Random example
+        "8D4B96969915560068AC3B284D77",  # Rand Examp
         # Adding two frames for same ICAO, one even, one odd, for CPR decode
-        "8D40621D58C386435CC412692AD6",  # ICAO 40621D, even
-        "8D40621D58C382D690C8AC2863A7",  # ICAO 40621D, odd
+        "8D40621D58C386435CC412692AD6",  # ICAO 40621D --> even
+        "8D40621D58C382D690C8AC2863A7",  # ICAO 40621D --> odd
     ]
     receiver_lat, receiver_lon = 40.0, -86.0
     for frame in sample_frames:
-        ok = adsb.ingest_frame(frame[:28], receiver_lat, receiver_lon)  # 28 chars
+        ok = adsb.ingest_frame(frame[:28], receiver_lat, receiver_lon) 
         print("ingest", frame[:28], ok)
     flights = adsb.fetch_flights(receiver_lat, receiver_lon)
     for f in flights:
