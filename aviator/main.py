@@ -19,6 +19,37 @@ for pin_num in SAFE_PINS:
         # Skip pins that cannot be configured as GPIO (e.g., reserved)
         print(f"Skipping invalid pin {pin_num}")
 
+####
+import display
+from display import HUB75Display
+PINMAP = {
+    "R1": 11,
+    "G1": 10,
+    "B1": 9,
+    "R2": 5,
+    "G2": 8,
+    "B2": 18,
+    "A": 38,
+    "B": 39,
+    "C": 40,
+    "D": 41,
+    "E": 42,
+    "CLK": 4,
+    "LAT": 12,
+    "OE": 17
+}
+
+disp = HUB75Display(PINMAP)
+
+def hello_test():
+    text = "HELLO WORLD!"
+    disp.clear()
+    disp.draw_text(2,4,text,[1,0,0])
+    disp.refresh()
+    time.sleep_ms(100)
+####
+
+
 def all_on():
     """Turn all safe GPIOs ON (logic high)."""
     for p in pins:
