@@ -1,8 +1,10 @@
 # README
 
+Note: the Makefile is configured for Arch Linux and will not work without modification on Windows or Mac.
+
 ## Flashing
 
-Follow the instructions [here](https://micropython.org/download/UM_PROS3/).
+Follow the instructions for your device [here](https://micropython.org/download/UM_PROS3/).
 
 WebREPL password: `password`.
 

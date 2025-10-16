@@ -7,3 +7,6 @@
 [submodule "aviator/ESP32-HUB75-MatrixPanel-DMA"]
 	path = aviator/ESP32-HUB75-MatrixPanel-DMA
 	url = git@github.com:mrcodetastic/ESP32-HUB75-MatrixPanel-DMA.git
+[submodule "aviator/Adafruit_CircuitPython_Bundle"]
+	path = aviator/Adafruit_CircuitPython_Bundle
+	url = https://github.com/adafruit/Adafruit_CircuitPython_Bundle.git
