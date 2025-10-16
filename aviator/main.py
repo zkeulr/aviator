@@ -1,6 +1,11 @@
 # main.py - Integration of ADS-B, networking, display, etc.
 
-'''
+# Currently, these tests are functional:
+# test_adsb
+# test_display
+# test_fallback
+# test_save_restore()
+
 import time
 import json
 
@@ -26,10 +31,9 @@ try:
 except ImportError:
     import requests
 
-# Wi-Fi credentials
-WIFI_SSID = "CampusWiFi"      # Placeholder SSID
-WIFI_USERNAME = "pulrich"
-WIFI_PASS = "PASSCODE"
+WIFI_SSID = "David's iPhone (5)"  
+# WIFI_USERNAME = "pulrich"
+WIFI_PASS = "password"
 
 # Initialize the LED matrix display with a pin mapping (set actual GPIO pins for your board)
 DISPLAY_PINMAP = {
@@ -128,5 +132,3 @@ def test_save_restore():
     with open('state.json', 'r') as f:
         loaded = json.load(f)
     print("Loaded state, flights:", loaded.get('flights'))
-
-'''
