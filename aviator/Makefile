@@ -5,12 +5,16 @@ git:
 
 flash:
 	echo "Before flashing, press and hold BOOT, press and release RST, then release BOOT"
-	esptool --port /dev/ttyACM0 erase-flash
-	esptool --port /dev/ttyACM0 write_flash 0 adafruit-circuitpython-unexpectedmaker_pros3-en_US-10.0.1.bin
+	esptool erase-flash
+	esptool --port $(ls /dev/ttyACM* | head -1) write-flash 0 adafruit-circuitpython-unexpectedmaker_pros3-en_US-10.0.1.bin
 	echo "Press RST"
 
-transfer:
-	sudo mpremote fs cp -r *.py :.
+deploy:
+	sudo cp -v *.py /run/media/$(USER)/CIRCUITPY
+
+clean:
+	rm -f *.tar.xz *.zip *.bin
+	clear
 
 connect:
-	screen /dev/ttyACM0
+	screen $(ls /dev/ttyACM* | head -1)

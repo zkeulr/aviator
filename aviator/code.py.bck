@@ -1,0 +1,78 @@
+import time
+import board
+import displayio
+import framebufferio
+import rgbmatrix
+from adafruit_display_text import label
+from adafruit_bitmap_font import bitmap_font
+import terminalio
+##########vDO NOT ALTERv##########
+# Release any previous displays
+displayio.release_displays()
+# --- Pin Map ---
+RGB_PINS = (
+    board.IO12, # R1
+    board.IO42, # G1
+    board.IO13, # B1
+    board.IO14, # R2
+    board.IO41, # G2
+    board.IO15 # B2
+)
+ADDR_PINS = (
+    board.IO16, # A
+    board.IO39, # B
+    board.IO0, # C
+    board.IO38 # D
+)
+CLOCK_PIN = board.IO21
+LATCH_PIN = board.IO6
+OE_PIN = board.IO5
+# Create the matrix display 
+matrix = rgbmatrix.RGBMatrix(
+    width=64,
+    height=32,
+    bit_depth=6, # Higher = smoother gradients, more RAM use
+    rgb_pins=RGB_PINS,
+    addr_pins=ADDR_PINS,
+    clock_pin=CLOCK_PIN,
+    latch_pin=LATCH_PIN,
+    output_enable_pin=OE_PIN,
+    doublebuffer=True,
+)
+display = framebufferio.FramebufferDisplay(matrix, auto_refresh=True)##########^DO NOT ALTER^##########
+# --- DIAGNOSTIC PRINTS START ---
+print("=== FONT / LABEL DEBUG START ===")
+try:
+    print("Using terminalio.FONT directly (no bitmap file).")
+    test_font = terminalio.FONT
+    print("FONT object:", test_font)
+except Exception as e:
+    print("Font load failed:", e)
+    # Try creating a label
+try:
+    print("Creating label...")
+    text_label = label.Label(
+    test_font,
+    text="SFO > LAF",
+    color=0x00FF00,
+    x=2,
+    y=16
+    )
+    print("Label object created:", text_label)
+    print("Label text:", text_label.text)
+    print("Label bounding box:", text_label.bounding_box)
+except Exception as e:
+    print("Label creation failed:", e)
+    # Try adding label to group
+try:
+    group = displayio.Group()
+    group.append(text_label)
+    display.root_group = group
+    print("Display refresh rate:", display.refresh_rate)
+    print("Group successfully set as root_group.")
+except Exception as e:
+    print("Display group assignment failed:", e)
+    print("=== FONT / LABEL DEBUG END ===")
+    # --- DIAGNOSTIC PRINTS END ---
+while True:
+    time.sleep(1) # type: ignore
