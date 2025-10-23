@@ -42,6 +42,7 @@ matrix = rgbmatrix.RGBMatrix(
 display = framebufferio.FramebufferDisplay(matrix, auto_refresh=True)##########^DO NOT ALTER^##########
 # --- DIAGNOSTIC PRINTS START ---
 print("=== FONT / LABEL DEBUG START ===")
+
 try:
     print("Using terminalio.FONT directly (no bitmap file).")
     test_font = terminalio.FONT

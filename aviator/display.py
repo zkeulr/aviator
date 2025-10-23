@@ -1,96 +1,55 @@
-import machine
-import time
+import board
+import displayio
+import framebufferio
+import rgbmatrix
+from adafruit_display_text import label
+from adafruit_bitmap_font import bitmap_font
+import terminalio
 
-WIDTH = 64
-HEIGHT = 32
-FONT = {
-    "A": [0x1E, 0x05, 0x05, 0x1E, 0x00],
-    "B": [0x1F, 0x15, 0x15, 0x0A, 0x00],
-    "C": [0x0E, 0x11, 0x11, 0x11, 0x00],
-    "D": [0x1F, 0x11, 0x11, 0x0E, 0x00],
-    "E": [0x1F, 0x15, 0x15, 0x11, 0x00],
-    "H": [0x1F, 0x04, 0x04, 0x1F, 0x00],
-    "L": [0x1F, 0x10, 0x10, 0x10, 0x00],
-    "O": [0x0E, 0x11, 0x11, 0x0E, 0x00],
-    "R": [0x1F, 0x05, 0x0D, 0x12, 0x00],
-    "W": [0x1F, 0x08, 0x04, 0x08, 0x1F],
-    " ": [0x00, 0x00, 0x00, 0x00, 0x00]
-}
+# Release any previous displays
+displayio.release_displays()
 
-class HUB75Display:
-    def __init__(self,pinmap):
-        self.CLK = machine.Pin(pinmap["CLK"], machine.Pin.OUT)
-        self.LAT = machine.Pin(pinmap["LAT"], machine.Pin.OUT)
-        self.OE  = machine.Pin(pinmap["OE"], machine.Pin.OUT)
+RGB_PINS = (
+    board.IO12, # R1
+    board.IO42, # G1
+    board.IO13, # B1
+    board.IO14, # R2
+    board.IO41, # G2
+    board.IO15 # B2
+)
 
-        self.R1 = machine.Pin(pinmap["R1"], machine.Pin.OUT)
-        self.G1 = machine.Pin(pinmap["G1"], machine.Pin.OUT)
-        self.B1 = machine.Pin(pinmap["B1"], machine.Pin.OUT)
-        
-        self.R2 = machine.Pin(pinmap["R2"], machine.Pin.OUT)
-        self.G2 = machine.Pin(pinmap["G2"], machine.Pin.OUT)
-        self.B2 = machine.Pin(pinmap["B2"], machine.Pin.OUT)
+ADDR_PINS = (
+    board.IO16, # A
+    board.IO39, # B
+    board.IO0, # C
+    board.IO38 # D
+)
 
-        self.ADDR = [
-            machine.Pin(pinmap["A"], machine.Pin.OUT),
-            machine.Pin(pinmap["B"], machine.Pin.OUT),
-            machine.Pin(pinmap["C"], machine.Pin.OUT),
-            # machine.Pin(pinmap["D"], machine.Pin.OUT),
-            # machine.Pin(pinmap["E"], machine.Pin.OUT)
-        ]
-        self.NUM_ROWS= 32
-        self.NUM_COLS= 64
-        self.frame = [[[0, 0, 0] for _ in range(self.NUM_COLS)] for _ in range(self.NUM_ROWS)]
+CLOCK_PIN = board.IO21
+LATCH_PIN = board.IO6
+OE_PIN = board.IO5
 
-        self.OE.on()
-        self.LAT.off()
-        self.CLK.off()
-        
-    def select_row(self, row):
-        for i in range(3):
-            bit = (row >> i) & 1
-            self.ADDR[i].value(bit)
+matrix = rgbmatrix.RGBMatrix(
+    width=64,
+    height=32,
+    bit_depth=6, # Higher = smoother gradients, more RAM use
+    rgb_pins=RGB_PINS,
+    addr_pins=ADDR_PINS,
+    clock_pin=CLOCK_PIN,
+    latch_pin=LATCH_PIN,
+    output_enable_pin=OE_PIN,
+    doublebuffer=True,
+)
+framebuffer_display = framebufferio.FramebufferDisplay(matrix, auto_refresh=True)
 
-    def pulse(self, pin):
-        pin.on()
-        pin.off()
-
-    def set_pixel(self, x, y, color):
-        if 0 <= x < self.NUM_COLS and 0 <= y < self.NUM_ROWS:
-            self.frame[y][x] = color
-
-    def draw_text(self, x, y, text, color):
-        """Draws simple 5x7 text onto the framebuffer"""
-        for char in text:
-            bitmap = FONT.get(char.upper(), FONT[" "])
-            for col, bits in enumerate(bitmap):
-                for row in range(7):
-                    if bits & (1 << row):
-                        self.set_pixel(x + col, y + row, color)
-            x += 6  # spacing between characters
-
-    def refresh(self):
-        for row in range(self.NUM_ROWS // 2):
-            self.select_row(row)
-            self.OE.on()
-            for col in range(self.NUM_COLS):
-                top = self.frame[row][col]
-                bot = self.frame[row + 16][col]
-                # Upper half
-                self.R1.value(top[0])
-                self.G1.value(top[1])
-                self.B1.value(top[2])
-                # Bottom half
-                self.R2.value(bot[0])
-                self.G2.value(bot[1])
-                self.B2.value(bot[2])
-                self.pulse(self.CLK)
-            self.pulse(self.LAT)
-            self.OE.off()
-            time.sleep_us(200)
-            self.OE.on()
-
-    def clear(self):
-        for y in range(self.NUM_ROWS):
-            for x in range(self.NUM_COLS):
-                self.frame[y][x] = [0, 0, 0]
+def display(text: str) -> None:
+    text_label = label.Label(
+        terminalio.FONT,
+        text=text,
+        color=0x00FF00,
+        x=2,
+        y=16
+    )
+    group = displayio.Group()
+    group.append(text_label)
+    framebuffer_display.root_group = group
