@@ -6,7 +6,7 @@ import time
 import math
 
 
-MODE = "sim"  # Should be "raw" when real ADS-B Arrives PLZZZZZ
+MODE = "raw"  # Should be "raw" when real ADS-B Arrives PLZZZZZ
 
 # Error tracking
 _error_count = 0
