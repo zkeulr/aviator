@@ -12,9 +12,5 @@ flash:
 deploy:
 	sudo cp -v *.py /run/media/$(USER)/CIRCUITPY
 
-clean:
-	rm -f *.tar.xz *.zip *.bin
-	clear
-
 connect:
 	screen $(ls /dev/ttyACM* | head -1)
