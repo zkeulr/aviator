@@ -10,7 +10,7 @@
 		(rev "1")
 		(company "Aviator")
 		(comment 1 "Reminder: OE, LAT - LOW at boot, BOOT0 - HIGH at reset")
-		(comment 2 "Reminder: PD USB C support with STUSB to negotiate ~50W")
+		(comment 2 "Reminder: Configure ESP32 as host of ADSB")
 		(comment 3 "Reminder: 22-100ohm on hub75 if ringing")
 	)
 	(lib_symbols
@@ -9453,7 +9453,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "56k"
 			(at 50.292 137.16 90)
 			(effects
 				(font
@@ -16548,7 +16548,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "56k"
 			(at 54.102 144.78 90)
 			(effects
 				(font
