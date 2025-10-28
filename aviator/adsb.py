@@ -236,47 +236,112 @@ def _cprNL(lat: float) -> int:
 
 
 def _decode_cpr_position(icao: str) -> Optional[Tuple[float, float]]:
-	"""If both even and odd frames exist for ICAO, decode lat/lon."""
+	"""If both even and odd frames exist for ICAO, decode lat/lon using global CPR.
+
+	Notes:
+	- Uses normalized fractions (bits/2^17) per ICAO Doc 9871, App. B
+	- Includes 0.5 rounding in J/M computations
+	- Applies −90° latitude offset and correct NL/Δlon per parity
+	"""
 	cache = _cpr_cache.get(icao)
 	if not cache or "even" not in cache or "odd" not in cache:
 		return None
-	# Extracting CPR fields
+
 	lat_even = cache["even"]["lat_cpr"]
 	lon_even = cache["even"]["lon_cpr"]
 	lat_odd = cache["odd"]["lat_cpr"]
 	lon_odd = cache["odd"]["lon_cpr"]
 	t_even = cache["even"]["ts"]
 	t_odd = cache["odd"]["ts"]
-	# In here we use the most recent frame fellas
-	if t_even > t_odd:
-		ts = t_even
+
+	# Require frames to be recent relative to each other. Typical is ~10s;
+	# use 20s to be more tolerant indoors/low SNR.
+	if abs(t_even - t_odd) > 20:
+		return None
+
+	# Normalized CPR fractions (0..1)
+	inv = 1.0 / (2 ** 17)
+	yz0 = lat_even * inv
+	yz1 = lat_odd * inv
+
+	# Latitude grid sizes
+	Dlat0 = 360.0 / 60.0  # even
+	Dlat1 = 360.0 / 59.0  # odd
+
+	# Latitude reconstruction with rounding per spec
+	j = math.floor(59 * yz0 - 60 * yz1 + 0.5)
+	rlat0 = Dlat0 * ((j % 60) + yz0) - 90.0
+	rlat1 = Dlat1 * ((j % 59) + yz1) - 90.0
+
+	# If zone count differs, solution is invalid (close to zone boundary)
+	if _cprNL(rlat0) != _cprNL(rlat1):
+		return None
+
+	# Use most recent parity for final lat and lon
+	use_even = t_even >= t_odd
+	rlat = rlat0 if use_even else rlat1
+	nl = _cprNL(rlat)
+
+	# Normalized lon fractions
+	xz0 = lon_even * inv
+	xz1 = lon_odd * inv
+
+	# Longitude reconstruction with rounding per spec
+	m = math.floor(xz0 * (nl - 1) - xz1 * nl + 0.5)
+	if use_even:
+		if nl <= 0:
+			return None
+		dlon = 360.0 / nl
+		rlon = dlon * ((m % nl) + xz0)
 	else:
-		ts = t_odd
-	# CPR algorithm
-	# More info from this on --> ICAO Doc 9871, Appendix B
-	Dlat_even = 360.0 / 60.0
-	Dlat_odd = 360.0 / 59.0
-	j = math.floor((59 * lat_even - 60 * lat_odd) / (2 ** 17))
-	lat = Dlat_even * ((lat_even + j) % 60)
-	lat_odd_val = Dlat_odd * ((lat_odd + j) % 59)
-	# Use most recent frame's parity to select lat
-	if t_even > t_odd:
-		lat = lat
-		ni = _cprNL(lat)
-		m = math.floor((lon_even * (ni - 1) - lon_odd * ni) / (2 ** 17))
-		if ni > 0:
-			lon = (360.0 / ni) * ((lon_even + m) % ni)
-		else:
-			lon = None
-	else:
-		lat = lat_odd_val
-		ni = _cprNL(lat)
-		m = math.floor((lon_even * (ni - 1) - lon_odd * ni) / (2 ** 17))
-		if ni > 0:
-			lon = (360.0 / ni) * ((lon_odd + m) % ni)
-		else:
-			lon = None
-	return (lat, lon)
+		if nl - 1 <= 0:
+			return None
+		dlon = 360.0 / (nl - 1)
+		rlon = dlon * ((m % (nl - 1)) + xz1)
+
+	# Normalize lon to [-180, 180]
+	if rlon >= 180.0:
+		rlon -= 360.0
+
+	# Sanity clamp lat to [-90, 90]
+	if rlat > 90.0 or rlat < -90.0:
+		return None
+
+	return (rlat, rlon)
+
+
+def _decode_cpr_position_local(lat_cpr: int, lon_cpr: int, is_odd: bool, ref_lat: float, ref_lon: float) -> Optional[Tuple[float, float]]:
+	"""Decode a single CPR frame using a local reference (receiver location).
+
+	This resolves the zone ambiguity by choosing the latitude/longitude bands
+	nearest to the provided reference. Useful when a recent even/odd pair isn't
+	available yet. Based on the local CPR method from ICAO Doc 9871.
+	"""
+	try:
+		inv = 1.0 / (2 ** 17)
+		yz = lat_cpr * inv
+		dlat = 360.0 / (59.0 if is_odd else 60.0)
+		# Choose latitude band nearest to reference
+		k = round((ref_lat + 90.0) / dlat - yz)
+		rlat = dlat * (k + yz) - 90.0
+		nl = _cprNL(rlat)
+		if nl <= 0:
+			return None
+		dlon = 360.0 / (nl - 1 if is_odd and nl > 1 else nl)
+		xz = lon_cpr * inv
+		m = round(ref_lon / dlon - xz)
+		rlon = dlon * (m + xz)
+		# Normalize lon to [-180, 180]
+		while rlon > 180.0:
+			rlon -= 360.0
+		while rlon < -180.0:
+			rlon += 360.0
+		# Sanity clamp lat
+		if rlat > 90.0 or rlat < -90.0:
+			return None
+		return (rlat, rlon)
+	except Exception:
+		return None
 
 
 def _haversine(lat1, lon1, lat2, lon2):
@@ -410,10 +475,27 @@ def _update_raw_flight(icao: str, frame: str, type_code: int, altitude: Optional
 		_cpr_cache[icao][parity] = {"lat_cpr": cpr["lat_cpr"], "lon_cpr": cpr["lon_cpr"], "ts": now}
 		pos = _decode_cpr_position(icao)
 		if pos:
-			rec["lat"], rec["lon"] = pos
-			# Computing the distance if receiver location given
+			lat_dec, lon_dec = pos
+			# If receiver location known, discard implausible far-away positions (bad CPR pairs)
+			if receiver_lat is not None and receiver_lon is not None and lat_dec is not None and lon_dec is not None:
+				d = _haversine(receiver_lat, receiver_lon, lat_dec, lon_dec)
+				if d <= 800:  # km, generous upper bound for an RTL-SDR station
+					rec["lat"], rec["lon"] = lat_dec, lon_dec
+					rec["dist_km"] = round(d, 2)
+			else:
+				# No receiver reference to validate – accept position
+				rec["lat"], rec["lon"] = lat_dec, lon_dec
+		else:
+			# Fallback: local decode using receiver as reference if available
 			if receiver_lat is not None and receiver_lon is not None:
-				rec["dist_km"] = round(_haversine(receiver_lat, receiver_lon, rec["lat"], rec["lon"]), 2)
+				is_odd = cpr["parity"] == 1
+				loc = _decode_cpr_position_local(cpr["lat_cpr"], cpr["lon_cpr"], is_odd, receiver_lat, receiver_lon)
+				if loc is not None:
+					lat_dec, lon_dec = loc
+					d = _haversine(receiver_lat, receiver_lon, lat_dec, lon_dec)
+					if d <= 800:
+						rec["lat"], rec["lon"] = lat_dec, lon_dec
+						rec["dist_km"] = round(d, 2)
 	# Storing last raw frame for debugging
 	rec["raw_frame"] = frame
 
