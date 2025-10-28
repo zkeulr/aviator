@@ -26,9 +26,9 @@
         },
         "fab_line_width": 0.1,
         "fab_text_italic": false,
-        "fab_text_size_h": 1.0,
-        "fab_text_size_v": 1.0,
-        "fab_text_thickness": 0.15,
+        "fab_text_size_h": 0.4,
+        "fab_text_size_v": 0.4,
+        "fab_text_thickness": 0.1,
         "fab_text_upright": false,
         "other_line_width": 0.1,
         "other_text_italic": false,
@@ -37,9 +37,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.0,
-          "height": 1.4,
-          "width": 1.2
+          "drill": 0.4,
+          "height": 0.65,
+          "width": 0.65
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -51,7 +51,13 @@
           "min_clearance": 0.0
         }
       },
-      "diff_pair_dimensions": [],
+      "diff_pair_dimensions": [
+        {
+          "gap": 0.0,
+          "via_gap": 0.0,
+          "width": 0.0
+        }
+      ],
       "drc_exclusions": [],
       "meta": {
         "version": 2
@@ -70,7 +76,7 @@
         "extra_footprint": "warning",
         "footprint": "error",
         "footprint_symbol_mismatch": "warning",
-        "footprint_type_mismatch": "ignore",
+        "footprint_type_mismatch": "warning",
         "hole_clearance": "error",
         "hole_near_hole": "error",
         "holes_co_located": "warning",
@@ -83,12 +89,12 @@
         "lib_footprint_mismatch": "warning",
         "malformed_courtyard": "error",
         "microvia_drill_out_of_range": "error",
-        "missing_courtyard": "ignore",
+        "missing_courtyard": "warning",
         "missing_footprint": "warning",
         "net_conflict": "warning",
-        "npth_inside_courtyard": "ignore",
+        "npth_inside_courtyard": "warning",
         "padstack": "warning",
-        "pth_inside_courtyard": "ignore",
+        "pth_inside_courtyard": "warning",
         "shorting_items": "error",
         "silk_edge_clearance": "warning",
         "silk_over_copper": "warning",
@@ -121,7 +127,7 @@
         "min_silk_clearance": 0.0,
         "min_text_height": 0.8,
         "min_text_thickness": 0.08,
-        "min_through_hole_diameter": 0.3,
+        "min_through_hole_diameter": 0.2,
         "min_track_width": 0.0,
         "min_via_annular_width": 0.1,
         "min_via_diameter": 0.5,
@@ -171,7 +177,9 @@
           "td_width_to_size_filter_ratio": 0.9
         }
       ],
-      "track_widths": [],
+      "track_widths": [
+        0.0
+      ],
       "tuning_pattern_settings": {
         "diff_pair_defaults": {
           "corner_radius_percentage": 80,
@@ -198,7 +206,12 @@
           "spacing": 0.6
         }
       },
-      "via_dimensions": [],
+      "via_dimensions": [
+        {
+          "diameter": 0.0,
+          "drill": 0.0
+        }
+      ],
       "zones_allow_external_fillets": false
     },
     "ipc2581": {
@@ -216,16 +229,7 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [
-      "lib_symbol_issues|1841500|292100|fd91886d-5289-4e3c-ac73-72ee514864ab|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|1917700|292100|f1b24746-2d88-4bf7-80cb-5d65144a6779|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|2222500|317500|769d72ba-9043-42ad-b7f1-ffab0c20282e|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|2298700|317500|9d3c2f98-be66-492f-a426-2d250b74e08a|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|2514600|317500|3a3edecf-7e0b-4491-a554-1dcebd3ba20d|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|2590800|317500|95c9ca17-dabf-4d5a-ba4d-b92841ee168c|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|2654300|825500|b86dda23-4602-44e5-93b3-0d0e2676e387|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|342900|1828800|0a381c4d-6087-4cb1-9f99-0e6224bd2c5d|00000000-0000-0000-0000-000000000000|||"
-    ],
+    "erc_exclusions": [],
     "meta": {
       "version": 0
     },

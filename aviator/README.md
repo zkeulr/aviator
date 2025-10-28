@@ -1,14 +1,11 @@
 # README
 
-## Flashing
+## Connect:
 
-Follow the instructions [here](https://micropython.org/download/UM_PROS3/).
-
-WebREPL password: `password`.
-
-## Transferring Files
+To connect, run
 
 ```sh
-sudo mpremote fs cp -r *.py :.
-sudo mpremote connect /dev/ttyACM0
+screen $(ls /dev/ttyACM* | head -1)
 ```
+
+To disconnect, press `CTRL+A` then `CTRL+D`.

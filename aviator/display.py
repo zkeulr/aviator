@@ -1,91 +1,55 @@
-from machine import Pin
-import utime
+import board
+import displayio
+import framebufferio
+import rgbmatrix
+from adafruit_display_text import label
+from adafruit_bitmap_font import bitmap_font
+import terminalio
 
+# Release any previous displays
+displayio.release_displays()
 
-PINMAP = {
-    "R1": 12,
-    "G1": 42,
-    "B1": 13,
-    "R2": 14,
-    "G2": 41,
-    "B2": 15,
-    "A": 16,
-    "B": 39,
-    "C": 0,
-    "D": 38,
-    "CLK": 21,
-    "LAT": 6,
-    "OE": 5
-}
+RGB_PINS = (
+    board.IO12, # R1
+    board.IO42, # G1
+    board.IO13, # B1
+    board.IO14, # R2
+    board.IO41, # G2
+    board.IO15 # B2
+)
 
-# Setup pins
-pins = {name: Pin(num, Pin.OUT) for name, num in PINMAP.items()}
+ADDR_PINS = (
+    board.IO16, # A
+    board.IO39, # B
+    board.IO0, # C
+    board.IO38 # D
+)
 
-# Display size
-WIDTH = 64
-HEIGHT = 32
+CLOCK_PIN = board.IO21
+LATCH_PIN = board.IO6
+OE_PIN = board.IO5
 
-# Create a framebuffer (RGB tuples)
-frame = [[[0,0,0] for _ in range(WIDTH)] for _ in range(HEIGHT)]
+matrix = rgbmatrix.RGBMatrix(
+    width=64,
+    height=32,
+    bit_depth=6, # Higher = smoother gradients, more RAM use
+    rgb_pins=RGB_PINS,
+    addr_pins=ADDR_PINS,
+    clock_pin=CLOCK_PIN,
+    latch_pin=LATCH_PIN,
+    output_enable_pin=OE_PIN,
+    doublebuffer=True,
+)
+framebuffer_display = framebufferio.FramebufferDisplay(matrix, auto_refresh=True)
 
-def set_pixel(x, y, r, g, b):
-    """Set pixel color in framebuffer."""
-    if 0 <= x < WIDTH and 0 <= y < HEIGHT:
-        frame[y][x] = [r, g, b]
-
-def show():
-    """Render the framebuffer to the HUB75 display."""
-    for row in range(16):  # half of 32-pixel panel
-        # Set address lines (A-D)
-        pins["A"].value(row & 1)
-        pins["B"].value((row >> 1) & 1)
-        pins["C"].value((row >> 2) & 1)
-        pins["D"].value((row >> 3) & 1)
-
-        # Disable output while shifting
-        pins["OE"].on()
-
-        # Shift out pixel data for one row
-        for col in range(WIDTH):
-            top = frame[row][col]
-            bottom = frame[row + 16][col]
-
-            pins["R1"].value(top[0])
-            pins["G1"].value(top[1])
-            pins["B1"].value(top[2])
-
-            pins["R2"].value(bottom[0])
-            pins["G2"].value(bottom[1])
-            pins["B2"].value(bottom[2])
-
-            # Clock pulse
-            pins["CLK"].on()
-            pins["CLK"].off()
-
-        # Latch data
-        pins["LAT"].on()
-        pins["LAT"].off()
-
-        # Enable output for a short period
-        pins["OE"].off()
-        utime.sleep_us(100)
-        pins["OE"].on()
-
-# test animation
-def fill_color(r, g, b):
-    for y in range(HEIGHT):
-        for x in range(WIDTH):
-            set_pixel(x, y, r, g, b)
-
-def color_cycle():
-    while True:
-        fill_color(1, 0, 0)
-        show()
-        utime.sleep(0.5)
-        fill_color(0, 1, 0)
-        show()
-        utime.sleep(0.5)
-        fill_color(0, 0, 1)
-        show()
-        utime.sleep(0.5)
-
+def display(text: str) -> None:
+    text_label = label.Label(
+        terminalio.FONT,
+        text=text,
+        color=0x00FF00,
+        x=2,
+        y=16
+    )
+    group = displayio.Group()
+    group.append(text_label)
+    framebuffer_display.root_group = group
