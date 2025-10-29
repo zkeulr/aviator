@@ -3,7 +3,7 @@ import displayio
 import framebufferio
 import rgbmatrix
 from adafruit_display_text import label
-from adafruit_bitmap_font import bitmap_font
+# from adafruit_bitmap_font import bitmap_font
 import terminalio
 
 # Release any previous displays
