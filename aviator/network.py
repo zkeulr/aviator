@@ -6,6 +6,9 @@ import ssl
 import adafruit_requests
 
 radio = wifi.radio
+pool = socketpool.SocketPool(wifi.radio)
+ssl_context = ssl.create_default_context()
+requests = adafruit_requests.Session(pool, ssl_context)
 
 def connect(ssid=None, password=None):
     if not ssid:
@@ -34,15 +37,6 @@ def test_connection():
 
 def test_requests():
     connect()
-
-    # Create socket pool and SSL context using built-in modules
-    pool = socketpool.SocketPool(wifi.radio)
-    ssl_context = ssl.create_default_context()
-
-    # Create the requests session
-    requests = adafruit_requests.Session(pool, ssl_context)
-
-    # Perform the test request
     response = requests.get("http://wifitest.adafruit.com/testwifi/index.html")
     print("Response:", response.text)
     response.close()
