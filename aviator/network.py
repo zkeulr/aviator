@@ -1,11 +1,10 @@
-# network.py must be robust for all types of wifi networks, both personal and enterprise.
-
-import os
-import ipaddress
-import ssl
+import network
 import wifi
+import os
+
 import socketpool
 import adafruit_requests
+import ipaddress
 
 # URLs to fetch from
 TEXT_URL = "http://wifitest.adafruit.com/testwifi/index.html"
@@ -24,17 +23,24 @@ wifi.radio.stop_scanning_networks()
 
 print(f"Connecting to {os.getenv('CIRCUITPY_WIFI_SSID')}")
 
-if personal:
-    wifi.radio.connect(os.getenv("CIRCUITPY_WIFI_SSID"), os.getenv("CIRCUITPY_WIFI_PASSWORD"))
-elif enterprise:
-    wifi.radio.connect(
-    ssid=f"{os.getenv('CIRCUITPY_WIFI_SSID')}",
-    username=f"{os.getenv('CIRCUITPY_WIFI_USERNAME')}",
-    password=f"{os.getenv('CIRCUITPY_WIFI_PASSWORD')}",
-    identity=f"{os.getenv('CIRCUITPY_WIFI_USERNAME')}",  # often same as username
-    eap="PEAP",                # or "TLS", "TTLS", etc.
-)
-
+try:
+    ssid = os.getenv("CIRCUITPY_WIFI_SSID")
+    password = os.getenv("CIRCUITPY_WIFI_PASSWORD")
+    username = os.getenv('CIRCUITPY_WIFI_USERNAME')
+    if ssid and password and username:
+        wifi.radio.connect(
+            ssid=ssid,
+            username=username,
+            password=password,
+            identity=username,  # often same as username
+            eap="PEAP",                # or "TLS", "TTLS", etc.
+        )  
+        network.set_enterprise(ssid, username, password, eap="PEAP")
+    else: 
+        wifi.radio.connect(ssid, password)
+        network.set_personal(ssid, password)
+except:
+    print("Not connected to any network")
 
 print(f"Connected to {os.getenv('CIRCUITPY_WIFI_SSID')}")
 print(f"My IP address: {wifi.radio.ipv4_address}")
