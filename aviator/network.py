@@ -1,84 +1,42 @@
-import network
 import wifi
 import os
-
-import socketpool
-import adafruit_requests
 import ipaddress
+import socketpool
+import ssl
+import adafruit_requests
 
-# URLs to fetch from
-TEXT_URL = "http://wifitest.adafruit.com/testwifi/index.html"
-JSON_QUOTES_URL = "https://www.adafruit.com/api/quotes.php"
-JSON_STARS_URL = "https://api.github.com/repos/adafruit/circuitpython"
+radio = wifi.radio
+pool = socketpool.SocketPool(wifi.radio)
+ssl_context = ssl.create_default_context()
+requests = adafruit_requests.Session(pool, ssl_context)
 
-print("ESP32-S2 WebClient Test")
+def connect(ssid=None, password=None):
+    if not ssid:
+        ssid = os.getenv("CIRCUITPY_WIFI_SSID")
+    if not password:
+        password = os.getenv("CIRCUITPY_WIFI_PASSWORD")
+        
+    radio.connect(ssid, password)
 
-print(f"My MAC address: {[hex(i) for i in wifi.radio.mac_address]}")
 
-print("Available WiFi networks:")
-for network in wifi.radio.start_scanning_networks():
-    print("\t%s\t\tRSSI: %d\tChannel: %d" % (str(network.ssid, "utf-8"),
-                                             network.rssi, network.channel))
-wifi.radio.stop_scanning_networks()
+def test_connection():
+    connect()
 
-print(f"Connecting to {os.getenv('CIRCUITPY_WIFI_SSID')}")
+    print(f"Connected to {os.getenv('CIRCUITPY_WIFI_SSID')}")
+    print(f"My IP address: {wifi.radio.ipv4_address}")
 
-try:
-    ssid = os.getenv("CIRCUITPY_WIFI_SSID")
-    password = os.getenv("CIRCUITPY_WIFI_PASSWORD")
-    username = os.getenv('CIRCUITPY_WIFI_USERNAME')
-    if ssid and password and username:
-        wifi.radio.connect(
-            ssid=ssid,
-            username=username,
-            password=password,
-            identity=username,  # often same as username
-            eap="PEAP",                # or "TLS", "TTLS", etc.
-        )  
-        network.set_enterprise(ssid, username, password, eap="PEAP")
-    else: 
-        wifi.radio.connect(ssid, password)
-        network.set_personal(ssid, password)
-except:
-    print("Not connected to any network")
-
-print(f"Connected to {os.getenv('CIRCUITPY_WIFI_SSID')}")
-print(f"My IP address: {wifi.radio.ipv4_address}")
-
-ping_ip = ipaddress.IPv4Address("8.8.8.8")
-ping = wifi.radio.ping(ip=ping_ip)
-
-# retry once if timed out
-if ping is None:
+    ping_ip = ipaddress.IPv4Address("8.8.8.8")
     ping = wifi.radio.ping(ip=ping_ip)
 
-if ping is None:
-    print("Couldn't ping 'google.com' successfully")
-else:
-    # convert s to ms
+    if ping is None:
+        print("Could not ping 'google.com'")
+        return False
+    
     print(f"Pinging 'google.com' took: {ping * 1000} ms")
+    return True
 
-pool = socketpool.SocketPool(wifi.radio)
-requests = adafruit_requests.Session(pool, ssl.create_default_context())
-
-print(f"Fetching text from {TEXT_URL}")
-response = requests.get(TEXT_URL)
-print("-" * 40)
-print(response.text)
-print("-" * 40)
-
-print(f"Fetching json from {JSON_QUOTES_URL}")
-response = requests.get(JSON_QUOTES_URL)
-print("-" * 40)
-print(response.json())
-print("-" * 40)
-
-print()
-
-print(f"Fetching and parsing json from {JSON_STARS_URL}")
-response = requests.get(JSON_STARS_URL)
-print("-" * 40)
-print(f"CircuitPython GitHub Stars: {response.json()['stargazers_count']}")
-print("-" * 40)
-
-print("Done")
+def test_requests():
+    connect()
+    response = requests.get("http://wifitest.adafruit.com/testwifi/index.html")
+    print("Response:", response.text)
+    response.close()

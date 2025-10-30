@@ -2,41 +2,31 @@
 
 import adsb
 import display
+import network
 import time
-import json
 import weather
 
-json_errors = {}
 PURDUE_LOCATION = {"lat": 40.4237, "lon": 86.9212}
-networks = []
 
-with open('log.json', 'w') as f:
-    f.write("Booting")
-    f.flush()
+json_errors = {}
+is_connected = False
 
-import wifi
+is_connected = network.connect()
+print(is_connected)
 
-try:
-    for network in wifi.radio.start_scanning_networks():
-        networks.append(network)
-    wifi.radio.stop_scanning_networks()
-    networks = sorted(networks, key=lambda net: net.rssi, reverse=True)
-
-    with open('errors.json', 'w') as f:
-            for network in networks:
-                json_errors.update({network.ssid: network.rssi})
-                json.dump(json_errors, f)
-except:
-    pass
+# DEBUG
+network.test_connection()
+network.test_requests()
 
 while True:
     try:
         flights = adsb.fetch_flights(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
-        weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
-        display.display(str(flights) + str(weather))
-        time.sleep(1)
+        print(weather)
+        current_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+        print(current_weather)
+        display.display(str(flights) + str(current_weather['temperature']) + " C")
+        time.sleep(5)
     except Exception as e:
         json_errors.update({time.time(): e})
-        with open('errors.json', 'w') as f:
-            json.dump(json_errors, f)
+        print(json_errors)
 

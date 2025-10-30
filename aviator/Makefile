@@ -4,12 +4,12 @@ git:
 	git push
 
 flash:
-	@echo ""Before flashing, press and hold BOOT, press and release RST, then release BOOT"
+	@echo "Before flashing, press and hold BOOT, press and release RST, then release BOOT"
 	read -p "Press any key to continue"
 	esptool erase-flash
-	esptool write-flash 0 adafruit-circuitpython-unexpectedmaker_pros3-en_US-10.0.1.bin
+	wget https://downloads.circuitpython.org/bin/unexpectedmaker_feathers3/en_US/adafruit-circuitpython-unexpectedmaker_feathers3-en_US-10.0.3.bin
+	esptool write-flash 0 adafruit-circuitpython-unexpectedmaker_pros3-en_US-10.0.3.bin
 	read -p "Press RST, then open Dolphin and mount board"
-	sudo cp -v -r lib/ /run/media/$(USER)/CIRCUITPY
 
 deploy:
 	sudo cp -v settings.toml *.py /run/media/$(USER)/CIRCUITPY
