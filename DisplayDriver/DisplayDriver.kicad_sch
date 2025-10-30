@@ -5986,37 +5986,29 @@
 				)
 			)
 		)
-		(symbol "Regulator_Linear:MCP1727-3302xSN"
+		(symbol "Regulator_Linear:AMS1117-3.3"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "U"
-				(at -7.62 8.89 0)
+				(at -3.81 3.175 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "MCP1727-3302xSN"
-				(at 11.43 8.89 0)
+			(property "Value" "AMS1117-3.3"
+				(at 0 3.175 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(justify left)
 				)
 			)
-			(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-				(at 0 24.13 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "https://ww1.microchip.com/downloads/aemtest/APID/ProductDocuments/DataSheets/MCP1727-1.5A-Low-Voltage-Low-Quiescent-Current-LDO-Regulator-20001999D.pdf"
-				(at 0 21.59 0)
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-223-3_TabPin2"
+				(at 0 5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -6024,7 +6016,16 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "1.5A, Low Voltage, Low Quiescent Current LDO Regulator, 2.3 - 6V Input, Fixed 3.3V Output, 330mV Dropout, SOIC-8"
+			(property "Datasheet" "http://www.advanced-monolithic.com/pdf/ds1117.pdf"
+				(at 2.54 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "1A Low Dropout regulator, positive, 3.3V fixed output, SOT-223"
 				(at 0 0 0)
 				(effects
 					(font
@@ -6033,7 +6034,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "Low Voltage Low Quiescent Current Fixed LDO Regulator"
+			(property "ki_keywords" "linear regulator ldo fixed positive"
 				(at 0 0 0)
 				(effects
 					(font
@@ -6042,7 +6043,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "SOIC*3.9x4.9mm*P1.27mm*"
+			(property "ki_fp_filters" "SOT?223*TabPin2*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -6051,84 +6052,10 @@
 					(hide yes)
 				)
 			)
-			(symbol "MCP1727-3302xSN_0_0"
-				(pin open_collector line
-					(at 12.7 -2.54 180)
-					(length 2.54)
-					(name "PWRGD"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -12.7 -2.54 0)
-					(length 2.54)
-					(name "Cdelay"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at 12.7 0 180)
-					(length 2.54)
-					(name "Sense"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_out line
-					(at 12.7 2.54 180)
-					(length 2.54)
-					(name "Vout"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(symbol "MCP1727-3302xSN_0_1"
+			(symbol "AMS1117-3.3_0_1"
 				(rectangle
-					(start -10.16 5.08)
-					(end 10.16 -5.08)
+					(start -5.08 -5.08)
+					(end 5.08 1.905)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -6138,11 +6065,11 @@
 					)
 				)
 			)
-			(symbol "MCP1727-3302xSN_1_1"
+			(symbol "AMS1117-3.3_1_1"
 				(pin power_in line
-					(at -12.7 2.54 0)
+					(at 0 -7.62 90)
 					(length 2.54)
-					(name "Vin"
+					(name "GND"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -6157,10 +6084,10 @@
 						)
 					)
 				)
-				(pin passive line
-					(at -12.7 2.54 0)
-					(length 2.54) hide
-					(name "Vin"
+				(pin power_out line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "VO"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -6175,10 +6102,10 @@
 						)
 					)
 				)
-				(pin input line
-					(at -12.7 0 0)
+				(pin power_in line
+					(at -7.62 0 0)
 					(length 2.54)
-					(name "~{SHDN}"
+					(name "VI"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -6186,24 +6113,6 @@
 						)
 					)
 					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 -7.62 90)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -6317,16 +6226,16 @@
 		(uuid "12924390-aef0-4cf5-b243-2865fd309d66")
 	)
 	(junction
+		(at -50.8 83.82)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "298c8ede-b6fc-4294-a599-84a0951ef1ef")
+	)
+	(junction
 		(at -77.47 87.63)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "384d5918-a4ff-46b3-9b4a-9bf3729d76c3")
-	)
-	(junction
-		(at -26.67 82.55)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3af91501-038f-4bb7-95cf-c5c85f9d4726")
 	)
 	(junction
 		(at 44.45 124.46)
@@ -6383,10 +6292,10 @@
 		(uuid "dfe2a7e3-804f-4c34-a780-dccf21870af3")
 	)
 	(junction
-		(at -20.32 82.55)
+		(at -29.21 83.82)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "e30e31fc-f4c6-4016-a9ad-081274115edb")
+		(uuid "ea57e9d5-4a5a-4e69-bde2-e97649a310c6")
 	)
 	(no_connect
 		(at 275.59 85.09)
@@ -6465,10 +6374,6 @@
 		(uuid "934ae129-44a5-4ad1-8b34-c84b7576769a")
 	)
 	(no_connect
-		(at -53.34 85.09)
-		(uuid "9525a4c6-4ff1-41a4-977c-6a24034555b2")
-	)
-	(no_connect
 		(at 125.73 74.93)
 		(uuid "9d27bdf4-d6e6-41e3-8697-c7b1bbd8dbc7")
 	)
@@ -6503,6 +6408,16 @@
 	(no_connect
 		(at 57.15 82.55)
 		(uuid "fb709b9d-6d68-46ac-8990-f89199a6101c")
+	)
+	(wire
+		(pts
+			(xy -25.4 82.55) (xy -25.4 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0203576f-02e7-4c58-91a6-4a3d9af3aa44")
 	)
 	(wire
 		(pts
@@ -6706,6 +6621,16 @@
 	)
 	(wire
 		(pts
+			(xy -53.34 82.55) (xy -53.34 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "116dad4f-ca7e-4922-8d80-7383447971ba")
+	)
+	(wire
+		(pts
 			(xy 212.09 60.96) (xy 217.17 60.96)
 		)
 		(stroke
@@ -6896,6 +6821,16 @@
 	)
 	(wire
 		(pts
+			(xy -29.21 83.82) (xy -25.4 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2af7ff8b-ec88-4d24-bc47-1636ddcbf728")
+	)
+	(wire
+		(pts
 			(xy 48.26 116.84) (xy 43.18 116.84)
 		)
 		(stroke
@@ -6923,6 +6858,16 @@
 			(type solid)
 		)
 		(uuid "2ecffa55-7e62-4050-ba92-e1c3483b4b5d")
+	)
+	(wire
+		(pts
+			(xy -50.8 83.82) (xy -46.99 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2f58a558-6c67-4625-823c-23afa40d8b32")
 	)
 	(polyline
 		(pts
@@ -7156,26 +7101,6 @@
 	)
 	(wire
 		(pts
-			(xy -20.32 81.28) (xy -20.32 82.55)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "46f43d26-f031-4f9b-9eb5-ec657ef70f74")
-	)
-	(wire
-		(pts
-			(xy -27.94 85.09) (xy -26.67 85.09)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "47537449-e6c3-4c5d-9854-70929ccb5a1e")
-	)
-	(wire
-		(pts
 			(xy 76.2 36.83) (xy 76.2 38.1)
 		)
 		(stroke
@@ -7334,16 +7259,6 @@
 		)
 		(uuid "5f1e1c49-36af-4dc6-884f-011c890dd919")
 	)
-	(wire
-		(pts
-			(xy -26.67 82.55) (xy -27.94 82.55)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5f521e32-aea5-477b-bcf0-0aa2e5c07281")
-	)
 	(polyline
 		(pts
 			(xy 176.53 44.45) (xy 176.53 76.2)
@@ -7393,6 +7308,16 @@
 			(type default)
 		)
 		(uuid "632a6c4c-1d5a-4e87-8fe7-fa05d2bb2c89")
+	)
+	(wire
+		(pts
+			(xy -53.34 83.82) (xy -50.8 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6447f2ef-35d9-45ac-a228-a56d1ac99082")
 	)
 	(wire
 		(pts
@@ -7616,13 +7541,13 @@
 	)
 	(wire
 		(pts
-			(xy -57.15 87.63) (xy -53.34 87.63)
+			(xy -39.37 93.98) (xy -39.37 91.44)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "898b1fc1-7a23-4bfa-9e12-1659a2b8258c")
+		(uuid "844a22f0-2860-403d-bfde-34d8574cfbbf")
 	)
 	(polyline
 		(pts
@@ -7676,23 +7601,13 @@
 	)
 	(wire
 		(pts
-			(xy -26.67 85.09) (xy -26.67 82.55)
+			(xy -31.75 83.82) (xy -29.21 83.82)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8f852d96-f027-4434-8251-3ba63350c83e")
-	)
-	(wire
-		(pts
-			(xy -59.69 81.28) (xy -59.69 82.55)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "903c02bc-6c93-4a53-aa0c-93354f66a8c1")
+		(uuid "8decd998-b131-499b-b320-929bdc17ae44")
 	)
 	(polyline
 		(pts
@@ -7733,16 +7648,6 @@
 			(type solid)
 		)
 		(uuid "949c1cb8-b5bc-43c9-86e7-a9e2c284e7da")
-	)
-	(wire
-		(pts
-			(xy -40.64 95.25) (xy -40.64 92.71)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "949d6c48-8caa-40ad-911d-a5b1846641cb")
 	)
 	(wire
 		(pts
@@ -7914,16 +7819,6 @@
 		)
 		(uuid "b105aae4-e976-4068-8fa7-3d600dcbbe09")
 	)
-	(wire
-		(pts
-			(xy -59.69 82.55) (xy -53.34 82.55)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b179cc03-b1ae-46b2-b6b2-8f4ac2cffac7")
-	)
 	(polyline
 		(pts
 			(xy 284.48 49.276) (xy 284.9857 49.2823)
@@ -8003,16 +7898,6 @@
 			(type default)
 		)
 		(uuid "b640136a-0a5c-483b-b8a5-97218108af3e")
-	)
-	(wire
-		(pts
-			(xy -26.67 82.55) (xy -20.32 82.55)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b6e04a42-e8f5-492a-bdcd-65924e33c4d5")
 	)
 	(wire
 		(pts
@@ -8474,16 +8359,6 @@
 		)
 		(uuid "f163f02a-96a5-4888-9d8e-4460749869fc")
 	)
-	(wire
-		(pts
-			(xy -20.32 82.55) (xy -20.32 87.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f2ab9fd3-6e3e-4f26-91e8-1f702a639f90")
-	)
 	(polyline
 		(pts
 			(xy 77.47 12.0085) (xy 77.5176 12.0085)
@@ -8656,7 +8531,7 @@
 		)
 		(uuid "2374f8ba-1769-4784-9747-d6fd3ba1f8db")
 	)
-	(text "TO DO:\n"
+	(text "TO DO:\n(this is all board exluded!)\n"
 		(exclude_from_sim no)
 		(at -93.218 28.956 0)
 		(effects
@@ -8757,7 +8632,7 @@
 		)
 		(uuid "9e35efbd-eff9-417c-95ed-6687987afe66")
 	)
-	(text "Caps for screen power\n(CURRENTLY BOARD EXCLUDED!!!!!!!!!!)"
+	(text "Caps for screen power"
 		(exclude_from_sim no)
 		(at -85.09 41.656 0)
 		(effects
@@ -11106,6 +10981,75 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C")
+		(at -50.8 87.63 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "271703c5-0c1f-4ce3-b6d3-54b11265964a")
+		(property "Reference" "C4"
+			(at -47.752 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "C"
+			(at -47.752 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at -49.8348 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at -50.8 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at -50.8 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "4df1b4e8-f361-4acf-84bf-ba4f2c7d94f1")
+		)
+		(pin "1"
+			(uuid "7eca4ac5-7937-43f6-9349-66a64f1590ab")
+		)
+		(instances
+			(project "DisplayDriver"
+				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
+					(reference "C4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "DisplayLibrary(sketch):R")
 		(at 95.25 77.47 90)
 		(unit 1)
@@ -11321,7 +11265,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2c81f544-fee5-4ef9-8110-7610f8794502")
-		(property "Reference" "DOWN2"
+		(property "Reference" "RST1"
 			(at 189.23 21.59 0)
 			(effects
 				(font
@@ -11329,7 +11273,7 @@
 				)
 			)
 		)
-		(property "Value" "SW_Push"
+		(property "Value" "(Generic) Lab Kit"
 			(at 189.23 24.13 0)
 			(effects
 				(font
@@ -11337,7 +11281,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Molex:Molex_KK-254_AE-6410-02A_1x02_P2.54mm_Vertical"
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 189.23 24.13 0)
 			(effects
 				(font
@@ -11373,7 +11317,7 @@
 		(instances
 			(project "DisplayDriver"
 				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
-					(reference "DOWN2")
+					(reference "RST1")
 					(unit 1)
 				)
 			)
@@ -11923,7 +11867,7 @@
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "40f2e5a9-a05b-4eb4-afae-99371dacf6dc")
@@ -11986,17 +11930,33 @@
 		)
 	)
 	(symbol
-		(lib_id "DisplayLibrary(sketch):supply1_GND")
-		(at -57.15 97.79 0)
-		(mirror y)
+		(lib_id "Regulator_Linear:AMS1117-3.3")
+		(at -39.37 83.82 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "45629287-24d5-4ce1-bdfb-7f474617c5e0")
-		(property "Reference" "#GND015"
-			(at -57.15 97.79 0)
+		(fields_autoplaced yes)
+		(uuid "43c6bd65-af35-4d00-becb-03f517cb9268")
+		(property "Reference" "U4"
+			(at -39.37 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "AMS1117-3.3"
+			(at -39.37 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-223-3_TabPin2"
+			(at -39.37 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12004,17 +11964,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "GND"
-			(at -57.404 97.536 0)
-			(effects
-				(font
-					(size 1.778 1.5113)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Footprint" ""
-			(at -57.15 97.79 0)
+		(property "Datasheet" "http://www.advanced-monolithic.com/pdf/ds1117.pdf"
+			(at -36.83 90.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12022,8 +11973,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
-			(at -57.15 97.79 0)
+		(property "Description" "1A Low Dropout regulator, positive, 3.3V fixed output, SOT-223"
+			(at -39.37 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12031,22 +11982,19 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at -57.15 97.79 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
+		(pin "2"
+			(uuid "a8d60c10-9526-4af9-9c60-a4bf78f027c8")
+		)
+		(pin "3"
+			(uuid "a0881bbe-8e87-4e3e-be6f-3532d962f1a2")
 		)
 		(pin "1"
-			(uuid "12545013-1e89-469f-a89c-7e1588909a5c")
+			(uuid "63a57535-ee34-4377-b712-82360d18dcdb")
 		)
 		(instances
-			(project "DisplayDriver"
+			(project ""
 				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
-					(reference "#GND015")
+					(reference "U4")
 					(unit 1)
 				)
 			)
@@ -12459,72 +12407,6 @@
 		)
 	)
 	(symbol
-		(lib_id "DisplayLibrary(sketch):PowerTags_+5V")
-		(at -59.69 78.74 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "5036568a-0016-4efd-8b4c-45beca190bf7")
-		(property "Reference" "#P+08"
-			(at -59.69 78.74 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+5V"
-			(at -65.278 80.01 0)
-			(effects
-				(font
-					(size 1.778 1.5113)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Footprint" ""
-			(at -59.69 78.74 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at -59.69 78.74 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at -59.69 78.74 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "8b8f3c92-8539-4162-addd-0d038ebbb2a8")
-		)
-		(instances
-			(project "DisplayDriver"
-				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
-					(reference "#P+08")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "DisplayLibrary(sketch):C_Small")
 		(at 179.07 76.2 0)
 		(unit 1)
@@ -12596,16 +12478,16 @@
 	)
 	(symbol
 		(lib_id "DisplayLibrary(sketch):supply1_GND")
-		(at -40.64 97.79 0)
+		(at -29.21 93.98 0)
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "556ada81-7044-47a5-abd0-238dea3b7889")
-		(property "Reference" "#GND02"
-			(at -40.64 97.79 0)
+		(uuid "540ce6f9-62f8-40dd-b1e2-49f91a3cad07")
+		(property "Reference" "#GND025"
+			(at -29.21 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12614,7 +12496,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at -40.894 97.536 0)
+			(at -29.464 93.726 0)
 			(effects
 				(font
 					(size 1.778 1.5113)
@@ -12623,7 +12505,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at -40.64 97.79 0)
+			(at -29.21 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12632,7 +12514,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at -40.64 97.79 0)
+			(at -29.21 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12641,7 +12523,7 @@
 			)
 		)
 		(property "Description" ""
-			(at -40.64 97.79 0)
+			(at -29.21 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12650,12 +12532,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "c411181d-012a-438e-9609-d927295f003e")
+			(uuid "4f30a5a0-bec7-441e-ba52-e3c088d33127")
 		)
 		(instances
 			(project "DisplayDriver"
 				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
-					(reference "#GND02")
+					(reference "#GND025")
 					(unit 1)
 				)
 			)
@@ -13715,6 +13597,75 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C")
+		(at -29.21 87.63 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6b219811-cc0c-409d-8c20-99835cf32937")
+		(property "Reference" "C5"
+			(at -26.162 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "C"
+			(at -26.162 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at -28.2448 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at -29.21 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at -29.21 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "649a2cf1-31f0-43f9-a665-d8147c3da7c6")
+		)
+		(pin "1"
+			(uuid "80103561-c30b-45d7-abc7-e509a30de0c6")
+		)
+		(instances
+			(project "DisplayDriver"
+				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
+					(reference "C5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "DisplayLibrary(sketch):RESISTOR_0603_NOOUT")
 		(at 153.67 63.5 270)
 		(unit 1)
@@ -14053,6 +14004,73 @@
 		)
 	)
 	(symbol
+		(lib_id "DisplayLibrary(sketch):supply1_GND")
+		(at -50.8 93.98 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6f6ac671-2e02-4d61-9a52-4ad6fb82cc40")
+		(property "Reference" "#GND022"
+			(at -50.8 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at -51.054 93.726 0)
+			(effects
+				(font
+					(size 1.778 1.5113)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Footprint" ""
+			(at -50.8 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at -50.8 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at -50.8 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "027c91c8-2e39-4c52-ba1d-0c1b02448ebc")
+		)
+		(instances
+			(project "DisplayDriver"
+				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
+					(reference "#GND022")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "DisplayLibrary(sketch):PowerTags_+5V")
 		(at -93.98 46.99 0)
 		(unit 1)
@@ -14113,6 +14131,73 @@
 			(project "DisplayDriver"
 				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
 					(reference "#P+09")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "DisplayLibrary(sketch):supply1_GND")
+		(at -39.37 96.52 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "708c1814-121f-4b00-aaa8-7e195d7a543c")
+		(property "Reference" "#GND02"
+			(at -39.37 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at -39.624 96.266 0)
+			(effects
+				(font
+					(size 1.778 1.5113)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Footprint" ""
+			(at -39.37 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at -39.37 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at -39.37 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0c13e68d-1f79-4e46-b8be-b6b8e1f65ef0")
+		)
+		(instances
+			(project "DisplayDriver"
+				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
+					(reference "#GND02")
 					(unit 1)
 				)
 			)
@@ -14247,92 +14332,6 @@
 			(project "DisplayDriver"
 				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
 					(reference "#GND07")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Regulator_Linear:MCP1727-3302xSN")
-		(at -40.64 85.09 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "7d3f28cf-f914-4056-a2dc-4bb821cf60ad")
-		(property "Reference" "U4"
-			(at -40.64 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "MCP1727-3302xSN"
-			(at -40.64 77.47 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at -40.64 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/MCP1727-1.5A-Low-Voltage-Low-Quiescent-Current-LDO-Regulator-20001999D.pdf"
-			(at -40.64 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "1.5A, Low Voltage, Low Quiescent Current LDO Regulator, 2.3 - 6V Input, Fixed 3.3V Output, 330mV Dropout, SOIC-8"
-			(at -40.64 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "b7ebbf99-bd00-4cad-a935-1e11db180c4c")
-		)
-		(pin "6"
-			(uuid "66cd1209-5377-4782-910a-fe42444fcc10")
-		)
-		(pin "8"
-			(uuid "ebf9e2fb-283e-4a76-b4ab-fd5c9a3be79a")
-		)
-		(pin "5"
-			(uuid "74a164fb-d37b-457b-a80e-c63d3dc19203")
-		)
-		(pin "3"
-			(uuid "6e4c392d-2fcf-4479-8b88-4caf1a994e9d")
-		)
-		(pin "4"
-			(uuid "fc91f2fe-a0dd-4651-a326-be891d7251fc")
-		)
-		(pin "1"
-			(uuid "19726218-ddfa-4584-8bdc-b3ccc880ab4b")
-		)
-		(pin "7"
-			(uuid "ccef7af1-72e0-49f5-ae7c-c2e5cabc3d8f")
-		)
-		(instances
-			(project ""
-				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
-					(reference "U4")
 					(unit 1)
 				)
 			)
@@ -15343,72 +15342,6 @@
 		)
 	)
 	(symbol
-		(lib_id "DisplayLibrary(sketch):3.3V")
-		(at -20.32 78.74 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "a5a67520-5864-4897-9da2-f2398452db9b")
-		(property "Reference" "#U$09"
-			(at -20.32 78.74 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "3.3V"
-			(at -18.542 80.264 0)
-			(effects
-				(font
-					(size 1.27 1.0795)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Footprint" ""
-			(at -20.32 78.74 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at -20.32 78.74 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at -20.32 78.74 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "e5ae63d9-5232-4b86-a04f-5ee8c7072c2b")
-		)
-		(instances
-			(project "DisplayDriver"
-				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
-					(reference "#U$09")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "DisplayLibrary(sketch):CAP_CERAMIC0603_NO")
 		(at 201.93 35.56 0)
 		(unit 1)
@@ -16384,6 +16317,72 @@
 		)
 	)
 	(symbol
+		(lib_id "DisplayLibrary(sketch):3.3V")
+		(at -25.4 80.01 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "c2add1ed-69fd-4e91-b65a-850f1945c6ba")
+		(property "Reference" "#U$09"
+			(at -25.4 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "3.3V"
+			(at -23.622 81.534 0)
+			(effects
+				(font
+					(size 1.27 1.0795)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Footprint" ""
+			(at -25.4 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at -25.4 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at -25.4 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "85c03d39-4e07-4e5f-a819-d16a6345c51a")
+		)
+		(instances
+			(project "DisplayDriver"
+				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
+					(reference "#U$09")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "DisplayLibrary(sketch):PowerTags_+5V")
 		(at 48.26 113.03 0)
 		(unit 1)
@@ -16941,75 +16940,6 @@
 			(project "DisplayDriver"
 				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
 					(reference "#GND03")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at -57.15 91.44 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "d23b29ab-152c-4ca0-8607-6fc9562755c6")
-		(property "Reference" "C3"
-			(at -54.102 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "C"
-			(at -54.102 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at -56.1848 95.25 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at -57.15 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at -57.15 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "2e0db71e-6269-4d5f-9495-49bf9b82a3f6")
-		)
-		(pin "1"
-			(uuid "cf448c2f-d35b-4811-acc5-778c20adaa8d")
-		)
-		(instances
-			(project ""
-				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
-					(reference "C3")
 					(unit 1)
 				)
 			)
@@ -17856,73 +17786,6 @@
 	)
 	(symbol
 		(lib_id "DisplayLibrary(sketch):R")
-		(at -24.13 87.63 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "df8e3347-963f-4946-a6aa-bbfe3f774373")
-		(property "Reference" "R8"
-			(at -24.13 85.344 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "R"
-			(at -23.876 87.63 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at -24.13 89.408 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at -24.13 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at -24.13 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "07c73a64-0a61-4572-a711-14d603c26624")
-		)
-		(pin "1"
-			(uuid "0bb90568-d442-4a96-bbcc-47a7788e4795")
-		)
-		(instances
-			(project "DisplayDriver"
-				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
-					(reference "R8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "DisplayLibrary(sketch):R")
 		(at 124.46 87.63 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -18503,6 +18366,72 @@
 			(project "DisplayDriver"
 				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
 					(reference "#GND017")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "DisplayLibrary(sketch):PowerTags_+5V")
+		(at -53.34 80.01 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f47d6b4b-75e4-4010-bb55-d476a0cae244")
+		(property "Reference" "#P+08"
+			(at -53.34 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at -58.928 81.28 0)
+			(effects
+				(font
+					(size 1.778 1.5113)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Footprint" ""
+			(at -53.34 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at -53.34 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at -53.34 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c2bfdd99-044e-440e-a0fc-7b2d6429fd24")
+		)
+		(instances
+			(project "DisplayDriver"
+				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
+					(reference "#P+08")
 					(unit 1)
 				)
 			)
