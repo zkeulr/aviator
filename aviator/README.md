@@ -25,8 +25,6 @@ Create `settings.toml` and fill in the following variables. The
 specific names are important.
 
 ```toml
-CIRCUITPY_WIFI_SSID = "your_ssid"
-CIRCUITPY_WIFI_USERNAME = "your_username"
-CIRCUITPY_WIFI_PASSWORD = "your_password"
-
+CIRCUITPY_WIFI_SSID = "Aviator"
+CIRCUITPY_WIFI_PASSWORD = "password"
 ```

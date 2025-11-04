@@ -6,27 +6,27 @@ import network
 import time
 import weather
 
+# We can get this from the network,
+# doesn't need to be manually set
 PURDUE_LOCATION = {"lat": 40.4237, "lon": 86.9212}
+# Logo must fit within 32x16 pixels
+LOGO = """
+AVIATOR
+"""
 
-json_errors = {}
-is_connected = False
+display.display(LOGO, 1, 1)
 
 is_connected = network.connect()
-print(is_connected)
-
-# DEBUG
-network.test_connection()
-network.test_requests()
 
 while True:
     try:
         flights = adsb.fetch_flights(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
-        print(weather)
         current_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
-        print(current_weather)
-        display.display(str(flights) + str(current_weather['temperature']) + " C")
-        time.sleep(5)
-    except Exception as e:
-        json_errors.update({time.time(): e})
-        print(json_errors)
 
+        current_time = ntp.datetime
+
+        display.display(time.strftime("%Y-%m-%d %H:%M:%S", current_time) + str(flights) + str(current_weather['temperature']), 2, 16)
+        print(str(flights) + str(current_weather['temperature']))
+        time.sleep(10)
+    except Exception as e:
+        print({time.time(): e})

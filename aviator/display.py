@@ -42,13 +42,13 @@ matrix = rgbmatrix.RGBMatrix(
 )
 framebuffer_display = framebufferio.FramebufferDisplay(matrix, auto_refresh=True)
 
-def display(text: str) -> None:
+def display(text: str, x: int = 0, y: int = 0) -> None:
     text_label = label.Label(
         terminalio.FONT,
         text=text,
         color=0x00FF00,
-        x=2,
-        y=16
+        x=x,
+        y=y
     )
     group = displayio.Group()
     group.append(text_label)
