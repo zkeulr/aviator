@@ -1,4 +1,4 @@
-23894257401531342
+23897788102102398
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -56497,6 +56497,13 @@ connector Molex KK-254 vertical
 2
 2
 DisplayLibrary
+PW20
+
+SN74LVCH245APWT 
+0
+20
+20
+DisplayLibrary
 PinHeader_1x14_P2.54mm_Vertical
 Through hole straight pin header, 1x14, 2.54mm pitch, single row
 Through hole pin header THT 1x14 2.54mm single row
@@ -56524,6 +56531,13 @@ SOIC SO
 0
 20
 20
+DisplayLibrary
+SOT-223-3_TabPin2
+module CMS SOT223 4 pins
+CMS SOT
+0
+4
+3
 DisplayLibrary
 SW_PUSH_6mm
 Generic 6mm SW tactile push button
