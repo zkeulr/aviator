@@ -6383,18 +6383,6 @@
 		(uuid "259f0ac5-34af-439d-ab51-a879e427e93b")
 	)
 	(junction
-		(at 86.36 129.54)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "298c8ede-b6fc-4294-a599-84a0951ef1ef")
-	)
-	(junction
-		(at 107.95 129.54)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "2bb25fd9-4021-47fa-b2b7-e8bfb2460d91")
-	)
-	(junction
 		(at 86.36 161.29)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6467,10 +6455,22 @@
 		(uuid "dfe2a7e3-804f-4c34-a780-dccf21870af3")
 	)
 	(junction
+		(at 86.36 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "dff1e992-3e66-4d89-80d2-2fa0aa57308e")
+	)
+	(junction
 		(at 105.41 82.55)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e23902d3-73ab-4f09-af19-c18413e165a4")
+	)
+	(junction
+		(at 107.95 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fd85221b-6a25-4876-92b4-5f28b095720e")
 	)
 	(no_connect
 		(at 274.32 83.82)
@@ -10537,6 +10537,73 @@
 		)
 	)
 	(symbol
+		(lib_id "DisplayLibrary(sketch):CAP_CERAMIC0603_NO")
+		(at 86.36 134.62 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "0bb01729-1f77-4f63-b257-b778510b7a79")
+		(property "Reference" "C12"
+			(at 89.916 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "C"
+			(at 89.916 135.382 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
+			(at 86.36 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 86.36 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 86.36 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4d7fae03-d330-4359-a765-c1856e335514")
+		)
+		(pin "2"
+			(uuid "8caa2402-8d67-4700-a628-cc6e37bcbf49")
+		)
+		(instances
+			(project "DisplayDriver"
+				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
+					(reference "C12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "DisplayLibrary(sketch):CAP_CERAMIC0805-NOOUTLINE")
 		(at 77.47 63.5 180)
 		(unit 1)
@@ -11257,75 +11324,6 @@
 			(project "DisplayDriver"
 				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
 					(reference "#U$03")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "DisplayLibrary(sketch):C")
-		(at 86.36 133.35 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "271703c5-0c1f-4ce3-b6d3-54b11265964a")
-		(property "Reference" "C12"
-			(at 88.646 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "C"
-			(at 88.646 135.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 87.3252 137.16 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 86.36 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at 86.36 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "4df1b4e8-f361-4acf-84bf-ba4f2c7d94f1")
-		)
-		(pin "1"
-			(uuid "7eca4ac5-7937-43f6-9349-66a64f1590ab")
-		)
-		(instances
-			(project "DisplayDriver"
-				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
-					(reference "C12")
 					(unit 1)
 				)
 			)
@@ -12822,75 +12820,6 @@
 		)
 	)
 	(symbol
-		(lib_id "DisplayLibrary(sketch):C")
-		(at 107.95 133.35 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "55957f10-b9d9-4fe7-92c9-dd5db39f2b0d")
-		(property "Reference" "C13"
-			(at 110.998 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "C"
-			(at 110.998 135.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 108.9152 137.16 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 107.95 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at 107.95 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "0249a5da-9827-4b8d-90e2-c8b115cc7323")
-		)
-		(pin "1"
-			(uuid "40e1b268-d868-4363-a43e-5c29d97951bb")
-		)
-		(instances
-			(project "DisplayDriver"
-				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
-					(reference "C13")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "DisplayLibrary(sketch):PowerTags_+5V")
 		(at 77.47 31.75 0)
 		(unit 1)
@@ -14346,6 +14275,73 @@
 			(project "DisplayDriver"
 				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
 					(reference "#GND07")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "DisplayLibrary(sketch):CAP_CERAMIC0603_NO")
+		(at 107.95 134.62 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "77f325b1-e2cd-4470-bbe8-e8b6b6185378")
+		(property "Reference" "C13"
+			(at 111.506 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "C"
+			(at 111.506 135.382 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
+			(at 107.95 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 107.95 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 107.95 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e921dfbd-6b4e-4824-88b4-c7a8969e0ef6")
+		)
+		(pin "2"
+			(uuid "93249052-0a8f-4550-94ff-1528c8bc6f86")
+		)
+		(instances
+			(project "DisplayDriver"
+				(path "/ddc4c194-bb30-4734-adb1-ce29ad370a60"
+					(reference "C13")
 					(unit 1)
 				)
 			)
