@@ -37,9 +37,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 1.19,
-          "height": 2.19,
-          "width": 1.74
+          "drill": 0.4,
+          "height": 0.65,
+          "width": 0.65
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -229,17 +229,7 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [
-      "pin_to_pin|1511300|1270000|cc720f34-a780-46ed-a94f-e279cd76adf3|250a5a6c-6833-4e65-9d83-24a52a7b5ce3|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60",
-      "pin_to_pin|1511300|1270000|cc720f34-a780-46ed-a94f-e279cd76adf3|eb17eeb5-8e4d-4855-8dae-fb908a723384|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60",
-      "pin_to_pin|1511300|1320800|dbed698b-748d-4e65-8f76-034d153229f8|0fce0a5a-232f-4e5b-9971-9c6a50a7b5f3|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60",
-      "pin_to_pin|1511300|1320800|dbed698b-748d-4e65-8f76-034d153229f8|16799a7b-a810-44e9-b737-02a7d2f5ace7|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60",
-      "pin_to_pin|1511300|1320800|dbed698b-748d-4e65-8f76-034d153229f8|40dd7726-2cdc-40c7-882a-212a8f7f1474|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60",
-      "pin_to_pin|1511300|1320800|dbed698b-748d-4e65-8f76-034d153229f8|4789fc60-50eb-40f6-b811-31f37ce3e8e9|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60",
-      "pin_to_pin|1511300|1320800|dbed698b-748d-4e65-8f76-034d153229f8|5006bdbe-086d-440a-91e3-cac88b5889c4|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60",
-      "pin_to_pin|1511300|1320800|dbed698b-748d-4e65-8f76-034d153229f8|7fe70e97-f33a-4107-a611-c1d35541fe2e|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60",
-      "pin_to_pin|1511300|1320800|dbed698b-748d-4e65-8f76-034d153229f8|abf996a3-565e-496a-b1cc-6a899975d452|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60|/ddc4c194-bb30-4734-adb1-ce29ad370a60"
-    ],
+    "erc_exclusions": [],
     "meta": {
       "version": 0
     },
