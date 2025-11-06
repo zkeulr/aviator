@@ -21,7 +21,9 @@ display.display(LOGO, 1, 1)
 is_connected = network.connect()
 if (is_connected):
     network.init_ntp()
-    rtc.RTC().datetime = network.ntp.datetime
+    t = network.ntp.datetime
+    rtc.RTC().datetime = (t[0], t[1], t[2], t[6], t[3], t[4], t[5], 0)
+
 
 
 while True:
@@ -33,7 +35,7 @@ while True:
         # print("time:", current_time)
         # time_str = f"{current_time[3]}: {current_time[4]}"
 
-        current_time = network.ntp.datetime
+        current_time = rtc.RTC().datetime
         print("time:", current_time)
         time_str = f"{current_time[3]}: {current_time[4]}"
 
