@@ -41,15 +41,36 @@ matrix = rgbmatrix.RGBMatrix(
     doublebuffer=True,
 )
 framebuffer_display = framebufferio.FramebufferDisplay(matrix, auto_refresh=True)
+_root_group = displayio.Group()
+framebuffer_display.root_group = _root_group
 
-def display(text: str, x: int = 0, y: int = 0) -> None:
+def clear() -> None:
+    """Remove all children from the root group."""
+    global _root_group
+    _root_group.pop() if len(_root_group) > 0 else None
+    # simpler: replace with a fresh group
+    _root_group = displayio.Group()
+    framebuffer_display.root_group = _root_group
+
+
+def display(text: str, x: int = 0, y: int = 0, color: int = 0x00FF00, replace: bool = False, index: int | None = None) -> None:
+    """
+    Add a label to the persistent root group.
+    - If replace is True, clear existing children first.
+    - If index is provided, insert at that position (lower index -> behind).
+    """
+    global _root_group
+    if replace:
+        clear()
+
     text_label = label.Label(
         terminalio.FONT,
         text=text,
-        color=0x00FF00,
+        color=color,
         x=x,
         y=y
     )
-    group = displayio.Group()
-    group.append(text_label)
-    framebuffer_display.root_group = group
+    if index is None:
+        _root_group.append(text_label)
+    else:
+        _root_group.insert(index, text_label)

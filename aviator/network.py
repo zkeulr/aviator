@@ -9,7 +9,27 @@ radio = wifi.radio
 pool = socketpool.SocketPool(wifi.radio)
 ssl_context = ssl.create_default_context()
 requests = adafruit_requests.Session(pool, ssl_context)
-ntp = adafruit_ntp.NTP(pool, tz_offset=os.getenv("TZ_OFFSET"), cache_seconds=3600)
+
+def get_tz_offset():
+    response = requests.get("http://worldtimeapi.org/api/ip")
+    data = response.json()
+    offset_str = data["raw_offset"]
+    tz_offset = int(offset_str)
+    return tz_offset
+
+def init_ntp():
+    """Initialize the adafruit_ntp.NTP object after WiFi is connected."""
+    global ntp
+    env = os.getenv("TZ_OFFSET")
+    if env:
+        try:
+            tz_offset = int(env)
+        except Exception:
+            tz_offset = 0
+    else:
+        tz_offset = get_tz_offset()
+    ntp = adafruit_ntp.NTP(pool, tz_offset=tz_offset, cache_seconds=3600)
+    return ntp
 
 def connect(ssid=None, password=None) -> bool: 
     if not ssid:
@@ -23,4 +43,3 @@ def connect(ssid=None, password=None) -> bool:
     except Exception as e:
         print(e)
         return False
-    

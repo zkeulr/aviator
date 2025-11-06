@@ -18,19 +18,30 @@ Aviator
 
 display.display(LOGO, 1, 1)
 
-network.connect()
+is_connected = network.connect()
+if (is_connected):
+    network.init_ntp()
+    rtc.RTC().datetime = network.ntp.datetime
 
-rtc.RTC().datetime = network.ntp.datetime
 
 while True:
     try:
         flights = adsb.fetch_flights(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
         current_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
 
-        current_time = adafruit_ntp.datetime
+        # current_time = time.localtime()
+        # print("time:", current_time)
+        # time_str = f"{current_time[3]}: {current_time[4]}"
 
-        display.display(time.strftime("%Y-%m-%d %H:%M:%S", current_time) + str(flights) + str(current_weather['temperature']), 2, 16)
-        print(str(flights) + str(current_weather['temperature']))
-        time.sleep(10)
+        current_time = network.ntp.datetime
+        print("time:", current_time)
+        time_str = f"{current_time[3]}: {current_time[4]}"
+
+        display.clear()
+        display.display(time_str, 1, 5)
+        display.display(str(flights), 1, 16)
+        display.display(str(current_weather['temperature']), 1, 27)
+
+        time.sleep(15)
     except Exception as e:
         print({time.time(): e})
