@@ -479,7 +479,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "Gerbers/",
+      "plot": "AviatorGerbers/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",
