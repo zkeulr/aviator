@@ -48,3 +48,20 @@ def connect(ssid=None, password=None) -> bool:
     except Exception as e:
         print(e)
         return False
+    
+def is_connected(host="1.1.1.1", port=53, timeout=3) -> bool:
+    """
+    Return True if the device can reach the given host:port (default Cloudflare DNS).
+    Uses a short TCP connect to verify internet access.
+    """
+    try:
+        # quick check if WiFi has an IP assigned
+        if not getattr(radio, "ipv4_address", None):
+            return False
+        s = pool.socket(pool.AF_INET, pool.SOCK_STREAM)
+        s.settimeout(timeout)
+        s.connect((host, port))
+        s.close()
+        return True
+    except Exception:
+        return False

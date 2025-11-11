@@ -18,10 +18,12 @@ Aviator
 
 display.display(LOGO, 1, 1)
 
-is_connected = network.connect()
+network.connect()
 
 while True:
     try:
+        is_connected = network.is_connected()
+
         flights = adsb.fetch_flights(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
         current_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
 
@@ -33,6 +35,9 @@ while True:
         display.display(time_str, 1, 5)
         display.display(str(flights), 1, 16)
         display.display(str(current_weather['temperature']) + "C", 1, 27)
+
+        if not is_connected:
+            network.connect()
 
         time.sleep(60)
     except Exception as e:
