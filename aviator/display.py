@@ -48,7 +48,6 @@ def clear() -> None:
     """Remove all children from the root group."""
     global _root_group
     _root_group.pop() if len(_root_group) > 0 else None
-    # simpler: replace with a fresh group
     _root_group = displayio.Group()
     framebuffer_display.root_group = _root_group
 
@@ -74,3 +73,54 @@ def display(text: str, x: int = 0, y: int = 0, color: int = 0x00FF00, replace: b
         _root_group.append(text_label)
     else:
         _root_group.insert(index, text_label)
+
+
+def display_pixels(pixels, x: int = 0, y: int = 0, replace: bool = False, index: int | None = None) -> None:
+    """
+    Draw pixel data to the display without overwriting the text `display` function.
+
+    pixels: iterable of (px, py, color) tuples where color is 0xRRGGBB int.
+    x, y: offsets applied to the whole pixel set.
+    replace: if True, clears existing root group first.
+    index: insert position in the root group (lower index -> behind).
+    """
+    global _root_group
+    if replace:
+        clear()
+
+    pix_list = list(pixels)
+    if not pix_list:
+        return
+
+    xs = [p[0] for p in pix_list]
+    ys = [p[1] for p in pix_list]
+    min_x, max_x = min(xs), max(xs)
+    min_y, max_y = min(ys), max(ys)
+    width = max_x - min_x + 1
+    height = max_y - min_y + 1
+
+    # Build palette of unique colors
+    color_to_index = {}
+    unique_colors = []
+    for _, _, col in pix_list:
+        if col not in color_to_index:
+            color_to_index[col] = len(unique_colors)
+            unique_colors.append(col)
+
+    palette = displayio.Palette(len(unique_colors))
+    for i, col in enumerate(unique_colors):
+        palette[i] = col
+
+    bitmap = displayio.Bitmap(width, height, len(unique_colors))
+    for px, py, col in pix_list:
+        ix = px - min_x
+        iy = py - min_y
+        # guard against out-of-range just in case
+        if 0 <= ix < width and 0 <= iy < height:
+            bitmap[ix, iy] = color_to_index[col]
+
+    tile = displayio.TileGrid(bitmap, pixel_shader=palette, x=x + min_x, y=y + min_y)
+    if index is None:
+        _root_group.append(tile)
+    else:
+        _root_group.insert(index, tile)
