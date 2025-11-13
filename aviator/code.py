@@ -7,16 +7,20 @@ import time
 import weather
 import rtc
 
-
 # We can get this from the network,
 # doesn't need to be manually set
 PURDUE_LOCATION = {"lat": 40.4237, "lon": 86.9212}
-# Logo must fit within 32x16 pixels
-LOGO = """
-Aviator
-"""
 
-display.display(LOGO, 1, 1)
+flights = [{}]
+current_weather = {}
+
+# while True:
+#    display.display_pixels([(1,1,0x112233)])
+#    time.sleep(10)
+
+while True:
+    display.display_logo()
+    time.sleep(60)
 
 network.connect()
 
@@ -24,8 +28,9 @@ while True:
     try:
         is_connected = network.is_connected()
 
-        flights = adsb.fetch_flights(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
-        current_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+        if is_connected:
+            flights = adsb.fetch_flights(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+            current_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
 
         current_time = time.localtime()
         print(current_time)
@@ -34,7 +39,11 @@ while True:
         display.clear()
         display.display(time_str, 1, 5)
         display.display(str(flights), 1, 16)
-        display.display(str(current_weather['temperature']) + "C", 1, 27)
+
+        current_temp = current_weather.get('temperature')
+        if not current_temp:
+            current_temp = "It's a great day!"
+        display.display(str(current_temp) + "C", 1, 27)
 
         if not is_connected:
             network.connect()

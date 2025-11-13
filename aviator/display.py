@@ -3,7 +3,6 @@ import displayio
 import framebufferio
 import rgbmatrix
 from adafruit_display_text import label
-# from adafruit_bitmap_font import bitmap_font
 import terminalio
 
 # Release any previous displays
@@ -28,11 +27,12 @@ ADDR_PINS = (
 CLOCK_PIN = board.IO21
 LATCH_PIN = board.IO6
 OE_PIN = board.IO5
+BIT_DEPTH=1
 
 matrix = rgbmatrix.RGBMatrix(
     width=64,
     height=32,
-    bit_depth=6, # Higher = smoother gradients, more RAM use
+    bit_depth=BIT_DEPTH, # Higher = smoother gradients, more RAM use
     rgb_pins=RGB_PINS,
     addr_pins=ADDR_PINS,
     clock_pin=CLOCK_PIN,
@@ -77,7 +77,7 @@ def display(text: str, x: int = 0, y: int = 0, color: int = 0x00FF00, replace: b
 
 def display_pixels(pixels, x: int = 0, y: int = 0, replace: bool = False, index: int | None = None) -> None:
     """
-    Draw pixel data to the display without overwriting the text `display` function.
+    Draw pixel data to the display.
 
     pixels: iterable of (px, py, color) tuples where color is 0xRRGGBB int.
     x, y: offsets applied to the whole pixel set.
@@ -124,3 +124,10 @@ def display_pixels(pixels, x: int = 0, y: int = 0, replace: bool = False, index:
         _root_group.append(tile)
     else:
         _root_group.insert(index, tile)
+
+def display_logo():
+    clear()
+    with open("/logo.bmp", "rb") as f:
+        odb = displayio.OnDiskBitmap(f)
+        tile = displayio.TileGrid(odb, pixel_shader=displayio.ColorConverter())
+        _root_group.append(tile)
