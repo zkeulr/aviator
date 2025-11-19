@@ -10,13 +10,11 @@
 % Specifications
 \subsubsection{Specifications}
 \begin{enumerate}
-    \item Support SPI clock $\geq$ 20 MHz
-    \item SPI support up to 40 MHz, full-duplex, DMA capable
-    \item Display update latency $\leq$ 16 ms
-    \item Support configurable API refresh interval between 60 and 300 s
-    \item API end-to-end fetch latency $\leq$ 2 s
     \item Clock drift $\leq \pm 1\frac{\text{sec}}{\text{day}}$
-    \item Operating voltage: $3.3 \pm 0.1$ V
+    \item System must recover from exceptions within 120 seconds.
+    \item After network interrupt, system must reconnect within 120 seconds upon network resumption.
+    \item System must run with zero memory leaks.
+    \item System must never display text overrunning borders.
 \end{enumerate}
 
 % Subsystem Interactions
@@ -124,6 +122,20 @@ data, with a warning that the data is out of date.
 \begin{enumerate}
     \item {[Copy specification here. ]} \\
           {[Explain the specification here. Add photoes if necessary. ]}
+\end{enumerate}
+
+\begin{enumerate}
+    \item Clock drift $\leq \pm 1\frac{\text{sec}}{\text{day}}$
+    \item System must recover from exceptions within 120 seconds.
+    \item After network interrupt, system must reconnect within 120 seconds upon network resumption.
+    \item System must run with zero memory leaks.
+
+          We test this by enabling heap logging and tracking over
+          three days.
+          \begin{lstlisting}[language=Python]
+        
+          \end{lstlisting}
+    \item System must never display text overrunning borders.
 \end{enumerate}
 
 % Standards
