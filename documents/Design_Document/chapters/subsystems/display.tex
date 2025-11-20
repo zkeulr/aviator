@@ -10,13 +10,14 @@
 % Specifications
 \subsubsection{Specifications}
 \begin{enumerate}
-    \item Feature a 2056-pixel Dot Display (128 x 256px)
+    \item Feature a 2048-pixel Dot Display (64 x 32px)
     \item Physical dimensions of housing within 5\% of 64 x 128 x 256 mm.
+    \item No noticable screen tear (refresh rate > 60Hz)
 \end{enumerate}
 
 % Subsystem Interactions
 \subsubsection{Subsystem Interactions}
-The display subsystem links the main PCB and the LED Matrix. This subsystem will interface with the power management system and the main PCB. It will recieve data and commands from the main PCB, interpret the commands, and display the data.
+The display subsystem links the main PCB and the LED Matrix. This subsystem will interface all subsystems on and the main PCB. It will recieve data from the network and communiations subsystem, from the main PCB and processing subsytem it will recieve commands regarding the format of the display, interpret the commands, and display the relevant air traffic data.
 
 % Core ECE
 \subsubsection{Core ECE Design Tasks}
@@ -121,7 +122,7 @@ The display subsystem links the main PCB and the LED Matrix. This subsystem will
 % Theory of Operation
 \subsubsection{Theory of Operation}
 \paragraph{}
-The Display Driver subsystem serves as the primary interface between the ESP32-WROVER-B microcontroller and a 32×64 HUB75 RGB LED matrix, enabling real-time visualization of aviation and weather data. 
+The Display subsystem serves as the primary interface between the ESP32-S3-WROOM-1 microcontroller and a HUB75d 32×64 RGB LED matrix, enabling real-time visualization of aviation and weather data. 
 The ESP32 handles pixel generation, frame buffering, and timing control for row and column scanning of the display. 
 Core signals — including LAT (latch), OE (output enable), CLK (clock), and address lines A–E — are driven directly from the ESP32’s GPIO pins and level-shifted from 3.3 V logic to the 5 V domain required by the HUB75 interface. 
 The RGB data lines (R1, G1, B1, R2, G2, B2) are similarly translated to ensure proper color channel switching for both the upper and lower halves of the LED matrix. 
@@ -129,15 +130,19 @@ The RGB data lines (R1, G1, B1, R2, G2, B2) are similarly translated to ensure p
 During operation, the ESP32 continuously cycles through the address lines, updating one row at a time while controlling brightness through pulse-width modulation synchronized with the OE signal. 
 Power is supplied through regulated 5 V and 3.3 V rails, supporting both the LED panel and logic circuitry. 
 Optional pushbuttons provide manual reset and boot functionality, while status LEDs indicate system power and data activity. 
-In system deployment, the Display Driver operates under firmware that retrieves aircraft position and weather telemetry from networked sources, translating this incoming data into color-coded graphical output. 
-This modular design allows the subsystem to function independently or as an integrated component of the larger Aviator platform, emphasizing robustness, timing precision, and electrical isolation between logic and display domains.
+In system deployment, the display subsystem retrieves aircraft position and weather telemetry from networked sources and ADS-B data, translating this incoming data into text output or images. 
+This modular design allows the subsystem to function independently or as an integrated component of the larger Aviator platform, focusing on robustness, timing precision, and electrical isolation between logic and display domains.
 
 % Specification Measurement
 \subsubsection{Specifications Measurement}
-[\textbf{DD3+} Every specification here should match the specification above. ]
 \begin{enumerate}
-    \item {[Copy specification here. ]} \\
-          {[Explain the specification here. Add photoes if necessary. ]}
+    \item Feature a 2048-pixel Dot Display (64 x 32px)
+    \item   The correct screen was ordered, featuring a 32x64px RGB LED matrix
+    \item Physical dimensions of housing within 5\% of 64 x 128 x 256 mm.
+    \item   Measured with ruler and calipers, the actual screen dimensions are 127 x 255 mm.
+    \item No noticable screen tear (refresh rate > 60Hz)
+    \item   In observing the screen during normal operation, the image is clear and constant with no noticable tear. Achieved >60Hz refresh rate
+          
 \end{enumerate}
 
 % Standards
