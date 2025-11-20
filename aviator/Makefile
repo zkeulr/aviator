@@ -22,7 +22,7 @@ unmount:
 	udisksctl unmount -b /dev/sda1
 
 deploy:
-	sudo cp -v settings.toml *.py logo.bmp /run/media/$(USER)/CIRCUITPY
+	sudo cp -v settings.toml *.py /run/media/$(USER)/CIRCUITPY
 
 convert:
-	magick sr24db3a82b18cc.png -resize 64x32! logo.bmp
+	magick sr24db3a82b18cc.png -compress none -resize 64x32! logo.bmp

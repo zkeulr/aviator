@@ -27,7 +27,8 @@ ADDR_PINS = (
 CLOCK_PIN = board.IO21
 LATCH_PIN = board.IO6
 OE_PIN = board.IO5
-BIT_DEPTH=1
+BIT_DEPTH = 1
+DISPLAY_WIDTH = 64
 
 matrix = rgbmatrix.RGBMatrix(
     width=64,
@@ -52,7 +53,7 @@ def clear() -> None:
     framebuffer_display.root_group = _root_group
 
 
-def display(text: str, x: int = 0, y: int = 0, color: int = 0x00FF00, replace: bool = False, index: int | None = None) -> None:
+def display(text: str, x: int = 0, y: int = 0, color: int = 0x00FF00, replace: bool = False, index: int | None = None) -> label.Label | None:
     """
     Add a label to the persistent root group.
     - If replace is True, clear existing children first.
@@ -69,11 +70,38 @@ def display(text: str, x: int = 0, y: int = 0, color: int = 0x00FF00, replace: b
         x=x,
         y=y
     )
+
+    if text_label.bounding_box[2] > DISPLAY_WIDTH - 2:
+        text_label.x = DISPLAY_WIDTH
+        setattr(text_label, "_scroll_speed", 1)
+        print(text, "_scroll_speed set to 1")
+
     if index is None:
         _root_group.append(text_label)
     else:
         _root_group.insert(index, text_label)
 
+    return text_label
+
+def scroll_step(lbl: label.Label, dx: int | None = None) -> None:
+    """
+    Advance a scrolling label left by dx pixels. If dx is None uses the label's
+    _scroll_speed attribute (set by display(..., scroll=True, scroll_speed=...)).
+    When the label has fully scrolled off the left edge it is reset to start from
+    the right edge again for continuous scrolling.
+    """
+    if dx is None:
+        dx = getattr(lbl, "_scroll_speed", 1)
+    # move left
+    lbl.x = lbl.x - dx
+    # label width
+    try:
+        w = lbl.bounding_box[2] or 0
+    except Exception:
+        w = 0
+    # if completely off-screen to the left, reset to right edge
+    if lbl.x + w < 0:
+        lbl.x = DISPLAY_WIDTH
 
 def display_pixels(pixels, x: int = 0, y: int = 0, replace: bool = False, index: int | None = None) -> None:
     """
@@ -124,10 +152,3 @@ def display_pixels(pixels, x: int = 0, y: int = 0, replace: bool = False, index:
         _root_group.append(tile)
     else:
         _root_group.insert(index, tile)
-
-def display_logo():
-    clear()
-    with open("/logo.bmp", "rb") as f:
-        odb = displayio.OnDiskBitmap(f)
-        tile = displayio.TileGrid(odb, pixel_shader=displayio.ColorConverter())
-        _root_group.append(tile)
