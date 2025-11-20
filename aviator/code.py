@@ -14,8 +14,12 @@ PURDUE_LOCATION = {"lat": 40.4237, "lon": 86.9212}
 flights = [{}]
 current_weather = {}
 display.display("AVIATOR")
+is_connected=False
 
-network.connect()
+try:
+    is_connected = network.connect()
+except:
+    pass
 
 while True:
     try:
