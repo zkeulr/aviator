@@ -124,10 +124,3 @@ def display_pixels(pixels, x: int = 0, y: int = 0, replace: bool = False, index:
         _root_group.append(tile)
     else:
         _root_group.insert(index, tile)
-
-def display_logo():
-    clear()
-    with open("/logo.bmp", "rb") as f:
-        odb = displayio.OnDiskBitmap(f)
-        tile = displayio.TileGrid(odb, pixel_shader=displayio.ColorConverter())
-        _root_group.append(tile)

@@ -13,14 +13,7 @@ PURDUE_LOCATION = {"lat": 40.4237, "lon": 86.9212}
 
 flights = [{}]
 current_weather = {}
-
-# while True:
-#    display.display_pixels([(1,1,0x112233)])
-#    time.sleep(10)
-
-while True:
-    display.display_logo()
-    time.sleep(60)
+display.display("AVIATOR")
 
 network.connect()
 
@@ -47,7 +40,8 @@ while True:
 
         if not is_connected:
             network.connect()
-
-        time.sleep(60)
     except Exception as e:
         print({time.time(): e})
+    finally:
+        time.sleep(60)
+
