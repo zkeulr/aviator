@@ -11,7 +11,6 @@
 \subsubsection{Specifications}
 \begin{enumerate}
     \item Clock drift $\leq \pm 1\frac{\text{sec}}{\text{day}}$
-    \item System must recover from exceptions within 120 seconds.
     \item After network interrupt, system must reconnect within 120 seconds upon network resumption.
     \item System must run with zero memory leaks.
     \item System must never display text overrunning borders.
@@ -118,24 +117,39 @@ data, with a warning that the data is out of date.
 
 % Specification Measurement
 \subsubsection{Specifications Measurement}
-[\textbf{DD3+} Every specification here should match the specification above. ]
 \begin{enumerate}
-    \item {[Copy specification here. ]} \\
-          {[Explain the specification here. Add photoes if necessary. ]}
-\end{enumerate}
+    \item \emph{Clock drift $\leq \pm 1\frac{\text{sec}}{\text{day}}$}.
 
-\begin{enumerate}
-    \item Clock drift $\leq \pm 1\frac{\text{sec}}{\text{day}}$
-    \item System must recover from exceptions within 120 seconds.
-    \item After network interrupt, system must reconnect within 120 seconds upon network resumption.
-    \item System must run with zero memory leaks.
-
-          We test this by enabling heap logging and tracking over
-          three days.
+          We measured drift over a period of two days with the following script:
           \begin{lstlisting}[language=Python]
-        
-          \end{lstlisting}
-    \item System must never display text overrunning borders.
+    import time, board, rtc, wifi, socketpool, adafruit_requests
+    pool = socketpool.SocketPool(wifi.radio)
+    requests = adafruit_requests.Session(pool, None)
+    r = requests.get("http://worldtimeapi.org/api/ip")
+    ref = r.json()['unixtime']
+    r.close()
+    dev = rtc.RTC().datetime 
+    dev_epoch = int(time.mktime(dev[0:6] + (0,0,0))) 
+    print("offset_s", dev_epoch - ref)
+    \end{lstlisting}
+          Reported drift was 1.44 seconds, or 0.72 seconds per day, within tolerance.
+    \item \emph{After network interrupt, system must reconnect within 120 seconds upon network resumption.}
+
+          This was tested by disabling the Wi-Fi hotspot to which the device was
+          connected, waiting 60 seconds, and renabling. Device reconnected in 50 seconds.
+          By design, the device will always try to reconnect once a minute if disconnected.
+    \item \emph{System must run with zero memory leaks.}
+
+          We tested this by enabling heap logging via the \texttt{gc} module and tracking over
+          three days while device was in normal operation. Free memory
+          was observed to not have a monotonically decreasing trend beyond noise;
+          upon initialization, free memory was reported as
+          \texttt{8274912} and after three days free memory was still
+          reported as \texttt{8274912}.
+    \item \emph{System must never display text overrunning borders.}
+          This is accomplished with bounds checking and scrolling text that
+          overflows bounding box. Tested with random strings up to
+          65 characters long.
 \end{enumerate}
 
 % Standards
