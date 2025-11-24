@@ -4,6 +4,7 @@
 
 import time
 import math
+from typing import Dict, Optional, Tuple
 
 
 MODE = "raw"  # Should be "raw" when real ADS-B Arrives PLZZZZZ
@@ -234,7 +235,6 @@ def _cprNL(lat):
     return 0
 
 
-<<<<<<< HEAD
 def _decode_cpr_position(icao: str) -> Optional[Tuple[float, float]]:
 	"""If both even and odd frames exist for ICAO, decode lat/lon using global CPR.
 
@@ -342,50 +342,6 @@ def _decode_cpr_position_local(lat_cpr: int, lon_cpr: int, is_odd: bool, ref_lat
 		return (rlat, rlon)
 	except Exception:
 		return None
-=======
-def _decode_cpr_position(icao):
-    """If both even and odd frames exist for ICAO, decode lat/lon."""
-    cache = _cpr_cache.get(icao)
-    if not cache or "even" not in cache or "odd" not in cache:
-        return None
-    # Extracting CPR fields
-    lat_even = cache["even"]["lat_cpr"]
-    lon_even = cache["even"]["lon_cpr"]
-    lat_odd = cache["odd"]["lat_cpr"]
-    lon_odd = cache["odd"]["lon_cpr"]
-    t_even = cache["even"]["ts"]
-    t_odd = cache["odd"]["ts"]
-    # In here we use the most recent frame fellas
-    if t_even > t_odd:
-        ts = t_even
-    else:
-        ts = t_odd
-    # CPR algorithm
-    # More info from this on --> ICAO Doc 9871, Appendix B
-    Dlat_even = 360.0 / 60.0
-    Dlat_odd = 360.0 / 59.0
-    j = math.floor((59 * lat_even - 60 * lat_odd) / (2 ** 17))
-    lat = Dlat_even * ((lat_even + j) % 60)
-    lat_odd_val = Dlat_odd * ((lat_odd + j) % 59)
-    # Use most recent frame's parity to select lat
-    if t_even > t_odd:
-        lat = lat
-        ni = _cprNL(lat)
-        m = math.floor((lon_even * (ni - 1) - lon_odd * ni) / (2 ** 17))
-        if ni > 0:
-            lon = (360.0 / ni) * ((lon_even + m) % ni)
-        else:
-            lon = None
-    else:
-        lat = lat_odd_val
-        ni = _cprNL(lat)
-        m = math.floor((lon_even * (ni - 1) - lon_odd * ni) / (2 ** 17))
-        if ni > 0:
-            lon = (360.0 / ni) * ((lon_odd + m) % ni)
-        else:
-            lon = None
-    return (lat, lon)
->>>>>>> 7bcb17f9c75267dcb242ce05f49e5ac295abcdaa
 
 
 def _haversine(lat1, lon1, lat2, lon2):
@@ -482,7 +438,6 @@ def _decode_velocity(bits, type_code):
     return track, speed
 
 
-<<<<<<< HEAD
 def _update_raw_flight(icao: str, frame: str, type_code: int, altitude: Optional[int], callsign: Optional[str], velocity: Tuple[Optional[int], Optional[int]], cpr: Optional[Dict], receiver_lat: Optional[float]=None, receiver_lon: Optional[float]=None):
 	now = int(time.time())
 	rec = _flights_by_icao.get(icao)
@@ -543,51 +498,6 @@ def _update_raw_flight(icao: str, frame: str, type_code: int, altitude: Optional
 						rec["dist_km"] = round(d, 2)
 	# Storing last raw frame for debugging
 	rec["raw_frame"] = frame
-=======
-def _update_raw_flight(icao, frame, type_code, altitude, callsign, velocity, cpr, receiver_lat=None, receiver_lon=None):
-    now = int(time.time())
-    rec = _flights_by_icao.get(icao)
-    if not rec:
-        rec = {
-            "icao": icao,
-            "callsign": callsign,
-            "lat": None,
-            "lon": None,
-            "alt_ft": altitude,
-            "heading": velocity[0],
-            "gs_kt": velocity[1],
-            "dist_km": None,
-            "updated": now,
-            "mode": "raw",
-            "last_tc": type_code,
-        }
-        _flights_by_icao[icao] = rec
-    else:
-        if altitude is not None:
-            rec["alt_ft"] = altitude
-        if callsign:
-            rec["callsign"] = callsign
-        if velocity[0] is not None:
-            rec["heading"] = velocity[0]
-        if velocity[1] is not None:
-            rec["gs_kt"] = velocity[1]
-        rec["last_tc"] = type_code
-        rec["updated"] = now
-    # CPR cache update
-    if cpr:
-        parity = "even" if cpr["parity"] == 0 else "odd"
-        if icao not in _cpr_cache:
-            _cpr_cache[icao] = {}
-        _cpr_cache[icao][parity] = {"lat_cpr": cpr["lat_cpr"], "lon_cpr": cpr["lon_cpr"], "ts": now}
-        pos = _decode_cpr_position(icao)
-        if pos:
-            rec["lat"], rec["lon"] = pos
-            # Computing the distance if receiver location given
-            if receiver_lat is not None and receiver_lon is not None:
-                rec["dist_km"] = round(_haversine(receiver_lat, receiver_lon, rec["lat"], rec["lon"]), 2)
-    # Storing last raw frame for debugging
-    rec["raw_frame"] = frame
->>>>>>> 7bcb17f9c75267dcb242ce05f49e5ac295abcdaa
 
 
 def ingest_frame(hex_frame, receiver_lat=None, receiver_lon=None):
