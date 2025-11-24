@@ -1,4 +1,7 @@
 __pycache__/
 .vscode/
+.venv/
 *.bin
 .pio/
+settings.toml
+screenlog.*

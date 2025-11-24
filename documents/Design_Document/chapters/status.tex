@@ -1,13 +1,81 @@
-%%%%%%%%%%%%%%% Final Status Page %%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Final Status of Requirements}
- [\textbf{DD3+}]
- [If met, give a detailed explanation of the requirement. If partially met, mention what has been met and a reason for why the complete requirement couldn’t be achieved. If not met, give an explanation for why the requirement couldn’t be met in the product. Add as many requirements as you had in your earlier design documents here. ]
 \begin{enumerate}
-    \item Requirement 1: [Copy your requirement above here] \\
-          \textbf{Met}: [Explanation]
-    \item Requirement 2: [Copy your requirement above here] \\
-          \textbf{Partially Met}: [Explanation]
-    \item Requirement 3: [Copy your requirement above here] \\
-          \textbf{Not Met}: [Explanation]
+      \item Requirement 1: The device must display accurate information.\\
+            \textbf{Met}: all information displayed is timestamped and
+            discarded once stale. The device is paired with a local
+            ADS-B receiver to ensure coverage of local flight since
+            open flight APIs lack providers in most areas, ensuring
+            overhead flights are accurately captured on-screen.
+      \item Requirement 2: The display must not interfere with
+            user's well-being by, for example, displaying at
+            excessive luminosity, updating rapidly
+            in a distracting manner, or being
+            excessively bulky. \\
+            \textbf{Met}: luminosity is configurable, animations are
+            limited to scrolling overflowed text, and the device is
+            contained within a 10x5x3 cubic inch volume.
+      \item Requirement 3: The device must not infringe on any person's
+            reasonable expectation of privacy. \\
+            \textbf{Partially met}: the device's location could be
+            determined by anyone with access to the API by plotting
+            the epicenter of the newly appearing flights, and
+            arguably tracking flights violates the privacy of flyers,
+            but overall the device leaks very little personally
+            identifiable information.
+      \item Requirement 4: The device must be language-agnostic wherever possible. \\
+            \textbf{Not met}: the interface is
+            in English due to the difficulty of displaying
+            discernible language-agnostic icons on a screen with
+            32x64 resolution. The documentation is also English.
+      \item Requirement 5: The device must be responsive and intuitive. \\
+            \textbf{Met}: the user interface is limited to swapping
+            in between different display modes. All other configuration
+            is automatic. The device responds in a fraction of a
+            second to user input.
+      \item Requirement 6: The device must have robust error handling and recovery. \\
+            \textbf{Met}: the device is capable of autonomously recovering
+            from any software error.
+      \item Requirement 7: The physical device should be easily replicated with
+            widely available parts. \\
+            \textbf{Met}: by design, every component of the device is
+            affordably sourced, with no custom machining needed beyond
+            the PCB. A hobbyist or electrical engineering student
+            should be able to recreate the device in a few hours.
+      \item Requirement 8: The code for the device must be open-source and well-documented. \\
+            \textbf{Partially met}: the code and PCB designs are
+            published with open-source licenses. However, the
+            documentation is unaligned with good practice and lacking in
+            several areas.
+      \item Requirement 9: The device should be as durable and
+            environmentally friendly as possible so as
+            not to contribute to e-waste. \\
+            \textbf{Partially met}: the device is designed to last a
+            minimum of four years of continuous operation, but the
+            components are not sourced sustainably, and construction
+            is not eco-friendly.
+      \item Requirement 10: The device must not contribute to noise
+            or visual pollution of any space. \\
+            \textbf{Met}: the device emits no sound and displays
+            no visually disrupting imagery.
+      \item Requirement 11: The device must be energy-efficient. \\
+            \textbf{Partially met}: the display consumes approximately 1.3 watts during
+            normal operation, 16\% of the maximum possible power consumption of
+            the RGB LED display. While not low-power, the device therefore
+            does use what power is available conservatively.
+      \item Requirement 12: The device must minimize
+            construction and recurring costs. \\
+            \textbf{Met}: the device costs approximately \$110 USD
+            to construct, including the ADS-B SDR. By using only
+            free APIs, the device incurs no recurring costs apart
+            from energy use.
+      \item Requirement 13: The device must not infringe on right to repair. \\
+            \textbf{Met}: all information needed to construct, maintain,
+            and repair the device is freely available.
+      \item Requirement 14: The device must mount and dismount without
+            damage to vertical surfaces. \\
+            \textbf{Met}: through magnets embedded in the casing, the
+            device can attach to magnetic surfaces without adhesive.
+            The back of the device is also conducive to non-damaging
+            adhesive strips.
 \end{enumerate}
