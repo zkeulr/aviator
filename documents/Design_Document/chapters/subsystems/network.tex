@@ -1,141 +1,188 @@
-%%%%%%%%%%%%% Subsystem 4 %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% Subsystem 3: Communications Subsystem %%%%%%%%%%%%%%%%
 \clearpage
-\subsection{Subsystem 4: Network and Communications}
+\subsection{Subsystem 3: Communications Subsystem}
 
 % Subsystem Diagram
-\subsubsection{Subsystem Diagrams}
+\subsubsection{Subsystem Diagram}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{images/Communications/SubsystemDiagram-communcations.jpg} % Change the picture
-    \caption{Network subsystem Block Diagram}
-\end{figure} % If your subsystem is more coding, change it to activity diagram
+    \includegraphics[width=16cm]{images/Communications/SubsystemDiagram-communications.jpg}
+    \caption{Communications Subsystem Block Diagram}
+\end{figure}
 
 % Specifications
 \subsubsection{Specifications}
+
+\textbf{Wi-Fi \& Internet Connectivity}
 \begin{enumerate}
     \item Connection to WPA2 network established in less than 10 s.
     \item HTTPS request latency less than 500 ms for payloads up to 2 kB.
     \item Outbound HTTP POST/GET success rate at least 95\%.
-    \item Fallback mode automatically activates within 5 s if there is no connectivity.
-    \item Error handling: up to 3 retries with exponential back-off before fallback.
+    \item Fallback mode automatically activates within 5 s if connectivity is lost.
+    \item Error handling uses up to 3 retries with exponential back-off before fallback.
     \item System connectivity uptime at least 95\% during a continuous 1-hour runtime.
-    \item Operates at 1090 MHz Extended Squitter (1090ES) frame format.
-    \item Reception rate at least 100 packets/s when aircraft are in range.
-    \item Typical data rate: around 1000 ADS-B frames per second (raw stream).
-    \item Range: at least 200 nautical miles (line-of-sight).
-    \item Latency: less than 100 ms for frame decoding.
-    \item Error rate: less than 1\% decode errors with comprehensive error logging.
-    \item Provides 1Hz fix rate for accurate localization.
+\end{enumerate}
+
+\textbf{ADS-B Reception}
+\begin{enumerate}
+    \item Receives ADS-B messages over HTTPS from a remote decoding server.
+    \item Retrieval latency less than 500 ms per request.
+    \item API update frequency between 1–2 Hz (matching typical ADS-B refresh rate).
+    \item Data integrity ensured via JSON schema validation and CRC-validated ADS-B frames from the upstream server.
+    \item Missing-data tolerance: subsystem enters degraded-mode if ≥ 5 seconds pass without ADS-B updates.
+\end{enumerate}
+
+\textbf{GPS (Optional)}
+\begin{enumerate}
+    \item Provides 1 Hz location fix rate.
     \item Supplies location and time data to synchronize ADS-B and API results.
 \end{enumerate}
 
-% Subsystem Interactions
+% Interactions
 \subsubsection{Subsystem Interactions}
-The communications subsystem acts as the Aviator’s data bridge between external information sources and the internal electronics. 
-It collects ADS-B, API-airport data, and weather data, then forwards validated information to the Processing Subsystem via serial or SPI communication for formatting and display output.
-\newline
-Power is provided by the Power Management Subsystem through a regulated 3.3 V rail, ensuring stable operation of the ESP32 and SDR receiver. In return, the communications unit reports basic voltage or connection status when required.
-\newline
-Externally, this subsystem interacts with aircraft transponders (ADS-B at 1090 MHz), the Open-Meteo API through HTTPS, and other APIs for airport information. 
-Combined, these links guarantee the Aviator always has synchronized flight and environmental data for visualization on the display subsystem.
+The Communications Subsystem acts as the Aviator’s data bridge between external information sources and the internal electronics. It collects ADS-B data (via HTTPS), airport-information API responses, and weather API data, then forwards validated information to the Processing Subsystem over UART or SPI for formatting and display rendering.
 
+Power is provided by the Power Management Subsystem through a regulated 3.3 V rail, ensuring stable operation of the ESP32 and associated communication hardware. The ESP32 can also report basic voltage or connectivity status back to the power subsystem as needed.
 
-% Core ECE
+Externally, this subsystem interacts with:
+\begin{itemize}
+    \item An online ADS-B server providing decoded aircraft position, velocity, and identification data.
+    \item The Open-Meteo weather API.
+    \item Airport-information APIs.
+\end{itemize}
+
+All ADS-B demodulation and decoding of raw I/Q samples is performed externally (e.g., on a host PC or remote server). The ESP32 retrieves only the decoded data frames through periodic HTTPS requests.
+
+% Core ECE Tasks
 \subsubsection{Core ECE Design Tasks}
 \begin{itemize}
-    \item \textbf{ECE 36200}: Programming the ESP32 for SPI/UART communication and Wi-Fi control, configuring serial buses (UART, SPI), and managing real-time I/O between Wi-Fi, GPS, and ADS-B modules.
-    \item \textbf{ECE 43800}: Understanding ADS-B packet decoding and signal validation, including digital filtering, sampling, and signal integrity techniques used during packet extraction.
-    \item \textbf{ECE 54700}: Provided with a quantitative understanding of network protocols, error recovery, congestion control, and routing, which directly inform the subsystem’s retry logic, exponential back-off, and HTTP/TCP communication design.
-    \item \textbf{ECE 20875}: Implementing data parsing and JSON handling for API responses, plus everything in regard to how to code the process in python.
+    \item \textbf{ECE 36200 – Microprocessor Systems and Interfacing:}\\
+    Implementing ESP32 programming, Wi-Fi configuration, SPI/UART communication, and coordinating real-time I/O with GPS and ADS-B modules.
+    
+    \item \textbf{ECE 43800 – Digital Signal Processing:}\\
+    Understanding ADS-B packet structure, CRC validation, and the signal-processing chain used during the external decoding process.
+    
+    \item \textbf{ECE 54700 – Computer Communication Networks:}\\
+    Applying network protocol knowledge (TCP/IP, congestion control, retry strategies, exponential backoff, and reliability mechanisms) to design the HTTPS communication, retry logic, and fallback behavior.
+    
+    \item \textbf{ECE 20875 – Python for Data Science:}\\
+    Implementing JSON parsing, data handling, and API integration for weather and ADS-B retrieval processes, including associated Python-side tooling.
 \end{itemize}
 
 % Schematics
 \subsubsection{Schematics}
-[Type here \textbf{DD2+}]
+[Insert \textbf{DD2} schematic or pseudo-code diagram here.]
+
 \begin{figure}[h]
     \centering
-    \includegraphics[width=16cm]{images/white.png} % Change the picture
-    \caption{[Schematic Name]}
-\end{figure} % If your subsystem is more coding, change it to psudo code
+    \includegraphics[width=16cm]{images/white.png}
+    \caption{Communications Subsystem Schematic (Placeholder)}
+\end{figure}
 
 % Parts List
 \subsubsection{Parts}
 \begin{itemize}
-    \item ADS-B Receiver (1090 MHz SDR Dongle): Captures live aircraft broadcast signals (position, altitude, velocity, ICAO ID) using Automatic Dependent Surveillance–Broadcast (ADS-B). Interfaces with the ESP32 via UART or USB-serial bridge
-    \item Weather API Module: Software interface for retrieving real-time weather conditions (temperature, wind, pressure, etc.) through HTTPS requests to the Open-Meteo API.
-    \item Wi-Fi Network Interface (ESP32 Integrated): Enables wireless internet connectivity for API calls, data uploads, and synchronization with external services. Supports WPA2 and TCP/IP stack.
-    \item Data/Signal Interface: Internal software and pathways responsible for merging ADS-B, GPS, and API data. Manages data transfer to the Processing Subsystem via SPI or serial communication
-    \item GPS/Geolocation Unit (NEO-6M if used): Provides precise latitude, longitude, and time data at 1 Hz. Used for correlating aircraft positions and providing fallback localization when ADS-B data are unavailable.
+    \item \textbf{ADS-B Receiver (1090 MHz SDR Dongle):}\\
+    Receives aircraft broadcasts; raw I/Q data is decoded externally and uploaded to a server. ESP32 downloads decoded ADS-B messages over HTTPS.
+
+    \item \textbf{Weather API Module:}\\
+    Software interface for retrieving real-time Open-Meteo weather data via HTTPS.
+
+    \item \textbf{Wi-Fi Network Interface (ESP32 Integrated):}\\
+    Provides WPA2 networking and TCP/IP stack for ADS-B, weather, and airport-information retrieval.
+
+    \item \textbf{Data/Signal Interface:}\\
+    Internal software paths for merging ADS-B, GPS, and API data and transmitting it to the Processing Subsystem.
+
+    \item \textbf{GPS / Geolocation Unit (NEO-6M, optional):}\\
+    Provides 1 Hz location and timing data for correlating ADS-B positions and enhancing system accuracy.
 \end{itemize}
 
 % Algorithm
 \subsubsection{Algorithm}
-This Subsystem operates through a multi-threaded architecture that concurrently handles ADS-B signal processing and weather data acquisition, ensuring continuous data availability and synchronization between local and online sources.
-\newline
+
+This subsystem uses a multi-threaded structure that handles ADS-B retrieval and weather updates concurrently.
+
 \textbf{ADS-B Processing Pipeline}
-\begin{enumerate}   
-    \item Signal Acquisition: Continuously monitors the 1090 MHz frequency band for Extended Squitter (DF17) transmissions from aircraft transponders.
-    \item Frame Validation: Each 112-bit frame undergoes length verification and CRC-24 checksum validation to ensure data integrity.
-    \item Message Classification: Extract the Type Code (TC) from bits 32–37 to determine message content:
-    \begin{enumerate}
-        \item TC 1–4 → Aircraft identification containing 8-character callsign.
-        \item TC 9–18 → Airborne position with barometric altitude and encoded latitude/longitude.
-        \item TC 19 → Velocity vectors providing ground speed and track heading.
-    \end{enumerate}
-    \item Position Decoding: For location messages, implement the Compact Position Reporting (CPR) algorithm, requiring even/odd frame pairs per aircraft to resolve global coordinates.
-    \item Database Management: Maintain active flight records indexed by ICAO address, updating position, altitude, and velocity as new frames arrive.
+\begin{enumerate}
+    \item \textbf{Data Acquisition:} Retrieve decoded ADS-B messages from an external HTTPS server.
+    \item \textbf{Validation:} Apply JSON schema checks and ensure upstream CRC validation.
+    \item \textbf{Message Classification:} Use Type Codes (TC 1–4, 9–18, 19) to determine message type.
+    \item \textbf{Position Decoding:} Apply Compact Position Reporting (CPR) algorithms if raw coordinates require even/odd frame pairing.
+    \item \textbf{Database Management:} Maintain active aircraft records indexed by ICAO address.
 \end{enumerate}
 
-\textbf{Weather Integration Process}
+\textbf{Weather Integration}
 \begin{enumerate}
-    \item Periodic API Calls: Issue HTTPS requests to the Open-Meteo service every 15 minutes for current atmospheric conditions.
-    \item Multi-Level Data: Retrieve both surface weather and upper-atmosphere conditions at pressure levels (850 hPa – 250 hPa) corresponding to aircraft cruising altitudes.
-    \item Spatial Correlation: Match weather data to flight positions, providing contextual meteorological information for each tracked aircraft.
+    \item Issue HTTPS calls every 15 minutes to retrieve surface and upper-air data.
+    \item Parse fields including temperature, wind, and pressure at multiple atmospheric levels.
+    \item Correlate weather data to aircraft positions for contextual flight information.
 \end{enumerate}
 
-\textbf{Flight Database Correlation (Future Enhancement)}
+\textbf{Flight Database Correlation (Future)}
 \begin{enumerate}
-    \item Callsign Lookup: Match decoded aircraft callsigns with commercial flight-tracking APIs such as FlightAware or OpenSky Network.
-    \item Route Information: Correlate ICAO addresses with scheduled flight data to determine origin–destination pairs, delays, and gate assignments.
-    \item Enhanced Display: Transform raw aircraft data (position, altitude) into meaningful flight information (route, delay status, aircraft type).
+    \item Callsign lookup using OpenSky or FlightAware.
+    \item Route and delay correlation using external scheduling APIs.
+    \item Enhanced visualization of flight metadata.
 \end{enumerate}
 
 \textbf{Data Fusion and Export}
 \begin{enumerate}
-    \item Distance Calculation: Apply the formulas required to compute aircraft proximity to the receiver’s GPS location.
-    \item Error Handling: Implement comprehensive logging and retry mechanisms for malformed frames, failed API calls, and decoding errors.
-    \item Interface Abstraction: Export processed data through high-level APIs from functions that fetch flight-weather info that encapsulate protocol complexity from downstream subsystems.
+    \item Compute aircraft distance from receiver using geodesic formulas.
+    \item Apply retry handling for malformed frames and API failures.
+    \item Export fused data via high-level APIs to downstream processing.
 \end{enumerate}
-Real-Time Operation: Maintaining a continuous operation via non-blocking frame processing, periodic weather updates, automatic database pruning of stale aircraft records, and dual-mode functionality. This will ensure reliable data flow even during bad network or RF interference.
-% Theory of Operation
+
+% Theory
 \subsubsection{Theory of Operation}
-Upon initialization, the ESP32 microcontroller establishes WiFi connectivity and begins continuous monitoring of the 1090 MHz ADS-B frequency band. 
-The ADS-B receiver captures 112-bit Extended Squitter (DF17) frames broadcast by aircraft transponders, containing encoded ICAO identifiers, position data, altitude, and velocity information. 
-Each frame undergoes CRC validation and bit-level decoding, extracting Type Codes for identification (TC 1-4), airborne position (TC 9-18), and velocity (TC 19). 
-Position data uses Compact Position Reporting (CPR) algorithms, requiring even/odd frame pairs to decode latitude/longitude coordinates.
-\newline
-Simultaneously, the system issues periodic HTTPS requests to the Open-Meteo weather API, retrieving both surface conditions and upper-atmosphere data at pressure levels (850hPa to 250hPa) corresponding to aircraft cruising altitudes. 
-Weather data is correlated with flight positions to provide contextual information. 
-Additionally, information from airport information is looked for to match with ADS-B information about planes caught by the antenna, meaning one can match data and determine if flights are delayed, origin-destination, etc.
-\newline
-The ESP32 processes all incoming data streams in real-time, maintaining an active flight database indexed by ICAO address. 
-Distance calculations use formulas to determine aircraft proximity to the receiver. 
-Comprehensive error handling includes frame validation, API timeout recovery, and statistical error tracking to ensure robust operation.
+On startup, the ESP32 connects to Wi-Fi and immediately begins polling an external ADS-B decoding server. Each HTTPS GET request retrieves a JSON payload containing aircraft ICAO addresses, positions, velocities, and timestamps.
 
+Simultaneously, the ESP32 issues periodic HTTPS requests to the Open-Meteo API for weather conditions at surface and upper-atmosphere levels. If GPS is included, the module provides a synchronized 1 Hz fix for correlating ADS-B tracks with real-world position and time.
 
-% Specification Measurement
-\subsubsection{Specifications Measurement}
-[\textbf{DD3+} Every specification here should match the specification above. ]
-\begin{enumerate}
-    \item {[Copy specification here. ]} \\
-          {[Explain the specification here. Add photos if necessary. ]}
-\end{enumerate}
+The subsystem runs continuously with:
+\begin{itemize}
+    \item Failover behavior if connectivity is lost.
+    \item Retry logic (three attempts with exponential backoff).
+    \item Database pruning to remove stale aircraft entries.
+\end{itemize}
+
+% Measurements
+\subsubsection{Specification Measurements}
+\textbf{Wi-Fi \& Internet Connectivity}
+\begin{itemize}
+    \item Measure WPA2 connection time using UART timestamps (pass if $<10$ s).
+    \item Measure HTTPS latency using request/response timing (95th percentile $<500$ ms).
+    \item Compute success rate from 100–200 requests (pass if $\ge 95\%$).
+    \item Disable Wi-Fi to test fallback activation time ($<5$ s).
+    \item Log retry intervals to confirm exponential backoff.
+\end{itemize}
+
+\textbf{ADS-B Retrieval}
+\begin{itemize}
+    \item Measure GET request latency (95th percentile $<500$ ms).
+    \item Verify update frequency (1–2 Hz).
+    \item Validate JSON schema; malformed packets $<1\%$.
+\end{itemize}
+
+\textbf{Weather API}
+\begin{itemize}
+    \item Verify call period is $900 \pm 5$ s.
+    \item Ensure all expected JSON fields are present in 100\% of responses.
+\end{itemize}
+
+\textbf{Serial / SPI Output}
+\begin{itemize}
+    \item Measure throughput from the ESP32 to Processing Subsystem.
+    \item Measure forwarding latency (pass if $<50$ ms).
+\end{itemize}
 
 % Standards
 \subsubsection{Standards}
 \begin{itemize}
-    \item \textbf{NMEA 0183}: Used by GPS receivers to format location/time data, ensuring compatibility with processing algorithms.
-    \item \textbf{REST/HTTPS}: Secure, standardized communication with weather servers and external data sources.
-    \item \textbf{IEEE 802.11 (Wi-Fi) / IEEE 802.3 (Ethernet)}: Provides reliable networking for internet-based data exchange (when we add website interference).
-    \item \textbf{TCP/IP, Checksum validation}: Ensures robustness in communication so that even non-technical users get accurate, reliable results.
+    \item \textbf{ADS-B (1090ES / 978 UAT)} — Ensures compatibility with standardized aircraft broadcast formats.
+    \item \textbf{NMEA 0183} — GPS message formatting.
+    \item \textbf{REST/HTTPS} — Secure communication with ADS-B and weather servers.
+    \item \textbf{IEEE 802.11 / 802.3} — Networking standards for Wi-Fi/Ethernet.
+    \item \textbf{TCP/IP \& checksum validation} — Error detection and robust communication handling.
 \end{itemize}
+
