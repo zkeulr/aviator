@@ -1,5 +1,6 @@
 # pyright: ignore[reportShadowedImports]
 
+# ISSUES: see comments
 import adsb
 import display
 import network
@@ -20,12 +21,12 @@ flights_label = None
 weather_label = None
 last_fetch = -FETCH_INTERVAL
 
-# Try to connect once at startup
+# will hang forever if network not present
 try:
     print("Trying to connect to network...")
     network.connect()
     print("Successfully connected!")
-    display.clear() # remove logo
+    display.clear()
 except Exception:
     print("Network not connected at startup")
 
@@ -86,6 +87,7 @@ while True:
         except Exception as e:
             print("Fetch failed, keeping last data:", e)
 
+    # time is not displaying
     try:
         tm = time.localtime()
         time_str = f"{tm[1]:02d}/{tm[2]:02d} {tm[3]:02d}:{tm[4]:02d}"
@@ -96,7 +98,7 @@ while True:
     except Exception as e:
         print("Time update error:", e)
 
-    # Scroll flights if necessary
+    # Scroll flights if necessary. this could be done base on if the flights text is too long
     try:
         if flights_label is not None:
             display.scroll_step(flights_label)
