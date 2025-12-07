@@ -3,6 +3,7 @@ import displayio
 import framebufferio
 import rgbmatrix
 from adafruit_display_text import label
+# possible to display emojis with `from adafruit_display_emoji_text import EmojiLabel``
 import terminalio
 
 # Release any previous displays
@@ -53,7 +54,7 @@ def clear() -> None:
     framebuffer_display.root_group = _root_group
 
 
-def display(text: str, x: int = 0, y: int = 0, color: int = 0x00FF00, replace: bool = False, index: int | None = None) -> label.Label | None:
+def display(text: str, x: int = 0, y: int = 0, color: int = 0xFFFFFF, replace: bool = False, index: int | None = None) -> label.Label | None:
     """
     Add a label to the persistent root group.
     - If replace is True, clear existing children first.

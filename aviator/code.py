@@ -5,85 +5,102 @@ import display
 import network
 import time
 import weather
-import rtc
 
-# We can get this from the network,
-# doesn't need to be manually set
-PURDUE_LOCATION = {"lat": 40.4237, "lon": 86.9212}
+PURDUE_LOCATION = {"lat": 40.4237, "lon": -86.9212}
 FETCH_INTERVAL = 60.0
 TICK = 0.05
 
 flights = [{}]
 current_weather = {}
-display.display("AVIATOR")
-is_connected=False
+print("Displaing logo...")
+display.display("AVIATOR", 12, 16)
+
 time_label = None
 flights_label = None
 weather_label = None
 last_fetch = -FETCH_INTERVAL
 
+# Try to connect once at startup
 try:
+    print("Trying to connect to network...")
     network.connect()
-except:
-    pass
+    print("Successfully connected!")
+    display.clear() # remove logo
+except Exception:
+    print("Network not connected at startup")
 
 def temp_to_color(temp_c: float) -> int:
-    """
-    Map temperature to a color.
-    - Cold (<0°C): Blue
-    - Cool (0-15°C): Cyan
-    - Warm (16-25°C): Yellow
-    - Hot (>25°C): Red
-    """
     if temp_c is None:
-        return 0xFFFFFF  # default white if no temp
+        return 0xFFFFFF
     if temp_c < 0:
-        return 0x0000FF  # Blue
+        return 0x0000FF
     elif temp_c <= 15:
-        return 0x00FFFF  # Cyan
+        return 0x00FFFF
     elif temp_c <= 25:
-        return 0xFFFF00  # Yellow
+        return 0xFFFF00
     else:
-        return 0xFF0000  # Red
-
+        return 0xFF0000
 
 while True:
     now = time.monotonic()
 
+    # Fetch new data only if interval has passed
     if now - last_fetch >= FETCH_INTERVAL:
         last_fetch = now
         try:
-            if network.is_connected() or network.connect():
-                flights = adsb.fetch_flights(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
-                current_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+            try:
+                connected = network.is_connected()
+            except Exception as e:
+                print("Error checking connection:", e)
+                connected = False
+
+            if connected:
+                new_flights = adsb.fetch_flights(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+                # this call freezes the display for a bit, which is noticeable only with scrolling
+                new_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+
+                # Only update if fetch succeeds
+                flights = new_flights
+                current_weather = new_weather
+
+                # Update flights display
+                flights_text = "\n".join(
+                    f"{f.get('callsign','---')[:6]} {f.get('altitude','?')}ft {f.get('speed','?')}kt"
+                    for f in flights[:5]
+                ) or "No flights"
+                if flights_label is None:
+                    flights_label = display.display(flights_text, 1, 16)
+                else:
+                    flights_label.text = flights_text
+
+                # Update weather display
+                temp = current_weather.get("temperature")
+                temp_color = temp_to_color(temp)
+                weather_text = f"{temp}C" if temp is not None else "No weather"
+                if weather_label is None:
+                    weather_label = display.display(weather_text, 2, 27, color=temp_color)
+                else:
+                    weather_label.text = weather_text
+                    weather_label.color = temp_color
+
         except Exception as e:
-            print("fetch error:", e)
-
-        display.clear()
-        time_label = display.display("", 1, 5)
-
-        flights_text = str(flights)
-        flights_label = display.display(flights_text, 1, 16)
-
-        temp = current_weather.get("temperature")
-        temp_color = temp_to_color(temp)
-        weather_label = display.display((str(temp) + "C") if temp else "No weather", 1, 27, color=temp_color)
+            print("Fetch failed, keeping last data:", e)
 
     try:
         tm = time.localtime()
-        time_str = f"{tm[1]}/{tm[2]} {tm[3]:02d}:{tm[4]:02d}"
+        time_str = f"{tm[1]:02d}/{tm[2]:02d} {tm[3]:02d}:{tm[4]:02d}"
         if time_label is None:
-            time_label = display.display(time_str, 1, 5)
+            time_label = display.display(time_str, 2, 10)
         else:
             time_label.text = time_str
-    except Exception:
-        pass
+    except Exception as e:
+        print("Time update error:", e)
 
+    # Scroll flights if necessary
     try:
         if flights_label is not None:
             display.scroll_step(flights_label)
-
-    except Exception:
-        pass
+    except Exception as e:
+        print("Scroll error:", e)
 
     time.sleep(TICK)
