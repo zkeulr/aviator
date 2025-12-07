@@ -1,6 +1,6 @@
 git:
 	git add .
-	git commit -m "" --allow-empty-message
+	git commit -am "" --allow-empty-message
 	git push
 
 flash:
@@ -23,6 +23,3 @@ unmount:
 
 deploy:
 	sudo cp -v settings.toml *.py /run/media/$(USER)/CIRCUITPY
-
-convert:
-	magick sr24db3a82b18cc.png -compress none -resize 64x32! logo.bmp

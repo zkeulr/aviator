@@ -24,8 +24,8 @@
     \item Average System Power Consumption: < 8 W under typical load.
     \item Conversion Efficiency:
     \begin{itemize}
-        \item Buck/Buck-Boost conversion: ≥ 85\%.
-        \item Battery charge/discharge efficiency: ≥ 80\%.
+        \item Buck/Buck-Boost conversion: >= 85\%.
+        \item Battery charge/discharge efficiency: >= 80\%.
     \end{itemize}
     \item Protection: Resettable polyfuse (3 A hold), TVS diode for surge protection.
     \item Thermal Requirements: External device surface temperature < 60 °C at full load.
@@ -55,44 +55,30 @@
 
 % Schematics
 \subsubsection{Schematics}
-[Insert \textbf{DD2} schematic here.]
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=16cm]{images/white.png}
-    \caption{Power Management Subsystem Schematic (Placeholder)}
-\end{figure}
+A detailed schematic is unnecessary since the power subsystem uses standard regulation and protection components, and the block diagram clearly shows the complete power flow and functionality.
 
 % Parts
 \subsubsection{Parts}
 \begin{itemize}
-    \item USB-C 5 V input controller (STUSB4500)
-    \item Li-ion battery pack (3.7 V, 8000 mAh, PCM-protected)
-    \item Buck-boost regulator (TI TPS63070)
-    \item Battery charging IC (TP4056)
-    \item Resettable fuse (3 A)
-    \item TVS diode (SMBJ5.0A)
-    \item P-channel MOSFET switch (AO3407A) for PowerPath management
-    \item Output connectors and decoupling capacitor network
+    \item USB-C input controller: STUSB4500 (PD sink, 5 V mode)
+    \item Buck-boost regulator: TI TPS63070 (3.3 V / 5 V output from battery or adapter)
+    \item Battery charging IC: TP4056 (simple Li-ion charger for 5 V input)
+    \item Li-ion battery pack: 3.7 V 8000 mAh flat pack with PCM protection
+    \item Fuse: resettable polyfuse (3 A hold)
+    \item TVS diode: SMBJ5.0A (for transient suppression)
+    \item MOSFET switch: P-channel AO3407A (for reverse protection and load control)
+    \item Connectors / Headers: keyed 5 V and 3.3 V output headers with test pads
 \end{itemize}
 
 % Algorithm
 \subsubsection{Algorithm}
 \begin{enumerate}
-    \item Detect power source (USB-C or battery).
-    \item If USB-C present:
-    \begin{itemize}
-        \item Power the system from the adapter.
-        \item Charge the Li-ion battery at a regulated current.
-    \end{itemize}
-    \item If USB-C removed:
-    \begin{itemize}
-        \item Seamlessly switch to battery via ideal-diode MOSFET.
-    \end{itemize}
-    \item ESP32 monitors battery voltage and power-good lines periodically.
-    \item On low-battery condition:
-    \begin{itemize}
-        \item Trigger display brightness reduction and present “Low Battery” indicator.
-    \end{itemize}
+    \item Initialization: detect input source (USB-C present or battery only).
+    \item If USB-C is present: supply system load directly and charge battery at regulated current.
+    \item If USB-C is removed: automatically switch to battery through PowerPath MOSFET (ideal-diode behavior).
+    \item Monitor: ESP32 reads battery voltage and power-good signal periodically.
+    \item Low-voltage event: ESP32 alerts display and reduces brightness to conserve power.
+    \item Recharge: when USB-C is reconnected, return to normal operation and log battery status.
 \end{enumerate}
 
 % Theory of Operation
