@@ -1,6 +1,6 @@
 git:
 	git add .
-	git commit -m "" --allow-empty-message
+	git commit -am "" --allow-empty-message
 	git push
 
 flash:
