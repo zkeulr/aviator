@@ -4,8 +4,6 @@
 
 import time
 import math
-from typing import Dict, Optional, Tuple
-
 
 MODE = "raw"  # Should be "raw" when real ADS-B Arrives PLZZZZZ
 
@@ -235,7 +233,7 @@ def _cprNL(lat):
     return 0
 
 
-def _decode_cpr_position(icao: str) -> Optional[Tuple[float, float]]:
+def _decode_cpr_position(icao):
 	"""If both even and odd frames exist for ICAO, decode lat/lon using global CPR.
 
 	Notes:
@@ -310,7 +308,7 @@ def _decode_cpr_position(icao: str) -> Optional[Tuple[float, float]]:
 	return (rlat, rlon)
 
 
-def _decode_cpr_position_local(lat_cpr: int, lon_cpr: int, is_odd: bool, ref_lat: float, ref_lon: float) -> Optional[Tuple[float, float]]:
+def _decode_cpr_position_local(lat_cpr: int, lon_cpr: int, is_odd: bool, ref_lat: float, ref_lon: float):
 	"""Decode a single CPR frame using a local reference (receiver location).
 
 	This resolves the zone ambiguity by choosing the latitude/longitude bands
@@ -438,7 +436,7 @@ def _decode_velocity(bits, type_code):
     return track, speed
 
 
-def _update_raw_flight(icao: str, frame: str, type_code: int, altitude: Optional[int], callsign: Optional[str], velocity: Tuple[Optional[int], Optional[int]], cpr: Optional[Dict], receiver_lat: Optional[float]=None, receiver_lon: Optional[float]=None):
+def _update_raw_flight(icao: str, frame: str, type_code: int, altitude, callsign, velocity, cpr, receiver_lat=None, receiver_lon=None):
 	now = int(time.time())
 	rec = _flights_by_icao.get(icao)
 	if not rec:

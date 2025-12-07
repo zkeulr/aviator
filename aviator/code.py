@@ -27,6 +27,26 @@ try:
 except:
     pass
 
+def temp_to_color(temp_c: float) -> int:
+    """
+    Map temperature to a color.
+    - Cold (<0°C): Blue
+    - Cool (0-15°C): Cyan
+    - Warm (16-25°C): Yellow
+    - Hot (>25°C): Red
+    """
+    if temp_c is None:
+        return 0xFFFFFF  # default white if no temp
+    if temp_c < 0:
+        return 0x0000FF  # Blue
+    elif temp_c <= 15:
+        return 0x00FFFF  # Cyan
+    elif temp_c <= 25:
+        return 0xFFFF00  # Yellow
+    else:
+        return 0xFF0000  # Red
+
+
 while True:
     now = time.monotonic()
 
@@ -46,7 +66,8 @@ while True:
         flights_label = display.display(flights_text, 1, 16)
 
         temp = current_weather.get("temperature")
-        weather_label = display.display((str(temp) + "C") if temp else "No weather", 1, 27)
+        temp_color = temp_to_color(temp)
+        weather_label = display.display((str(temp) + "C") if temp else "No weather", 1, 27, color=temp_color)
 
     try:
         tm = time.localtime()
