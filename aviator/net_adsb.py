@@ -15,14 +15,21 @@ Usage examples:
 #?
 from __future__ import annotations
 
-import argparse
 import math
 import os
 import sys
 import time
-from typing import Any, Dict, List, Optional, Sequence, Tuple
 
-import requests
+# KEpt it for test
+try:
+    import argparse
+except Exception:  # noqa: BLE001
+    argparse = None  # type: ignore
+
+try:
+    import requests 
+except Exception:  # noqa: BLE001
+    requests = None  # type: ignore
 
 OPEN_SKY_URL = "https://opensky-network.org/api/states/all"
 TOKEN_URL = "https://auth.opensky-network.org/oauth/token"
@@ -30,10 +37,10 @@ ADSBX_URL_TEMPLATE = "https://api.adsb.lol/v2/lat/{lat}/lon/{lon}/dist/{dist}/"
 MPS_TO_KT = 1.9438444924406046
 M_TO_FT = 3.28084
 
-_TOKEN_CACHE: Dict[str, Any] = {"token": None, "expires_at": 0.0}
+_TOKEN_CACHE = {"token": None, "expires_at": 0.0}
 
 
-def _haversine(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+def _haversine(lat1, lon1, lat2, lon2):
     r = 6371.0
     phi1 = math.radians(lat1)
     phi2 = math.radians(lat2)
@@ -44,7 +51,7 @@ def _haversine(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     return r * c
 
 
-def _get_oauth_token(client_id: str, client_secret: str, timeout: int = 10) -> str:
+def _get_oauth_token(client_id, client_secret, timeout=10):
     now = time.time()
     cached = _TOKEN_CACHE
     if cached["token"] and now < cached["expires_at"]:
@@ -66,25 +73,22 @@ def _get_oauth_token(client_id: str, client_secret: str, timeout: int = 10) -> s
     return token
 
 
-def fetch_adsbx(
-    center_lat: float,
-    center_lon: float,
-    radius_nm: float,
-    timeout: int = 10,
-) -> Sequence[Dict[str, Any]]:
+def fetch_adsbx(center_lat, center_lon, radius_nm, timeout=10, session=None):
+    """Fetch raw ADS-B Exchange-style data from adsb.lol.
+
+    For CircuitPython pass `session=network.requests` (adafruit_requests.Session).
+    """
+    sess = session or requests
+    if sess is None:
+        raise RuntimeError("requests module not available; pass a session")
     url = ADSBX_URL_TEMPLATE.format(lat=center_lat, lon=center_lon, dist=radius_nm)
-    resp = requests.get(url, timeout=timeout)
-    resp.raise_for_status()
+    resp = sess.get(url, timeout=timeout)
     payload = resp.json() or {}
     return payload.get("ac") or []
 
 
-def normalize_adsbx(
-    aircraft: Sequence[Dict[str, Any]],
-    ref_lat: Optional[float] = None,
-    ref_lon: Optional[float] = None,
-) -> List[Dict[str, Any]]:
-    flights: List[Dict[str, Any]] = []
+def normalize_adsbx(aircraft, ref_lat=None, ref_lon=None):
+    flights = []
     for ac in aircraft:
         lat = ac.get("lat")
         lon = ac.get("lon")
@@ -93,7 +97,7 @@ def normalize_adsbx(
         alt = ac.get("alt_baro") or ac.get("alt_geom")
         spd = ac.get("gs")
         track = ac.get("track")
-        rec: Dict[str, Any] = {
+        rec = {
             "icao": (ac.get("icao") or "").upper(),
             "callsign": (ac.get("flight") or ac.get("call") or "").strip(),
             "lat": lat,
@@ -113,15 +117,49 @@ def normalize_adsbx(
     return flights
 
 
-def fetch_states(
-    center_lat: float,
-    center_lon: float,
-    delta_deg: float,
-    username: Optional[str] = None,
-    password: Optional[str] = None,
-    token: Optional[str] = None,
-    timeout: int = 10,
-) -> Sequence[List[Any]]:
+def get_flights(
+    lat,
+    lon,
+    *,
+    source="adsbx",
+    radius_nm=150.0,
+    delta=1.5,
+    nearest=1,
+    session=None,
+    username=None,
+    password=None,
+    client_id=None,
+    client_secret=None,
+    timeout=1,
+):
+    """One-shot fetch for use both on desktop and ESP32-S3.
+
+    On CircuitPython call with `session=network.requests`.
+    """
+    src = source.lower()
+    if src == "adsbx":
+        raw = fetch_adsbx(lat, lon, radius_nm, timeout=timeout, session=session)
+        flights = normalize_adsbx(raw, lat, lon)
+    else:
+        tok = None
+        if client_id and client_secret:
+            tok = _get_oauth_token(client_id, client_secret, timeout=timeout)
+        raw_states = fetch_states(
+            lat,
+            lon,
+            delta,
+            username=username,
+            password=password,
+            token=tok,
+            timeout=timeout,
+        )
+        flights = normalize_states(raw_states, lat, lon)
+    if nearest and nearest > 0:
+        flights = flights[:nearest]
+    return flights
+
+
+def fetch_states(center_lat, center_lon, delta_deg, username=None, password=None, token=None, timeout=10):
     """Call OpenSky REST API and return the raw `states` array."""
     lamin = max(-90.0, center_lat - delta_deg)
     lamax = min(90.0, center_lat + delta_deg)
@@ -141,13 +179,9 @@ def fetch_states(
     return payload.get("states") or []
 
 
-def normalize_states(
-    states: Sequence[Sequence[Any]],
-    ref_lat: Optional[float] = None,
-    ref_lon: Optional[float] = None,
-) -> List[Dict[str, Any]]:
+def normalize_states(states, ref_lat=None, ref_lon=None):
     """Convert OpenSky `states` entries to the dictionary format we use."""
-    flights: List[Dict[str, Any]] = []
+    flights = []
     for entry in states:
         if not entry or len(entry) < 17:
             continue
@@ -160,7 +194,7 @@ def normalize_states(
         alt_m = geo_alt if geo_alt is not None else baro_alt
         speed_mps = entry[9]
         heading = entry[10]
-        d: Dict[str, Any] = {
+        d = {
             "icao": (entry[0] or "").upper(),
             "callsign": (entry[1] or "").strip(),
             "origin_country": entry[2],
@@ -181,7 +215,7 @@ def normalize_states(
     return flights
 
 
-def poll_loop(args: argparse.Namespace) -> None:
+def poll_loop(args):
     source = args.source.lower()
     username = args.username or os.getenv("OPENSKY_USERNAME")
     password = args.password or os.getenv("OPENSKY_PASSWORD")
@@ -224,7 +258,7 @@ def poll_loop(args: argparse.Namespace) -> None:
                 if source == "adsbx"
                 else f"+/-{args.delta} deg box"
             )
-            print(f"[{time.strftime('%H:%M:%S')}] got {len(flights)} flights ({coverage})")
+            # print(f"[{time.strftime('%H:%M:%S')}] got {len(flights)} flights ({coverage})")
             for f in flights[: args.nearest]:
                 print(
                     "   ",
@@ -244,7 +278,9 @@ def poll_loop(args: argparse.Namespace) -> None:
         time.sleep(args.interval)
 
 
-def build_arg_parser() -> argparse.ArgumentParser:
+def build_arg_parser():
+    if argparse is None:
+        raise ImportError("argparse not available on this platform")
     parser = argparse.ArgumentParser(description="Poll an online ADS-B data source")
     parser.add_argument("--source", choices=("adsbx", "opensky"), default="adsbx", help="Data source")
     parser.add_argument("--lat", type=float, required=True, help="Center latitude")

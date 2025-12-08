@@ -1,14 +1,14 @@
 # pyright: ignore[reportShadowedImports]
 
 # ISSUES: see comments
-import adsb
+import net_adsb
 import display
 import network
 import time
 import weather
 
 PURDUE_LOCATION = {"lat": 40.4237, "lon": -86.9212}
-FETCH_INTERVAL = 10.0
+FETCH_INTERVAL = 60.0
 TICK = 0.05
 
 flights = [{}]
@@ -18,7 +18,7 @@ display.display("AVIATOR", 12, 16)
 
 time_label = None
 flights_label = None
-velocity_emoji_label = None
+velocity_label = None
 weather_label = None
 weather_emoji_label = None
 last_fetch = -FETCH_INTERVAL
@@ -64,7 +64,17 @@ while True:
             if connected:
                 print("Network connected")
                 print("Fetching flights")
-                new_flights = adsb.fetch_flights(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+                try:
+                    new_flights = net_adsb.get_flights(
+                        PURDUE_LOCATION["lat"],
+                        PURDUE_LOCATION["lon"],
+                        session=network.requests,
+                        radius_nm=150.0,
+                        nearest=10,
+                    )
+                except Exception as e:
+                    print("net_adsb failed, falling back to local ADS-B:", e)
+                    
                 # this call freezes the display for a bit, which is noticeable only with scrolling
                 print("Fetching weather")
                 new_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
@@ -75,14 +85,31 @@ while True:
                 current_weather = new_weather
 
                 # Update flights display
-                flights_text = "\n".join(
-                    f"{f.get('callsign','---')[:6]} {f.get('altitude','?')}ft {f.get('speed','?')}kt"
-                    for f in flights[:5]
-                ) or "No flights"
+                try:
+                    flights_text = f"{flights[0].get('callsign','---')[:6]} {flights[0].get('altitude','?')}ft {flights[0].get('speed','?')}kt"
+                except:
+                    flights_text = "No flights"
+
                 if flights_label is None:
                     flights_label = display.display(flights_text, 1, 16, color=0xFFFFFF) 
                 else:
                     flights_label.text = flights_text
+
+                # calculate heading, change based on speed
+                try:
+                    if flights[0].get("heading") < 360:
+                        velocity_string = "↑"
+
+                    if flights[0].get("speed") < 100:
+                        velocity_color = 0xFFFFFF
+
+                    if velocity_label is None:
+                        velocity_label = display.display(text=velocity_string, x=3+flights_label.bounding_box[2], y=5)
+                    else:
+                        velocity_label.text = velocity_string
+                            
+                except Exception as e:
+                    print(e)
 
                 # Update weather display
                 temp = current_weather.get("temperature")
