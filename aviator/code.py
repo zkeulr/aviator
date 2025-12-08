@@ -18,6 +18,7 @@ display.display("AVIATOR", 12, 16)
 
 time_label = None
 flights_label = None
+velocity_emoji_label = None
 weather_label = None
 weather_emoji_label = None
 last_fetch = -FETCH_INTERVAL
