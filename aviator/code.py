@@ -8,12 +8,12 @@ import time
 import weather
 
 PURDUE_LOCATION = {"lat": 40.4237, "lon": -86.9212}
-FETCH_INTERVAL = 60.0
+FETCH_INTERVAL = 10.0
 TICK = 0.05
 
 flights = [{}]
 current_weather = {}
-print("Displaing logo...")
+print("Displaying logo...")
 display.display("AVIATOR", 12, 16)
 
 time_label = None
@@ -25,14 +25,13 @@ last_fetch = -FETCH_INTERVAL
 try:
     print("Trying to connect to network...")
     if network.connect():
-        print("Connected successfully.")
+        print("Connected successfully")
     else:
-        print("Not connected to the network.")
+        print("Not connected")
 except Exception as e:
     print(e)
 finally:
     display.clear()
-
 
 def temp_to_color(temp_c: float) -> int:
     if temp_c is None:
@@ -51,20 +50,26 @@ while True:
 
     # Fetch new data only if interval has passed
     if now - last_fetch >= FETCH_INTERVAL:
+        print("Fetching new data")
         last_fetch = now
         try:
             try:
+                print("Testing network connectivity")
                 connected = network.is_connected()
             except Exception as e:
                 print("Error checking connection:", e)
                 connected = False
 
             if connected:
+                print("Network connected")
+                print("Fetching flights")
                 new_flights = adsb.fetch_flights(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
                 # this call freezes the display for a bit, which is noticeable only with scrolling
+                print("Fetching weather")
                 new_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
 
                 # Only update if fetch succeeds
+                print("Updating flights and weather")
                 flights = new_flights
                 current_weather = new_weather
 
@@ -87,6 +92,19 @@ while True:
                 else:
                     weather_label.text = weather_text
                     weather_label.color = temp_color
+            else:
+                print("Not connected to the network")
+                if flights_label is None:
+                    flights_label = display.display("No connection", 1, 16, color=0xFF0000)
+                try:
+                    print("Trying to connect to network...")
+                    if network.connect():
+                        print("Connected successfully")
+                    else:
+                        print("Not connected")
+                except Exception as e:
+                    print(e)
+
 
         except Exception as e:
             print("Fetch failed, keeping last data:", e)
@@ -102,7 +120,7 @@ while True:
     except Exception as e:
         print("Time update error:", e)
 
-    # Scroll flights if necessary. this could be done base on if the flights text is too long
+    # Scroll flights. This could be done based on if the flights text is too long
     try:
         if flights_label is not None:
             display.scroll_step(flights_label)
