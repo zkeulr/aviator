@@ -5,6 +5,7 @@ import ssl
 import adafruit_requests
 import adafruit_ntp
 import rtc
+import time
 
 radio = wifi.radio
 pool = socketpool.SocketPool(wifi.radio)
@@ -18,15 +19,19 @@ def init_ntp(tz_offset=None):
 
     try:
         if tz_offset is None:
-            print(int(os.getenv("CIRCUITPY_TZ_OFFSET")))
             if os.getenv("CIRCUITPY_TZ_OFFSET"):
                 tz_offset = int(os.getenv("CIRCUITPY_TZ_OFFSET"))
                 print("tz_offset:", tz_offset)
             else:
                 tz_offset = 0
 
-        ntp = adafruit_ntp.NTP(pool, tz_offset=tz_offset, cache_seconds=3600)
-        rtc.RTC().datetime = ntp.datetime
+            ntp = adafruit_ntp.NTP(pool, tz_offset=tz_offset, cache_seconds=3600)
+            utc_time_struct = ntp.datetime
+            utc_timestamp = time.mktime(utc_time_struct)
+            local_timestamp = utc_timestamp + tz_offset
+            local_time_struct = time.localtime(local_timestamp)
+            rtc.RTC().datetime = local_time_struct
+
     except Exception as e:
         print(e)
 
