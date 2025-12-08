@@ -21,9 +21,9 @@ flights_label = None
 weather_label = None
 last_fetch = -FETCH_INTERVAL
 
-# will hang forever if network not present
 try:
     print("Trying to connect to network...")
+    # If network is present, will hang forever while connecting
     if network.connect():
         print("Connected successfully")
     else:
@@ -50,7 +50,6 @@ while True:
 
     # Fetch new data only if interval has passed
     if now - last_fetch >= FETCH_INTERVAL:
-        print("Fetching new data")
         last_fetch = now
         try:
             try:
@@ -79,7 +78,8 @@ while True:
                     for f in flights[:5]
                 ) or "No flights"
                 if flights_label is None:
-                    flights_label = display.display(flights_text, 1, 16)
+                    flights_label = display.display(flights_text, 1, 16, color=0xFFFFFF) 
+                    # explicitly set color or else it could become permenantly red if network disconnects
                 else:
                     flights_label.text = flights_text
 
@@ -112,7 +112,10 @@ while True:
     # time is not displaying
     try:
         tm = time.localtime()
-        time_str = f"{tm[1]:02d}/{tm[2]:02d} {tm[3]:02d}:{tm[4]:02d}"
+        if tm[0] > 2000:
+            time_str = f"{tm[1]:02d}/{tm[2]:02d} {tm[3]:02d}:{tm[4]:02d}"
+        else:
+            time_str = "Clock not set"
         if time_label is None:
             time_label = display.display(time_str, 2, 10)
         else:
@@ -121,6 +124,8 @@ while True:
         print("Time update error:", e)
 
     # Scroll flights. This could be done based on if the flights text is too long
+    # The text stops scrolling during calls to the weather or checking the network
+    # This is very noticeable and not acceptable
     try:
         if flights_label is not None:
             display.scroll_step(flights_label)

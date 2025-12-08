@@ -25,12 +25,17 @@ def get_tz_offset():
 def init_ntp(tz_offset=None):
     global ntp
     """Initialize the adafruit_ntp.NTP object after WiFi is connected."""
+
     if tz_offset is None:
-        try:
-            tz_offset = get_tz_offset()
-        except Exception as e:
-            print(e)
-            tz_offset = 0
+        if os.getenv("CIRCUITPY_TZ_OFFSET"):
+            tz_offset = int(os.getenv("CIRCUITPY_TZ_OFFSET"))
+            print("tz_offset:", tz_offset)
+        else:
+            try:
+                tz_offset = get_tz_offset()
+            except Exception as e:
+                print(e)
+                tz_offset = 0
 
     ntp = adafruit_ntp.NTP(pool, tz_offset=tz_offset, cache_seconds=3600)
     return ntp
@@ -43,7 +48,8 @@ def connect(ssid=None, password=None) -> bool:
     
     try:
         radio.connect(ssid, password)
-        init_ntp()
+        init_ntp() # this line causes it to hang indefinitely if, for instance, worldtimeapi can't be reached
+        # if we never initialize network time, the time never displays
         return True
     except Exception as e:
         print(e)
