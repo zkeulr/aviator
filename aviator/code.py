@@ -24,11 +24,15 @@ last_fetch = -FETCH_INTERVAL
 # will hang forever if network not present
 try:
     print("Trying to connect to network...")
-    network.connect()
-    print("Successfully connected!")
+    if network.connect():
+        print("Connected successfully.")
+    else:
+        print("Not connected to the network.")
+except Exception as e:
+    print(e)
+finally:
     display.clear()
-except Exception:
-    print("Network not connected at startup")
+
 
 def temp_to_color(temp_c: float) -> int:
     if temp_c is None:

@@ -72,10 +72,10 @@ def display(text: str, x: int = 0, y: int = 0, color: int = 0xFFFFFF, replace: b
         y=y
     )
 
+    # this is called repeatedly, which is not needed
     if text_label.bounding_box[2] > DISPLAY_WIDTH - 2:
         text_label.x = DISPLAY_WIDTH
         setattr(text_label, "_scroll_speed", 1)
-        print(text, "_scroll_speed set to 1")
 
     if index is None:
         _root_group.append(text_label)
