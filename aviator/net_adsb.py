@@ -20,7 +20,7 @@ import os
 import sys
 import time
 
-# KEpt it for test
+# KEpt it for test - fixed
 try:
     import argparse
 except Exception:  # noqa: BLE001
@@ -87,7 +87,7 @@ def fetch_adsbx(center_lat, center_lon, radius_nm, timeout=10, session=None):
     return payload.get("ac") or []
 
 
-def normalize_adsbx(aircraft, ref_lat=None, ref_lon=None):
+def normalize_adsbx(aircraft, ref_lat=None, ref_lon=None, nearest=None):
     flights = []
     for ac in aircraft:
         lat = ac.get("lat")
@@ -115,7 +115,11 @@ def normalize_adsbx(aircraft, ref_lat=None, ref_lon=None):
         if ref_lat is not None and ref_lon is not None:
             rec["dist_km"] = round(_haversine(ref_lat, ref_lon, lat, lon), 2)
         flights.append(rec)
+        if nearest and nearest > 0 and ref_lat is None and ref_lon is None and len(flights) >= nearest:
+            break
     flights.sort(key=lambda x: x.get("dist_km", 1e9))
+    if nearest and nearest > 0:
+        flights = flights[:nearest]
     return flights
 
 
@@ -132,7 +136,7 @@ def get_flights(
     password=None,
     client_id=None,
     client_secret=None,
-    timeout=1,
+    timeout=10,
 ):
     """One-shot fetch for use both on desktop and ESP32-S3.
 
@@ -141,7 +145,7 @@ def get_flights(
     src = source.lower()
     if src == "adsbx":
         raw = fetch_adsbx(lat, lon, radius_nm, timeout=timeout, session=session)
-        flights = normalize_adsbx(raw, lat, lon)
+        flights = normalize_adsbx(raw, lat, lon, nearest=nearest)
     else:
         tok = None
         if client_id and client_secret:

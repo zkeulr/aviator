@@ -18,7 +18,7 @@ display.display("AVIATOR", 12, 16)
 
 time_label = None
 flights_label = None
-velocity_label = None
+velocity_label = "V"
 weather_label = None
 weather_emoji_label = None
 last_fetch = -FETCH_INTERVAL
@@ -97,21 +97,24 @@ while True:
 
                 # calculate heading, change based on speed
                 try:
-                    print("heading:", flights[0].get("heading"))
-                    print("gs_kt:", flights[0].get("gs_kt"))
-                    if int(flights[0].get("heading")) < 360:
-                        velocity_string = "A"
+                    # print("heading:", flights[0].get("heading"))
+                    # print("gs_kt:", flights[0].get("gs_kt"))
+                    #  if int(flights[0].get("heading")) < 360:
+                    #    velocity_string = "A"
 
-                    if flights[0].get("gs_kt") < 100:
-                        velocity_color = 0xFFFFFF
+                    # if flights[0].get("gs_kt") < 100:
+                    #   velocity_color = 0xFFFFFF
 
+                    velocity_string = "A"
                     if velocity_label is None:
                         velocity_label = display.display(text=velocity_string, x=3+time_label.bounding_box[2], y=5)
                     else:
+                        # Getting error, can't set attribute 'text'
+                        print("Updating velocity_label.text to", velocity_string)
                         velocity_label.text = velocity_string
                             
                 except Exception as e:
-                    print(e)
+                    print("Exception in calculating and setting velocity,", e)
 
                 # Update weather display
                 temp = current_weather.get("temperature")
@@ -120,6 +123,7 @@ while True:
                 if weather_label is None:
                     weather_label = display.display(weather_text, 2, 27, color=temp_color)
                 else:
+                    print("Updating weather_label.text to", weather_text)
                     weather_label.text = weather_text
                     weather_label.color = temp_color
 
@@ -129,6 +133,7 @@ while True:
                 if weather_emoji_label is None:
                     weather_emoji_label = display.display_emoji(string=weather_emoji, x=3+weather_label.bounding_box[2], y=21)
                 else:
+                    print("Updating weather_emoji_label.text to", weather_emoji)
                     weather_emoji_label.text = weather_emoji
 
                 # let's display the velocity of the plane with an emoji as well
