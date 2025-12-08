@@ -12,32 +12,24 @@ ssl_context = ssl.create_default_context()
 requests = adafruit_requests.Session(pool, ssl_context)
 ntp = None
 
-def get_tz_offset():
-    resp = requests.get("http://worldtimeapi.org/api/ip")
-    data = resp.json()
-    # "+HH:MM" or "-HH:MM"
-    s = data["utc_offset"]
-    sign = 1 if s[0] == "+" else -1
-    hours = int(s[1:3])
-    minutes = int(s[4:6]) if len(s) >= 6 else 0
-    return sign * (hours * 3600 + minutes * 60)
-
 def init_ntp(tz_offset=None):
     global ntp
     """Initialize the adafruit_ntp.NTP object after WiFi is connected."""
 
-    if tz_offset is None:
-        if os.getenv("CIRCUITPY_TZ_OFFSET"):
-            tz_offset = int(os.getenv("CIRCUITPY_TZ_OFFSET"))
-            print("tz_offset:", tz_offset)
-        else:
-            try:
-                tz_offset = get_tz_offset()
-            except Exception as e:
-                print(e)
+    try:
+        if tz_offset is None:
+            print(int(os.getenv("CIRCUITPY_TZ_OFFSET")))
+            if os.getenv("CIRCUITPY_TZ_OFFSET"):
+                tz_offset = int(os.getenv("CIRCUITPY_TZ_OFFSET"))
+                print("tz_offset:", tz_offset)
+            else:
                 tz_offset = 0
 
-    ntp = adafruit_ntp.NTP(pool, tz_offset=tz_offset, cache_seconds=3600)
+        ntp = adafruit_ntp.NTP(pool, tz_offset=tz_offset, cache_seconds=3600)
+        rtc.RTC().datetime = ntp.datetime
+    except Exception as e:
+        print(e)
+
     return ntp
 
 def connect(ssid=None, password=None) -> bool: 

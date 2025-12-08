@@ -112,12 +112,9 @@ while True:
     # time is not displaying
     try:
         tm = time.localtime()
-        if tm[0] > 2000:
-            time_str = f"{tm[1]:02d}/{tm[2]:02d} {tm[3]:02d}:{tm[4]:02d}"
-        else:
-            time_str = "Clock not set"
+        time_str = f"{tm[3]:02d}:{tm[4]:02d}" # Will not display if too long, e.g. including {tm[1]:02d}/{tm[2]:02d} 
         if time_label is None:
-            time_label = display.display(time_str, 2, 10)
+            time_label = display.display(time_str, 2, 5)
         else:
             time_label.text = time_str
     except Exception as e:
