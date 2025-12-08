@@ -45,8 +45,7 @@ def connect(ssid=None, password=None) -> bool:
     
     try:
         radio.connect(ssid, password)
-        init_ntp() # this line causes it to hang indefinitely if, for instance, worldtimeapi can't be reached
-        # if we never initialize network time, the time never displays
+        init_ntp()
         return True
     except Exception as e:
         print(e)

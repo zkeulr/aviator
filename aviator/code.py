@@ -19,6 +19,7 @@ display.display("AVIATOR", 12, 16)
 time_label = None
 flights_label = None
 weather_label = None
+weather_emoji_label = None
 last_fetch = -FETCH_INTERVAL
 
 try:
@@ -79,7 +80,6 @@ while True:
                 ) or "No flights"
                 if flights_label is None:
                     flights_label = display.display(flights_text, 1, 16, color=0xFFFFFF) 
-                    # explicitly set color or else it could become permenantly red if network disconnects
                 else:
                     flights_label.text = flights_text
 
@@ -92,6 +92,20 @@ while True:
                 else:
                     weather_label.text = weather_text
                     weather_label.color = temp_color
+
+                # available emoji are ☀️☁️⛅⛈️🌤️🌥️🌦️🌧️🌨️🌩️☔❄️
+                # can also display phases of the moon
+                weather_emoji = "❄️" # hard code for now
+                if weather_emoji_label is None:
+                    weather_emoji_label = display.display_emoji(string=weather_emoji, x=3+weather_label.bounding_box[2], y=21)
+                else:
+                    weather_emoji_label.text = weather_emoji
+
+                # let's display the velocity of the plane with an emoji as well
+                # ⬆️↗️➡️↘️⬇️↙️⬅️↖️
+
+
+
             else:
                 print("Not connected to the network")
                 if flights_label is None:

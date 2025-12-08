@@ -3,7 +3,8 @@ import displayio
 import framebufferio
 import rgbmatrix
 from adafruit_display_text import label
-# possible to display emojis with `from adafruit_display_emoji_text import EmojiLabel``
+from adafruit_display_emoji_text import EmojiLabel
+# API sadly not compatible with adafruit_display_text.label.Label
 import terminalio
 
 # Release any previous displays
@@ -53,7 +54,6 @@ def clear() -> None:
     _root_group = displayio.Group()
     framebuffer_display.root_group = _root_group
 
-
 def display(text: str, x: int = 0, y: int = 0, color: int = 0xFFFFFF, replace: bool = False, index: int | None = None) -> label.Label | None:
     """
     Add a label to the persistent root group.
@@ -84,6 +84,21 @@ def display(text: str, x: int = 0, y: int = 0, color: int = 0xFFFFFF, replace: b
         _root_group.insert(index, text_label)
 
     return text_label
+
+# Does this not allow you to position the label?
+def display_emoji(string, x, y):
+    global _root_group
+    emoji_label = EmojiLabel(
+        ascii_font=terminalio.FONT,
+        text=string,
+        scale=1
+    )
+    emoji_label.x = x
+    emoji_label.y = y
+    _root_group.append(emoji_label)
+
+    return emoji_label
+
 
 def scroll_step(lbl: label.Label, dx: int | None = None) -> None:
     """
