@@ -86,7 +86,7 @@ while True:
 
                 # Update flights display
                 try:
-                    flights_text = f"{flights[0].get('callsign','---')[:6]} {flights[0].get('altitude','?')}ft {flights[0].get('speed','?')}kt"
+                    flights_text = f"{flights[0].get('callsign','---')[:6]} {flights[0].get('alt_ft','?')}ft {flights[0].get('gs_kt','?')}kt"
                 except:
                     flights_text = "No flights"
 
@@ -97,14 +97,16 @@ while True:
 
                 # calculate heading, change based on speed
                 try:
-                    if flights[0].get("heading") < 360:
-                        velocity_string = "↑"
+                    print("heading:", flights[0].get("heading"))
+                    print("gs_kt:", flights[0].get("gs_kt"))
+                    if int(flights[0].get("heading")) < 360:
+                        velocity_string = "A"
 
-                    if flights[0].get("speed") < 100:
+                    if flights[0].get("gs_kt") < 100:
                         velocity_color = 0xFFFFFF
 
                     if velocity_label is None:
-                        velocity_label = display.display(text=velocity_string, x=3+flights_label.bounding_box[2], y=5)
+                        velocity_label = display.display(text=velocity_string, x=3+time_label.bounding_box[2], y=5)
                     else:
                         velocity_label.text = velocity_string
                             
