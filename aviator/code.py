@@ -8,7 +8,7 @@ import time
 import weather
 
 PURDUE_LOCATION = {"lat": 40.4237, "lon": -86.9212}
-FETCH_INTERVAL = 60.0
+FETCH_INTERVAL = 30.0
 TICK = 0.05
 
 flights = [{}]
@@ -70,25 +70,25 @@ def speed_to_color(speed):
     return speed_color
 
 # First pass to initialize everything while logo displays
-# try:
-#    print("Trying to connect to network...")
-#    if network.connect():
-#        print("Connected successfully")
-#    else:
-#        print("Not connected")
-
-#    flight = adsb.fetch_flight(
-#                        PURDUE_LOCATION["lat"],
-#                        PURDUE_LOCATION["lon"],
-#                        session=network.requests,
-#                        radius_nm=150.0)
+try:
+    print("Trying to connect to network...")
+    if network.connect():
+        print("Connected successfully")
+    else:
+        print("Not connected")
     
-#    current_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+    new_flight = adsb.fetch_flight(
+                       PURDUE_LOCATION["lat"],
+                       PURDUE_LOCATION["lon"],
+                       session=network.requests,
+                       radius_nm=150.0)
 
-#except Exception as e:
-#    print(e)
-#finally:
-#    display.clear()
+    new_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+
+except Exception as e:
+    print(e)
+finally:
+    display.clear()
 
 while True:
     now = time.monotonic()
@@ -111,23 +111,23 @@ while True:
                 # Fetch block
                 if flight_label is not None:
                     flight_label.text = "" # clear so it doesn't appear to freeze
-                    pass
-                try:
-                    new_flight = adsb.fetch_flight(
-                        PURDUE_LOCATION["lat"],
-                        PURDUE_LOCATION["lon"],
-                        session=network.requests,
-                        radius_nm=150.0,
-                    )
-                except Exception as e:
-                    print("net_adsb failed,", e)
-                    
-                print("Fetching weather")
-                new_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
 
                 if first_pass:
                     first_pass = False
-                    display.clear()
+                else:
+                    try:
+                        new_flight = adsb.fetch_flight(
+                            PURDUE_LOCATION["lat"],
+                            PURDUE_LOCATION["lon"],
+                            session=network.requests,
+                            radius_nm=150.0,
+                        )
+                    except Exception as e:
+                        print("net_adsb failed,", e)
+                        
+                    print("Fetching weather")
+                    new_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+
 
                 # Only update if fetch succeeds
                 print("Updating flights and weather")
@@ -191,7 +191,9 @@ while True:
                 # ⬆️↗️➡️↘️⬇️↙️⬅️↖️
 
             else:
-                display.clear()
+                if first_pass:
+                    first_pass = False
+                    display.clear()
                 print("Not connected to the network")
                 if flight_label is None:
                     flight_label = display.display("No connection", 1, 16, color=0xFF0000, scroll=True)
@@ -199,6 +201,7 @@ while True:
                     print("Trying to connect to network...")
                     if network.connect():
                         print("Connected successfully")
+                        connected = True
                     else:
                         print("Not connected")
                 except Exception as e:
