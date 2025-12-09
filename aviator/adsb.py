@@ -16,4 +16,5 @@ def fetch_flight(lat, lon, session, radius_nm=50, timeout=5):
         "callsign": (ac.get("flight") or ac.get("call") or "").strip(),
         "speed_kt": ac.get("gs"),
         "heading": ac.get("track"),
+        "alt_ft": ac.get("alt_geom") or ac.get("alt_baro")
     }

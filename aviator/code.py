@@ -29,9 +29,9 @@ def temp_to_color(temp_c):
         return 0xFFFFFF
     if temp_c < 0:
         return 0x0000FF
-    elif temp_c <= 15:
+    elif temp_c <= 20:
         return 0x00FFFF
-    elif temp_c <= 25:
+    elif temp_c <= 35:
         return 0xFFFF00
     else:
         return 0xFF0000
@@ -49,7 +49,7 @@ def heading_to_arrow(heading):
     elif heading < 225:
         arrow = "SW"
     elif heading < 270:
-        arrow = "W"
+        arrow = "W" 
     elif heading < 315:
         arrow = "NW"
     else:
@@ -121,7 +121,7 @@ while True:
                             PURDUE_LOCATION["lon"],
                             session=network.requests,
                             radius_nm=150.0,
-                        )
+                        )                            
                     except Exception as e:
                         print("net_adsb failed,", e)
                         
@@ -137,11 +137,15 @@ while True:
                 # Update flights display
                 try:
                     flight_text = f"{flight.get('callsign','---')[:6]}"
+                    if new_flight.get("emergency") and new_flight.get("emergency") is not 'none':
+                        print("Emergency:", new_flight.get("emergency"))
+                        flight_text += " IS IN DISTRESS!"
                 except:
                     flight_text = "No flights"
 
                 if flight_label is None:
                     print("Creating flight_label")
+                    
                     flight_label = display.display(flight_text, 1, 16, color=0xFFFFFF, scroll=True)
                 else:
                     flight_label.text = flight_text
@@ -159,7 +163,6 @@ while True:
                     if velocity_label is None:
                         velocity_label = display.display(text=velocity_string, x=50, y=5, color=speed_color)
                     else:
-                        # Getting error, can't set attribute 'text'
                         print("Updating velocity_label.text to", velocity_string)
                         velocity_label.text = velocity_string
                         velocity_label.color = speed_color
@@ -178,9 +181,24 @@ while True:
                     weather_label.text = weather_text
                     weather_label.color = temp_color
 
-                # available emoji are ☀️☁️⛅⛈️🌤️🌥️🌦️🌧️🌨️🌩️☔❄️
-                # can also display phases of the moon
-                weather_emoji = "❄️" # hard code for now
+                rain = current_weather.get("rain")
+                print("Rain:", rain)
+                cloud_cover = current_weather.get("cloud_cover")
+                print("Cloud cover:", cloud_cover)
+                weather_event = current_weather.get("snowfall")
+                print("Weather event:", weather_event)
+
+                # ☀️☁️⛅⛈️🌤️🌥️🌦️🌧️🌨️🌩️☔❄️
+                weather_emoji = ""
+                if float(current_weather.get("rain")) > 1:
+                    weather_emoji = "☔"
+                elif float(current_weather.get("cloud_cover")) > 50:
+                    weather_emoji = "☁️"
+                elif float(current_weather.get("snowfall")) > 1:
+                    weather_emoji = "❄️"
+                else: 
+                    weather_emoji = "☀️"
+
                 if weather_emoji_label is None:
                     weather_emoji_label = display.display_emoji(string=weather_emoji, x=3+weather_label.bounding_box[2], y=21)
                 else:
