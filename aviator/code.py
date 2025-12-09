@@ -10,7 +10,7 @@ import flightinfo
 import os
 
 LAT, LON = 40.4237, -86.9212
-FETCH_INTERVAL = 120
+FETCH_INTERVAL = 30 # 120
 TICK = 0.05
 
 flights = [{}]
@@ -22,6 +22,8 @@ weather_label = None
 weather_emoji_label = None
 last_fetch = -FETCH_INTERVAL
 first_pass = True
+new_flight = {}
+new_weather = {}
 
 def temp_to_color(temp_c):
     if temp_c is None:
@@ -77,6 +79,7 @@ try:
     if network.connect():
         print("Connected successfully")
 
+        # These may fail, resulting in no initial flights
         new_flight = adsb.fetch_flight(
                        LAT,
                        LON,
@@ -84,6 +87,8 @@ try:
                        radius_nm=150.0)
 
         new_weather = weather.fetch_weather(LAT, LON)
+
+        print("Fetched initial flights")
 
         if os.getenv("LAT") and os.getenv("LON"):
             LAT, LON = int(os.getenv("LAT")), int(os.getenv("LON"))

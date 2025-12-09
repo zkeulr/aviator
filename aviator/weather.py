@@ -30,7 +30,7 @@ def fetch_weather(lat, lon, altitude_ft=None):
     print("[weather] Fetching:", url)
 
     try:
-        resp = requests.get(url)
+        resp = requests.get(url, timeout=5)
         if resp.status_code != 200:
             print("[weather] HTTP error:", resp.status_code)
             return None
