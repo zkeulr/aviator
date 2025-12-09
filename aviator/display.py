@@ -77,7 +77,7 @@ def display(text: str, x: int = 0, y: int = 0, color: int = 0xFFFFFF, replace: b
         text_label = ScrollingLabel(
             terminalio.FONT,
             text=text,
-            animate_time=1, 
+            animate_time=0.3, 
         )
         text_label.y = y
 

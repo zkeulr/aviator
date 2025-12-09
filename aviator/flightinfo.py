@@ -30,8 +30,8 @@ def get_flights_by_callsign(callsign, session):
         arrival = flight.get("arrival", {}) or {}
 
         result.append({
-            "origin": departure.get("airport"),
-            "destination": arrival.get("airport"),
+            "origin": departure.get("iata"), # "airport"
+            "destination": arrival.get("iata"), # "airport"
             "dep_time": departure.get("scheduled"),
             "arr_time": arrival.get("scheduled"),
             "status": flight.get("flight_status"),

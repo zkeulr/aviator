@@ -7,16 +7,14 @@ import network
 import time
 import weather
 import flightinfo
+import os
 
-PURDUE_LOCATION = {"lat": 40.4237, "lon": -86.9212}
+LAT, LON = 40.4237, -86.9212
 FETCH_INTERVAL = 120
 TICK = 0.05
 
 flights = [{}]
 current_weather = {}
-print("Displaying logo...")
-display.display("AVIATOR", 12, 16)
-
 time_label = None
 flight_label = None
 velocity_label = None
@@ -70,21 +68,35 @@ def speed_to_color(speed):
 
     return speed_color
 
+print("Displaying logo...")
+display.display("AVIATOR", 12, 16)
+
 # First pass to initialize everything while logo displays
 try:
     print("Trying to connect to network...")
     if network.connect():
         print("Connected successfully")
-    else:
-        print("Not connected")
-    
-    new_flight = adsb.fetch_flight(
-                       PURDUE_LOCATION["lat"],
-                       PURDUE_LOCATION["lon"],
+
+        new_flight = adsb.fetch_flight(
+                       LAT,
+                       LON,
                        session=network.requests,
                        radius_nm=150.0)
 
-    new_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+        new_weather = weather.fetch_weather(LAT, LON)
+
+        if os.getenv("LAT") and os.getenv("LON"):
+            LAT, LON = int(os.getenv("LAT")), int(os.getenv("LON"))
+        else:
+            try:
+                LAT, LON = network.get_lat_lon()
+                if LAT is None and LON is None:
+                    LAT, LON = 40.4237, -86.9212
+            except Exception as e:
+                print(e)
+    else:
+        print("Not connected")
+
 
 except Exception as e:
     print(e)
@@ -118,8 +130,8 @@ while True:
                 else:
                     try:
                         new_flight = adsb.fetch_flight(
-                            PURDUE_LOCATION["lat"],
-                            PURDUE_LOCATION["lon"],
+                            LAT,
+                            LON,
                             session=network.requests,
                             radius_nm=150.0,
                         )                            
@@ -127,7 +139,7 @@ while True:
                         print("net_adsb failed,", e)
                         
                     print("Fetching weather")
-                    new_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+                    new_weather = weather.fetch_weather(LAT, LON)
                     print(new_weather)
 
 
