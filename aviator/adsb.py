@@ -10,6 +10,8 @@ def fetch_flight(lat, lon, session, radius_nm=50, timeout=5):
 
     ac = data[0]
 
+    print(ac)
+
     return {
         "callsign": (ac.get("flight") or ac.get("call") or "").strip(),
         "speed_kt": ac.get("gs"),

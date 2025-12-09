@@ -18,7 +18,7 @@ display.display("AVIATOR", 12, 16)
 
 time_label = None
 flight_label = None
-velocity_label = "V"
+velocity_label = None
 weather_label = None
 weather_emoji_label = None
 last_fetch = -FETCH_INTERVAL
@@ -98,25 +98,45 @@ while True:
                     flight_label.text = flight_text
 
                 # calculate heading, change based on speed
-                # try:
-                    # print("heading:", flights[0].get("heading"))
-                    # print("gs_kt:", flights[0].get("gs_kt"))
-                    #  if int(flights[0].get("heading")) < 360:
-                    #    velocity_string = "A"
+                try:
+                    heading = int(flight.get("heading"))
+                    print("heading:", heading)
+                    if heading < 45:
+                        velocity_string = "o"
+                    elif heading < 90:
+                        velocity_string = "->"
+                    elif heading < 135:
+                        velocity_string = "o"
+                    elif heading < 180:
+                        velocity_string = "v"
+                    elif heading < 225:
+                        velocity_string = "o"
+                    elif heading < 270:
+                        velocity_string = "<-"
+                    elif heading < 315:
+                        velocity_string = "o"
+                    else:
+                        velocity_string = "^"
 
-                    # if flights[0].get("gs_kt") < 100:
-                    #   velocity_color = 0xFFFFFF
+                    speed_kt = int(flight.get("speed_kt"))
+                    if speed_kt < 100:
+                        velocity_color = 0xFFFFFF
+                    elif speed_kt < 200:
+                        velocity_color = 0x0000FF
+                    elif speed_kt < 100:
+                        velocity_color = 0x00FF00
+                    else:
+                        velocity_color = 0xFF0000
 
-                #    velocity_string = "A"
-                #    if velocity_label is None:
-                 #       velocity_label = display.display(text=velocity_string, x=3+time_label.bounding_box[2], y=5)
-                  #  else:
+                    if velocity_label is None:
+                        velocity_label = display.display(text=velocity_string, x=3+time_label.bounding_box[2], y=5)
+                    else:
                         # Getting error, can't set attribute 'text'
-                   #     print("Updating velocity_label.text to", velocity_string)
-                    #    velocity_label.text = velocity_string
+                        print("Updating velocity_label.text to", velocity_string)
+                        velocity_label.text = velocity_string
                             
-                #except Exception as e:
-                 #   print("Exception in calculating and setting velocity,", e)
+                except Exception as e:
+                   print("Exception in calculating and setting velocity,", e, speed_kt, heading)
 
                 # Update weather display
                 temp = current_weather.get("temperature")
