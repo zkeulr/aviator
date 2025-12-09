@@ -8,7 +8,7 @@ import time
 import weather
 
 PURDUE_LOCATION = {"lat": 40.4237, "lon": -86.9212}
-FETCH_INTERVAL = 30.0
+FETCH_INTERVAL = 30.0 # 120
 TICK = 0.05
 
 flights = [{}]
