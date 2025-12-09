@@ -145,7 +145,7 @@ while True:
                     
                     flight_info = flightinfo.get_flights_by_callsign(flight.get("callsign", ""), session=network.requests)[0]
                     print(flight_info)
-                    flight_text += flight_info.get("origin") + " -> " + flight_info.get("destination")
+                    flight_text += ", " + flight_info.get("origin") + " -> " + flight_info.get("destination")
                 except Exception as e:
                     print("Error updating flights:", e)
                     flight_text = "No flights"
