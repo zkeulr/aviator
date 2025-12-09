@@ -9,7 +9,7 @@ import weather
 import flightinfo
 
 PURDUE_LOCATION = {"lat": 40.4237, "lon": -86.9212}
-FETCH_INTERVAL = 30.0 # 120
+FETCH_INTERVAL = 120
 TICK = 0.05
 
 flights = [{}]
@@ -142,8 +142,12 @@ while True:
                     if new_flight.get("emergency") and new_flight.get("emergency") is not 'none':
                         print("Emergency:", new_flight.get("emergency"))
                         flight_text += " IS IN DISTRESS!"
-                    flight_tex += flightinfo.get_flights_by_callsign(flight.get(", callsign", ""))
-                except:
+                    
+                    flight_info = flightinfo.get_flights_by_callsign(flight.get("callsign", ""), session=network.requests)[0]
+                    print(flight_info)
+                    flight_text += flight_info.get("origin") + " -> " + flight_info.get("destination")
+                except Exception as e:
+                    print("Error updating flights:", e)
                     flight_text = "No flights"
 
                 if flight_label is None:
