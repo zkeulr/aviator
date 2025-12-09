@@ -22,20 +22,9 @@ velocity_label = None
 weather_label = None
 weather_emoji_label = None
 last_fetch = -FETCH_INTERVAL
+first_pass = True
 
-try:
-    print("Trying to connect to network...")
-    # If network is present, will hang forever while connecting
-    if network.connect():
-        print("Connected successfully")
-    else:
-        print("Not connected")
-except Exception as e:
-    print(e)
-finally:
-    display.clear()
-
-def temp_to_color(temp_c: float) -> int:
+def temp_to_color(temp_c):
     if temp_c is None:
         return 0xFFFFFF
     if temp_c < 0:
@@ -46,6 +35,60 @@ def temp_to_color(temp_c: float) -> int:
         return 0xFFFF00
     else:
         return 0xFF0000
+    
+def heading_to_arrow(heading):
+    arrow = ""
+    if heading < 45:
+        arrow = "NE"
+    elif heading < 90:
+        arrow = "E"
+    elif heading < 135:
+        arrow = "SE"
+    elif heading < 180:
+        arrow = "S"
+    elif heading < 225:
+        arrow = "SW"
+    elif heading < 270:
+        arrow = "W"
+    elif heading < 315:
+        arrow = "NW"
+    else:
+        arrow = "N"
+
+    return arrow
+
+def speed_to_color(speed):
+    if speed_kt < 200:
+        speed_color = 0xFFFFFF
+    elif speed_kt < 400:
+        speed_color = 0x0000FF
+    elif speed_kt < 600:
+        speed_color = 0x00FF00
+    else:
+        speed_color = 0xFF0000
+
+    return speed_color
+
+# First pass to initialize everything while logo displays
+# try:
+#    print("Trying to connect to network...")
+#    if network.connect():
+#        print("Connected successfully")
+#    else:
+#        print("Not connected")
+
+#    flight = adsb.fetch_flight(
+#                        PURDUE_LOCATION["lat"],
+#                        PURDUE_LOCATION["lon"],
+#                        session=network.requests,
+#                        radius_nm=150.0)
+    
+#    current_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+
+#except Exception as e:
+#    print(e)
+#finally:
+#    display.clear()
 
 while True:
     now = time.monotonic()
@@ -64,6 +107,8 @@ while True:
             if connected:
                 print("Network connected")
                 print("Fetching flight")
+
+                # Fetch block
                 if flight_label is not None:
                     flight_label.text = "" # clear so it doesn't appear to freeze
                     pass
@@ -75,11 +120,14 @@ while True:
                         radius_nm=150.0,
                     )
                 except Exception as e:
-                    print("net_adsb failed, falling back to local ADS-B:", e)
+                    print("net_adsb failed,", e)
                     
-                # this call freezes the display for a bit, which is noticeable only with scrolling
                 print("Fetching weather")
                 new_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+
+                if first_pass:
+                    first_pass = False
+                    display.clear()
 
                 # Only update if fetch succeeds
                 print("Updating flights and weather")
@@ -88,12 +136,13 @@ while True:
 
                 # Update flights display
                 try:
-                    flight_text = f"{flight.get('callsign','---')[:6]} {flight.get('alt_ft','?')}ft {flight.get('gs_kt','?')}kt"
+                    flight_text = f"{flight.get('callsign','---')[:6]}"
                 except:
                     flight_text = "No flights"
 
                 if flight_label is None:
-                    flight_label = display.display(flight_text, 1, 16, color=0xFFFFFF, scroll=True) 
+                    print("Creating flight_label")
+                    flight_label = display.display(flight_text, 1, 16, color=0xFFFFFF, scroll=True)
                 else:
                     flight_label.text = flight_text
 
@@ -101,39 +150,19 @@ while True:
                 try:
                     heading = int(flight.get("heading"))
                     print("heading:", heading)
-                    if heading < 45:
-                        velocity_string = "o"
-                    elif heading < 90:
-                        velocity_string = "->"
-                    elif heading < 135:
-                        velocity_string = "o"
-                    elif heading < 180:
-                        velocity_string = "v"
-                    elif heading < 225:
-                        velocity_string = "o"
-                    elif heading < 270:
-                        velocity_string = "<-"
-                    elif heading < 315:
-                        velocity_string = "o"
-                    else:
-                        velocity_string = "^"
+                    velocity_string = heading_to_arrow(heading)
 
-                    speed_kt = int(flight.get("speed_kt"))
-                    if speed_kt < 100:
-                        velocity_color = 0xFFFFFF
-                    elif speed_kt < 200:
-                        velocity_color = 0x0000FF
-                    elif speed_kt < 100:
-                        velocity_color = 0x00FF00
-                    else:
-                        velocity_color = 0xFF0000
+                    speed_kt = int(flight.get("speed_kt", 0))
+                    print(speed_kt)
+                    speed_color = speed_to_color(speed_kt)
 
                     if velocity_label is None:
-                        velocity_label = display.display(text=velocity_string, x=3+time_label.bounding_box[2], y=5)
+                        velocity_label = display.display(text=velocity_string, x=50, y=5, color=speed_color)
                     else:
                         # Getting error, can't set attribute 'text'
                         print("Updating velocity_label.text to", velocity_string)
                         velocity_label.text = velocity_string
+                        velocity_label.color = speed_color
                             
                 except Exception as e:
                    print("Exception in calculating and setting velocity,", e, speed_kt, heading)
@@ -162,9 +191,10 @@ while True:
                 # ⬆️↗️➡️↘️⬇️↙️⬅️↖️
 
             else:
+                display.clear()
                 print("Not connected to the network")
                 if flight_label is None:
-                    flight_label = display.display("No connection", 1, 16, color=0xFF0000)
+                    flight_label = display.display("No connection", 1, 16, color=0xFF0000, scroll=True)
                 try:
                     print("Trying to connect to network...")
                     if network.connect():
