@@ -127,6 +127,7 @@ while True:
                         
                     print("Fetching weather")
                     new_weather = weather.fetch_weather(PURDUE_LOCATION["lat"], PURDUE_LOCATION["lon"])
+                    print(new_weather)
 
 
                 # Only update if fetch succeeds
@@ -171,7 +172,7 @@ while True:
                    print("Exception in calculating and setting velocity,", e, speed_kt, heading)
 
                 # Update weather display
-                temp = current_weather.get("temperature")
+                temp = current_weather.get("surface_temp")
                 temp_color = temp_to_color(temp)
                 weather_text = f"{temp}C" if temp is not None else "No weather"
                 if weather_label is None:
@@ -185,17 +186,17 @@ while True:
                 print("Rain:", rain)
                 cloud_cover = current_weather.get("cloud_cover")
                 print("Cloud cover:", cloud_cover)
-                weather_event = current_weather.get("snowfall")
-                print("Weather event:", weather_event)
+                snowfall = current_weather.get("snowfall")
+                print("Snowfall:", snowfall)
 
                 # ☀️☁️⛅⛈️🌤️🌥️🌦️🌧️🌨️🌩️☔❄️
                 weather_emoji = ""
-                if float(current_weather.get("rain")) > 1:
+                if float(current_weather.get("rain")) < 1:
                     weather_emoji = "☔"
+                elif float(current_weather.get("snowfall")) > 0.0:
+                    weather_emoji = "❄️"
                 elif float(current_weather.get("cloud_cover")) > 50:
                     weather_emoji = "☁️"
-                elif float(current_weather.get("snowfall")) > 1:
-                    weather_emoji = "❄️"
                 else: 
                     weather_emoji = "☀️"
 

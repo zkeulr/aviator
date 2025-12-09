@@ -1,100 +1,73 @@
 from network import requests
 
-SURFACE_URL = "https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true&hourly=snowfall,rain,cloud_cover"
-ALTITUDE_URL = "https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=temperature_850hPa,temperature_700hPa,temperature_500hPa,temperature_300hPa,temperature_250hPa,windspeed_850hPa,windspeed_700hPa,windspeed_500hPa,windspeed_300hPa,windspeed_250hPa,winddirection_850hPa,winddirection_700hPa,winddirection_500hPa,winddirection_300hPa,winddirection_250hPa"
+WEATHER_URL = (
+    "https://api.open-meteo.com/v1/forecast"
+    "?latitude={lat}&longitude={lon}"
+    "&current_weather=true"
+    "&hourly=snowfall,rain,cloud_cover,"
+    "temperature_850hPa,temperature_700hPa,temperature_500hPa,temperature_300hPa,temperature_250hPa,"
+    "windspeed_850hPa,windspeed_700hPa,windspeed_500hPa,windspeed_300hPa,windspeed_250hPa,"
+    "winddirection_850hPa,winddirection_700hPa,winddirection_500hPa,winddirection_300hPa,winddirection_250hPa"
+)
+
+# Altitude → Pressure Level lookup
+ALT_LEVELS = [
+    (7500,  "850hPa"),
+    (15000, "700hPa"),
+    (25000, "500hPa"),
+    (32000, "300hPa"),
+    (99999, "250hPa")
+]
+
+def pressure_for_alt(alt_ft):
+    for limit, level in ALT_LEVELS:
+        if alt_ft < limit:
+            return level
+    return "850hPa"
 
 def fetch_weather(lat, lon, altitude_ft=None):
-    print("[weather] fetch_weather called with lat=", lat, "lon=", lon, "alt_ft=", altitude_ft)
-    
-    # Surface Weather
-    surface_url = SURFACE_URL.format(lat=lat, lon=lon)
-    print("[weather] Fetching surface:", surface_url)
-    
+    url = WEATHER_URL.format(lat=lat, lon=lon)
+    print("[weather] Fetching:", url)
+
     try:
-        resp = requests.get(surface_url)
-        print("[weather] Surface HTTP status:", resp.status_code)
+        resp = requests.get(url)
         if resp.status_code != 200:
-            print("[weather] Surface HTTP error:", resp.status_code)
+            print("[weather] HTTP error:", resp.status_code)
             return None
-            
-        surface_data = resp.json()
-        surface = surface_data.get("current_weather", {})
-        surface_hourly = surface_data.get("hourly", {})
-        surface = surface | surface_hourly
-        print("[weather] surface weather:", surface)
-        
-        # If no altitude requested then it should return surface only
-        if altitude_ft is None:
-            return surface
-            
-        # Altitude Weather
-        altitude_url = ALTITUDE_URL.format(lat=lat, lon=lon)
-        print("[weather] Fetching altitude:", altitude_url)
-        
-        resp_alt = requests.get(altitude_url)
-        print("[weather] Altitude HTTP status:", resp_alt.status_code)
-        if resp_alt.status_code != 200:
-            print("[weather] Altitude HTTP error - returning surface only")
-            return surface
-            
-        altitude_data = resp_alt.json()
-        hourly = altitude_data.get("hourly", {})
-        
-        # Mappin Altitude - Pressure level
-        if altitude_ft < 7500:
-            level = "850hPa"
-            temp_key = "temperature_850hPa"
-            wind_speed_key = "windspeed_850hPa" 
-            wind_dir_key = "winddirection_850hPa"
-        elif altitude_ft < 15000:
-            level = "700hPa"
-            temp_key = "temperature_700hPa"
-            wind_speed_key = "windspeed_700hPa"
-            wind_dir_key = "winddirection_700hPa"
-        elif altitude_ft < 25000:
-            level = "500hPa"
-            temp_key = "temperature_500hPa"
-            wind_speed_key = "windspeed_500hPa"
-            wind_dir_key = "winddirection_500hPa"
-        elif altitude_ft < 32000:
-            level = "300hPa"
-            temp_key = "temperature_300hPa"
-            wind_speed_key = "windspeed_300hPa"
-            wind_dir_key = "winddirection_300hPa"
-        else:
-            level = "250hPa"
-            temp_key = "temperature_250hPa"
-            wind_speed_key = "windspeed_250hPa"
-            wind_dir_key = "winddirection_250hPa"
-        
-        # Extract current hour data
-        altitude_weather = {
-            "temperature": hourly.get(temp_key, [None])[0],
-            "windspeed": hourly.get(wind_speed_key, [None])[0], 
-            "winddirection": hourly.get(wind_dir_key, [None])[0],
-            "pressure_level": level,
-            "altitude_ft": altitude_ft
+
+        data = resp.json()
+        current = data.get("current_weather", {})
+        hourly = data.get("hourly", {})
+
+        # Find the current index in hourly data
+        times = hourly.get("time", [])
+        idx = times.index(current["time"]) if current.get("time") in times else 0
+
+        # Build combined surface response
+        result = {
+            "time": current.get("time"),
+            "surface_temp": current.get("temperature"),
+            "surface_windspeed": current.get("windspeed"),
+            "surface_winddirection": current.get("winddirection"),
+            "surface_weathercode": current.get("weathercode"),
+            "rain": hourly.get("rain", [None])[idx],
+            "snowfall": hourly.get("snowfall", [None])[idx],
+            "cloud_cover": hourly.get("cloud_cover", [None])[idx]
         }
-        
-        print("[weather] altitude weather:", altitude_weather)
-        
-        return {
-            "surface": surface,
-            "altitude": altitude_weather
-        }
-        
+
+        # Add altitude weather if requested
+        if altitude_ft is not None:
+            level = pressure_for_alt(altitude_ft)
+            result.update({
+                "altitude_ft": altitude_ft,
+                "pressure_level": level,
+                "alt_temp": hourly.get(f"temperature_{level}", [None])[idx],
+                "alt_windspeed": hourly.get(f"windspeed_{level}", [None])[idx],
+                "alt_winddirection": hourly.get(f"winddirection_{level}", [None])[idx]
+            })
+
+        return result
+
     except Exception as e:
         print("[weather] Exception:", e)
         return None
-
-# Test block - function is now defined BEFORE this runs
-if __name__ == "__main__":
-    # Test surface weather
-    print("=== SURFACE WEATHER ===")
-    result = fetch_weather(40.7128, -74.0060)
-    print("Surface result:", result)
-    
-    # Test high altitude weather 
-    print("\n=== HIGH ALTITUDE WEATHER (30,000 ft) ===")
-    result_alt = fetch_weather(40.7128, -74.0060, 30000)
-    print("Altitude result:", result_alt)
