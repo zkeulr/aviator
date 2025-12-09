@@ -3,6 +3,7 @@ import displayio
 import framebufferio
 import rgbmatrix
 from adafruit_display_text import label
+from adafruit_display_text.scrolling_label import ScrollingLabel
 from adafruit_display_emoji_text import EmojiLabel
 # API sadly not compatible with adafruit_display_text.label.Label
 import terminalio
@@ -54,7 +55,7 @@ def clear() -> None:
     _root_group = displayio.Group()
     framebuffer_display.root_group = _root_group
 
-def display(text: str, x: int = 0, y: int = 0, color: int = 0xFFFFFF, replace: bool = False, index: int | None = None) -> label.Label | None:
+def display(text: str, x: int = 0, y: int = 0, color: int = 0xFFFFFF, replace: bool = False, index: int | None = None, scroll=False) -> label.Label | None:
     """
     Add a label to the persistent root group.
     - If replace is True, clear existing children first.
@@ -64,19 +65,29 @@ def display(text: str, x: int = 0, y: int = 0, color: int = 0xFFFFFF, replace: b
     if replace:
         clear()
 
-    text_label = label.Label(
-        terminalio.FONT,
-        text=text,
-        color=color,
-        x=x,
-        y=y
-    )
+    if not scroll:
+        text_label = label.Label(
+            terminalio.FONT,
+            text=text,
+            color=color,
+            x=x,
+            y=y
+        )
+    else:
+        text_label = ScrollingLabel(
+            terminalio.FONT,
+            text=text,
+            animate_time=1, 
+        )
+        text_label.y = y
+
 
     # this is called repeatedly, which is not needed
-    if text_label.bounding_box[2] > DISPLAY_WIDTH - 2:
-        # This will cause anything that's too long to display off screen
-        text_label.x = DISPLAY_WIDTH
-        setattr(text_label, "_scroll_speed", 1)
+    # if text_label.bounding_box[2] > DISPLAY_WIDTH - 2:
+    #     # This will cause anything that's too long to display off screen
+    #     text_label.x = DISPLAY_WIDTH
+    #    setattr(text_label, "_scroll_speed", 1)
+
 
     if index is None:
         _root_group.append(text_label)
@@ -98,27 +109,6 @@ def display_emoji(string, x, y):
     _root_group.append(emoji_label)
 
     return emoji_label
-
-
-def scroll_step(lbl: label.Label, dx: int | None = None) -> None:
-    """
-    Advance a scrolling label left by dx pixels. If dx is None uses the label's
-    _scroll_speed attribute (set by display(..., scroll=True, scroll_speed=...)).
-    When the label has fully scrolled off the left edge it is reset to start from
-    the right edge again for continuous scrolling.
-    """
-    if dx is None:
-        dx = getattr(lbl, "_scroll_speed", 1)
-    # move left
-    lbl.x = lbl.x - dx
-    # label width
-    try:
-        w = lbl.bounding_box[2] or 0
-    except Exception:
-        w = 0
-    # if completely off-screen to the left, reset to right edge
-    if lbl.x + w < 0:
-        lbl.x = DISPLAY_WIDTH
 
 def display_pixels(pixels, x: int = 0, y: int = 0, replace: bool = False, index: int | None = None) -> None:
     """

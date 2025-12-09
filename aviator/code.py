@@ -1,7 +1,7 @@
 # pyright: ignore[reportShadowedImports]
 
 # ISSUES: see comments
-import net_adsb
+import adsb
 import display
 import network
 import time
@@ -17,7 +17,7 @@ print("Displaying logo...")
 display.display("AVIATOR", 12, 16)
 
 time_label = None
-flights_label = None
+flight_label = None
 velocity_label = "V"
 weather_label = None
 weather_emoji_label = None
@@ -63,14 +63,16 @@ while True:
 
             if connected:
                 print("Network connected")
-                print("Fetching flights")
+                print("Fetching flight")
+                if flight_label is not None:
+                    flight_label.text = "" # clear so it doesn't appear to freeze
+                    pass
                 try:
-                    new_flights = net_adsb.get_flights(
+                    new_flight = adsb.fetch_flight(
                         PURDUE_LOCATION["lat"],
                         PURDUE_LOCATION["lon"],
                         session=network.requests,
                         radius_nm=150.0,
-                        nearest=10,
                     )
                 except Exception as e:
                     print("net_adsb failed, falling back to local ADS-B:", e)
@@ -81,22 +83,22 @@ while True:
 
                 # Only update if fetch succeeds
                 print("Updating flights and weather")
-                flights = new_flights
+                flight = new_flight
                 current_weather = new_weather
 
                 # Update flights display
                 try:
-                    flights_text = f"{flights[0].get('callsign','---')[:6]} {flights[0].get('alt_ft','?')}ft {flights[0].get('gs_kt','?')}kt"
+                    flight_text = f"{flight.get('callsign','---')[:6]} {flight.get('alt_ft','?')}ft {flight.get('gs_kt','?')}kt"
                 except:
-                    flights_text = "No flights"
+                    flight_text = "No flights"
 
-                if flights_label is None:
-                    flights_label = display.display(flights_text, 1, 16, color=0xFFFFFF) 
+                if flight_label is None:
+                    flight_label = display.display(flight_text, 1, 16, color=0xFFFFFF, scroll=True) 
                 else:
-                    flights_label.text = flights_text
+                    flight_label.text = flight_text
 
                 # calculate heading, change based on speed
-                try:
+                # try:
                     # print("heading:", flights[0].get("heading"))
                     # print("gs_kt:", flights[0].get("gs_kt"))
                     #  if int(flights[0].get("heading")) < 360:
@@ -105,16 +107,16 @@ while True:
                     # if flights[0].get("gs_kt") < 100:
                     #   velocity_color = 0xFFFFFF
 
-                    velocity_string = "A"
-                    if velocity_label is None:
-                        velocity_label = display.display(text=velocity_string, x=3+time_label.bounding_box[2], y=5)
-                    else:
+                #    velocity_string = "A"
+                #    if velocity_label is None:
+                 #       velocity_label = display.display(text=velocity_string, x=3+time_label.bounding_box[2], y=5)
+                  #  else:
                         # Getting error, can't set attribute 'text'
-                        print("Updating velocity_label.text to", velocity_string)
-                        velocity_label.text = velocity_string
+                   #     print("Updating velocity_label.text to", velocity_string)
+                    #    velocity_label.text = velocity_string
                             
-                except Exception as e:
-                    print("Exception in calculating and setting velocity,", e)
+                #except Exception as e:
+                 #   print("Exception in calculating and setting velocity,", e)
 
                 # Update weather display
                 temp = current_weather.get("temperature")
@@ -139,12 +141,10 @@ while True:
                 # let's display the velocity of the plane with an emoji as well
                 # ⬆️↗️➡️↘️⬇️↙️⬅️↖️
 
-
-
             else:
                 print("Not connected to the network")
-                if flights_label is None:
-                    flights_label = display.display("No connection", 1, 16, color=0xFF0000)
+                if flight_label is None:
+                    flight_label = display.display("No connection", 1, 16, color=0xFF0000)
                 try:
                     print("Trying to connect to network...")
                     if network.connect():
@@ -173,8 +173,8 @@ while True:
     # The text stops scrolling during calls to the weather or checking the network
     # This is very noticeable and not acceptable
     try:
-        if flights_label is not None:
-            display.scroll_step(flights_label)
+        if flight_label is not None:
+            flight_label.update()
     except Exception as e:
         print("Scroll error:", e)
 
