@@ -6,6 +6,7 @@ import display
 import network
 import time
 import weather
+import flightinfo
 
 PURDUE_LOCATION = {"lat": 40.4237, "lon": -86.9212}
 FETCH_INTERVAL = 30.0 # 120
@@ -141,6 +142,7 @@ while True:
                     if new_flight.get("emergency") and new_flight.get("emergency") is not 'none':
                         print("Emergency:", new_flight.get("emergency"))
                         flight_text += " IS IN DISTRESS!"
+                    flight_tex += flightinfo.get_flights_by_callsign(flight.get(", callsign", ""))
                 except:
                     flight_text = "No flights"
 
@@ -191,9 +193,9 @@ while True:
 
                 # ☀️☁️⛅⛈️🌤️🌥️🌦️🌧️🌨️🌩️☔❄️
                 weather_emoji = ""
-                if float(current_weather.get("rain")) < 1:
+                if float(current_weather.get("rain")) > 1:
                     weather_emoji = "☔"
-                elif float(current_weather.get("snowfall")) > 0.0:
+                elif float(current_weather.get("snowfall")) > 1:
                     weather_emoji = "❄️"
                 elif float(current_weather.get("cloud_cover")) > 50:
                     weather_emoji = "☁️"
