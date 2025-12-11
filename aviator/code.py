@@ -182,10 +182,12 @@ while True:
                     heading = int(flight.get("heading"))
                     print("heading:", heading)
                     velocity_string = heading_to_arrow(heading)
-
-                    speed_kt = int(flight.get("speed_kt", 0))
-                    print(speed_kt)
-                    speed_color = speed_to_color(speed_kt)
+                    try:
+                        speed_kt = int(flight.get("speed_kt", 0))
+                        print(speed_kt)
+                        speed_color = speed_to_color(speed_kt)
+                    except:
+                        speed_kt = 0
 
                     if velocity_label is None:
                         velocity_label = display.display(text=velocity_string, x=50, y=5, color=speed_color)
