@@ -16,17 +16,17 @@
     \item Input Voltage: 5 V supplied through USB-C connector.
     \item Backup Power Source: 3.7 V Li-ion battery (minimum 8000 mAh).
     \item Output Rails:
-    \begin{itemize}
-        \item Regulated 5 V rail for display subsystem (load up to 3 A).
-        \item Regulated 3.3 V rail for ESP32 and communications (load up to 1 A).
-    \end{itemize}
+          \begin{itemize}
+              \item Regulated 5 V rail for display subsystem (load up to 3 A).
+              \item Regulated 3.3 V rail for ESP32 and communications (load up to 1 A).
+          \end{itemize}
     \item Voltage Accuracy: ±5\% across all regulated rails.
     \item Average System Power Consumption: < 8 W under typical load.
     \item Conversion Efficiency:
-    \begin{itemize}
-        \item Buck/Buck-Boost conversion: >= 85\%.
-        \item Battery charge/discharge efficiency: >= 80\%.
-    \end{itemize}
+          \begin{itemize}
+              \item Buck/Buck-Boost conversion: >= 85\%.
+              \item Battery charge/discharge efficiency: >= 80\%.
+          \end{itemize}
     \item Protection: Resettable polyfuse (3 A hold), TVS diode for surge protection.
     \item Thermal Requirements: External device surface temperature < 60 °C at full load.
 \end{enumerate}
@@ -83,34 +83,32 @@ A detailed schematic is unnecessary since the power subsystem uses standard regu
 
 % Theory of Operation
 \subsubsection{Theory of Operation}
-The Power Management Subsystem accepts 5 V from a USB-C adapter as its primary source.  
+The Power Management Subsystem accepts 5 V from a USB-C adapter as its primary source.
 When external power is present, a charger IC distributes current to both the system load and the Li-ion battery. The buck-boost regulator maintains stable 3.3 V and 5 V rails regardless of whether the system is powered by the adapter or the battery.
 
 If the USB-C connector is unplugged, a PowerPath MOSFET transitions the system to battery power with sub-100 ms interruption. The polyfuse and TVS diode protect against short circuits, surges, and reverse polarity conditions. The ESP32 monitors battery level and manages power-saving behaviors such as brightness reduction.
 
 % Measurements
 \subsubsection{Specification Measurements}
-[Design Document 3. Every specification above must be validated with measurements.]
-
 \textbf{3.3 V Rail Accuracy (AMS1117-3.3 Test)}
 
-\textbf{Test Setup:}  
+\textbf{Test Setup:}
 The AMS1117-3.3 linear regulator was powered from a 5 V USB supply. Output voltage was measured with a DMM referenced to system ground.
 
 \textbf{Results:}
 \begin{itemize}
-    \item Input Voltage: 5.0 V  
-    \item Target Output: 3.3 V  
+    \item Input Voltage: 5.0 V
+    \item Target Output: 3.3 V
     \item Measured Output: 3.3018 V
 \end{itemize}
 
 \textbf{Relative Error:}
 \[
-\text{Error} = 
-\frac{3.3018 - 3.30}{3.30} \times 100\% = 0.052\%
+    \text{Error} =
+    \frac{3.3018 - 3.30}{3.30} \times 100\% = 0.052\%
 \]
 
-This is well within the required ±5\% specification.  
+This is well within the required ±5\% specification.
 Therefore, the 3.3 V rail accuracy requirement is satisfied.
 
 Additional tests (DD3 requirement):
@@ -124,7 +122,6 @@ Additional tests (DD3 requirement):
 % Standards
 \subsubsection{Standards}
 
-\textbf{[Design Document 1 – Expected]}
 \begin{itemize}
     \item USB-C Power Delivery Specification — governs USB-C negotiation and safe 5 V input.
     \item IEEE 1625 — battery reliability standard for portable electronics.
@@ -132,7 +129,6 @@ Additional tests (DD3 requirement):
     \item IEC 62368-1 — safety for IT/communication equipment powering low-voltage systems.
 \end{itemize}
 
-\textbf{[Design Document 3 – Finalized]}
-The Power Management Subsystem meets all electrical and safety requirements for the Aviator System.  
-Measurements confirm stable power delivery, reliable failover behavior, and safe thermal performance.  
+The Power Management Subsystem meets all electrical and safety requirements for the Aviator System.
+Measurements confirm stable power delivery, reliable failover behavior, and safe thermal performance.
 No design changes were required for the final subsystem revision.
